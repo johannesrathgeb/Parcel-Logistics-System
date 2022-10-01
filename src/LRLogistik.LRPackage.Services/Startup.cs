@@ -118,7 +118,7 @@ namespace LRLogistik.LRPackage.Services
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseSwagger(c =>
