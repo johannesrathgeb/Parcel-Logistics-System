@@ -21,3 +21,7 @@ steps:
     targetFolder: '$(Build.ArtifactStagingDirectory)'    
 
 - task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: 'src/LRLogistik.LRPackage.Services/bin/$(buildConfiguration)/'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
