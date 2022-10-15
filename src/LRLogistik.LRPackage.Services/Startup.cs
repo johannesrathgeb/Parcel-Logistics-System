@@ -32,6 +32,7 @@ namespace LRLogistik.LRPackage.Services
     /// </summary>
     public class Startup
     {
+
         /// <summary>
         /// Constructor
         /// </summary>
