@@ -24,6 +24,8 @@ using LRLogistik.LRPackage.Services.Authentication;
 using LRLogistik.LRPackage.Services.Filters;
 using LRLogistik.LRPackage.Services.OpenApi;
 using LRLogistik.LRPackage.Services.Formatters;
+using AutoMapper;
+using LRLogistik.LRPackage.Services.MappingProfiles;
 
 namespace LRLogistik.LRPackage.Services
 {
@@ -53,6 +55,15 @@ namespace LRLogistik.LRPackage.Services
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
+            // AutoMapper
+            var config = new MapperConfiguration(cfg => {
+                //cfg.AddProfile<HelperProfile>();
+                //cfg.AddProfile<HopProfile>();
+                cfg.AddProfile<ParcelProfile>();
+            });
+            var mapper = config.CreateMapper();
+            services.AddSingleton(mapper);
+            services.AddMvc();
 
             // Add framework services.
             services

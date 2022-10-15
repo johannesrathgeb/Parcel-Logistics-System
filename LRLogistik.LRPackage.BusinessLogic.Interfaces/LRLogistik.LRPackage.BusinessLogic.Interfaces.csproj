@@ -11,4 +11,8 @@
     <PackageReference Include="FluentValidation" Version="11.2.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LRLogistik.LRPackage.BusinessLogic.Entities\LRLogistik.LRPackage.BusinessLogic.Entities.csproj" />
+  </ItemGroup>
+
 </Project>

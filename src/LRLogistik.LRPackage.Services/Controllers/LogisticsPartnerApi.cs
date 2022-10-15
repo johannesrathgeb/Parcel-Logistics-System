@@ -19,15 +19,25 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using Newtonsoft.Json;
 using LRLogistik.LRPackage.Services.Attributes;
 using LRLogistik.LRPackage.Services.DTOs;
+using AutoMapper;
+using LRLogistik.LRPackage.BusinessLogic;
 
 namespace LRLogistik.LRPackage.Services.Controllers
-{ 
+{
     /// <summary>
     /// 
     /// </summary>
+    /// 
+
     [ApiController]
     public class LogisticsPartnerApiController : ControllerBase
-    { 
+    {
+        private readonly IMapper _mapper;
+
+        public LogisticsPartnerApiController(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
         /// <summary>
         /// Transfer an existing parcel into the system from the service of a logistics partner. 
         /// </summary>
@@ -45,7 +55,9 @@ namespace LRLogistik.LRPackage.Services.Controllers
         [SwaggerResponse(statusCode: 400, type: typeof(Error), description: "The operation failed due to an error.")]
         public virtual IActionResult TransitionParcel([FromRoute (Name = "trackingId")][Required][RegularExpression("^[A-Z0-9]{9}$")]string trackingId, [FromBody]Parcel parcel)
         {
-
+            var parcelEntity = _mapper.Map<BusinessLogic.Entities.Parcel>(parcel);
+            var transferLogic = new TransferLogic();
+            var irgendwos = transferLogic.TransferPackage(trackingId, parcelEntity);
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(NewParcelInfo));
             //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
@@ -59,7 +71,7 @@ namespace LRLogistik.LRPackage.Services.Controllers
             ? JsonConvert.DeserializeObject<NewParcelInfo>(exampleJson)
             : default(NewParcelInfo);
             //TODO: Change the data returned
-            return new ObjectResult(example);
+            return new ObjectResult(_mapper.Map<NewParcelInfo>(irgendwos));
         }
     }
 }

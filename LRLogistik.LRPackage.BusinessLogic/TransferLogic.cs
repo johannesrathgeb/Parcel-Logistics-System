@@ -1,4 +1,5 @@
-﻿using LRLogistik.LRPackage.BusinessLogic.Interfaces;
+﻿using LRLogistik.LRPackage.BusinessLogic.Entities;
+using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,9 @@ namespace LRLogistik.LRPackage.BusinessLogic
 
         public TransferLogic() { }
 
-        public void TransferPackage(string trackingId)
+        public object TransferPackage(string trackingId, Parcel parcel)
         {
-            throw new NotImplementedException();
+            return new Parcel() { TrackingId = "gaugla"};
         }
     }
 }
