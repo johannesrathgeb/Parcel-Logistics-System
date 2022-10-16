@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LRLogistik.LRPackage.Busine
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LRLogistik.LRPackage.BusinessLogic.Interfaces", "LRLogistik.LRPackage.BusinessLogic.Interfaces\LRLogistik.LRPackage.BusinessLogic.Interfaces.csproj", "{89D6C402-E0E6-446D-89CB-3D7CB72DA30B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LRLogistik.LRPackage.BusinessLogic.Tests", "LRLogistik.LRPackage.BusinessLogic.Tests\LRLogistik.LRPackage.BusinessLogic.Tests.csproj", "{A2CAD515-8F51-462A-A853-AEF3CC96ED98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LRLogistik.LRPackage.BusinessLogic.Tests", "LRLogistik.LRPackage.BusinessLogic.Tests\LRLogistik.LRPackage.BusinessLogic.Tests.csproj", "{A2CAD515-8F51-462A-A853-AEF3CC96ED98}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LRLogistik.LRPackage.Services.Tests", "LRLogistik.LRPackage.Services.Tests\LRLogistik.LRPackage.Services.Tests.csproj", "{EFC4A663-50F4-48B7-9797-743EC2A35729}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{A2CAD515-8F51-462A-A853-AEF3CC96ED98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2CAD515-8F51-462A-A853-AEF3CC96ED98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2CAD515-8F51-462A-A853-AEF3CC96ED98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFC4A663-50F4-48B7-9797-743EC2A35729}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFC4A663-50F4-48B7-9797-743EC2A35729}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFC4A663-50F4-48B7-9797-743EC2A35729}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFC4A663-50F4-48B7-9797-743EC2A35729}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
