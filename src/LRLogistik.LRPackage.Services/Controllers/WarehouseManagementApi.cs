@@ -19,6 +19,8 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using Newtonsoft.Json;
 using LRLogistik.LRPackage.Services.Attributes;
 using LRLogistik.LRPackage.Services.DTOs;
+using AutoMapper;
+using LRLogistik.LRPackage.BusinessLogic;
 
 namespace LRLogistik.LRPackage.Services.Controllers
 {
@@ -28,6 +30,14 @@ namespace LRLogistik.LRPackage.Services.Controllers
     [ApiController]
     public class WarehouseManagementApiController : ControllerBase
     {
+        private readonly IMapper _mapper;
+
+        public WarehouseManagementApiController(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
+
         /// <summary>
         /// Exports the hierarchy of Warehouse and Truck objects. 
         /// </summary>
@@ -42,6 +52,21 @@ namespace LRLogistik.LRPackage.Services.Controllers
         [SwaggerResponse(statusCode: 400, type: typeof(Error), description: "The operation failed due to an error.")]
         public virtual IActionResult ExportWarehouses()
         {
+
+            WarehouseLogic warehouseLogic = new WarehouseLogic();
+
+            var result = warehouseLogic.ExportWarehouse();
+
+            if (result.GetType() == typeof(BusinessLogic.Entities.Warehouse))
+            {
+                //return new ObjectResult(_mapper.Map<NewParcelInfo>(result));
+                return StatusCode(200, new ObjectResult(_mapper.Map<Warehouse>(result)).Value);
+            }
+            else
+            {
+                return StatusCode(400, new ObjectResult(_mapper.Map<DTOs.Error>(result)).Value);
+            }
+
 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(Warehouse));
@@ -75,6 +100,21 @@ namespace LRLogistik.LRPackage.Services.Controllers
         public virtual IActionResult GetWarehouse([FromRoute(Name = "code")][Required] string code)
         {
 
+            WarehouseLogic warehouseLogic = new WarehouseLogic();
+
+            var result = warehouseLogic.GetWarehouse(code);
+
+            if (result.GetType() == typeof(BusinessLogic.Entities.Hop))
+            {
+                return StatusCode(200, new ObjectResult(_mapper.Map<DTOs.Hop>(result)).Value);
+            }
+            else
+            {
+                return StatusCode(400, new ObjectResult(_mapper.Map<DTOs.Error>(result)).Value);
+            }
+
+
+
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(Hop));
             //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
@@ -106,8 +146,25 @@ namespace LRLogistik.LRPackage.Services.Controllers
         public virtual IActionResult ImportWarehouses([FromBody] Warehouse warehouse)
         {
 
+            WarehouseLogic warehouseLogic = new WarehouseLogic();
+
+            var warehouseEntity = _mapper.Map<BusinessLogic.Entities.Warehouse>(warehouse);
+
+            var result = warehouseLogic.ImportWarehouse(warehouseEntity);
+
+
+
+            if (result.GetType() == typeof(string))
+            {
+                return StatusCode(200, new ObjectResult(result).Value);
+            }
+            else
+            {
+                return StatusCode(400, new ObjectResult(_mapper.Map<DTOs.Error>(result)).Value);
+            }
+
+
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            return StatusCode(200);
             //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(400, default(Error));
 

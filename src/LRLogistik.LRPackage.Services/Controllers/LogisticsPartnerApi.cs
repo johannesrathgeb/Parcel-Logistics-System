@@ -19,15 +19,25 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using Newtonsoft.Json;
 using LRLogistik.LRPackage.Services.Attributes;
 using LRLogistik.LRPackage.Services.DTOs;
+using AutoMapper;
+using LRLogistik.LRPackage.BusinessLogic;
 
 namespace LRLogistik.LRPackage.Services.Controllers
-{ 
+{
     /// <summary>
     /// 
     /// </summary>
+    /// 
+
     [ApiController]
     public class LogisticsPartnerApiController : ControllerBase
-    { 
+    {
+        private readonly IMapper _mapper;
+
+        public LogisticsPartnerApiController(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
         /// <summary>
         /// Transfer an existing parcel into the system from the service of a logistics partner. 
         /// </summary>
@@ -45,21 +55,19 @@ namespace LRLogistik.LRPackage.Services.Controllers
         [SwaggerResponse(statusCode: 400, type: typeof(Error), description: "The operation failed due to an error.")]
         public virtual IActionResult TransitionParcel([FromRoute (Name = "trackingId")][Required][RegularExpression("^[A-Z0-9]{9}$")]string trackingId, [FromBody]Parcel parcel)
         {
+            var parcelEntity = _mapper.Map<BusinessLogic.Entities.Parcel>(parcel);
+            var transferLogic = new TransferLogic();
+            var result = transferLogic.TransferPackage(trackingId, parcelEntity);
 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(NewParcelInfo));
-            //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(400, default(Error));
-            //TODO: Uncomment the next line to return response 409 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(409);
-            string exampleJson = null;
-            exampleJson = "{\n  \"trackingId\" : \"PYJRB4HZ6\"\n}";
             
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<NewParcelInfo>(exampleJson)
-            : default(NewParcelInfo);
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+            if(result.GetType() == typeof(BusinessLogic.Entities.Parcel))
+            {
+                //return new ObjectResult(_mapper.Map<NewParcelInfo>(result));
+                return StatusCode(200, new ObjectResult(_mapper.Map<NewParcelInfo>(result)).Value);
+            } else
+            {
+                return StatusCode(400, new ObjectResult(_mapper.Map<DTOs.Error>(result)).Value);
+            }
         }
     }
 }

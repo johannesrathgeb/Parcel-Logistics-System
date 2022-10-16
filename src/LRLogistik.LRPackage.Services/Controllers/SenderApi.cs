@@ -19,6 +19,8 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using Newtonsoft.Json;
 using LRLogistik.LRPackage.Services.Attributes;
 using LRLogistik.LRPackage.Services.DTOs;
+using AutoMapper;
+using LRLogistik.LRPackage.BusinessLogic;
 
 namespace LRLogistik.LRPackage.Services.Controllers
 {
@@ -28,6 +30,14 @@ namespace LRLogistik.LRPackage.Services.Controllers
     [ApiController]
     public class SenderApiController : ControllerBase
     {
+
+        private readonly IMapper _mapper;
+
+        public SenderApiController(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
         /// <summary>
         /// Submit a new parcel to the logistics service. 
         /// </summary>
@@ -45,6 +55,23 @@ namespace LRLogistik.LRPackage.Services.Controllers
         [SwaggerResponse(statusCode: 404, type: typeof(Error), description: "The address of sender or receiver was not found.")]
         public virtual IActionResult SubmitParcel([FromBody] Parcel parcel)
         {
+            var parcelEntity = _mapper.Map<BusinessLogic.Entities.Parcel>(parcel);
+            var submissionLogic = new SubmissionLogic();
+            var result = submissionLogic.SubmitParcel(parcelEntity);
+
+
+            if (result.GetType() == typeof(BusinessLogic.Entities.Parcel))
+            {
+                //return new ObjectResult(_mapper.Map<NewParcelInfo>(result));
+                return StatusCode(201, new ObjectResult(_mapper.Map<NewParcelInfo>(result)).Value);
+            }
+            else
+            {
+                return StatusCode(400, new ObjectResult(_mapper.Map<DTOs.Error>(result)).Value);
+            }
+
+
+
 
             //TODO: Uncomment the next line to return response 201 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(201, default(NewParcelInfo));
@@ -52,14 +79,6 @@ namespace LRLogistik.LRPackage.Services.Controllers
             // return StatusCode(400, default(Error));
             //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(404, default(Error));
-            string exampleJson = null;
-            exampleJson = "{\n  \"trackingId\" : \"PYJRB4HZ6\"\n}";
-
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<NewParcelInfo>(exampleJson)
-            : default;
-            //TODO: Change the data returned
-            return new ObjectResult(example);
         }
     }
 }

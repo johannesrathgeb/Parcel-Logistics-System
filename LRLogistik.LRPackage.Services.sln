@@ -9,6 +9,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LRLogistik.LRPackage.Servic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LRLogistik.LRPackage.Services", "src\LRLogistik.LRPackage.Services\LRLogistik.LRPackage.Services.csproj", "{0BE16AE1-9748-41BA-9748-733D97277753}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LRLogistik.LRPackage.BusinessLogic", "LRLogistik.LRPackage.BusinessLogic\LRLogistik.LRPackage.BusinessLogic.csproj", "{EDC33882-8828-48DD-AB6D-32EE32F970BD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LRLogistik.LRPackage.BusinessLogic.Entities", "LRLogistik.LRPackage.BusinessLogic.Entities\LRLogistik.LRPackage.BusinessLogic.Entities.csproj", "{ED9EC42B-2E96-4FF7-AD3E-4D8182BFF9B4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LRLogistik.LRPackage.BusinessLogic.Interfaces", "LRLogistik.LRPackage.BusinessLogic.Interfaces\LRLogistik.LRPackage.BusinessLogic.Interfaces.csproj", "{89D6C402-E0E6-446D-89CB-3D7CB72DA30B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LRLogistik.LRPackage.BusinessLogic.Tests", "LRLogistik.LRPackage.BusinessLogic.Tests\LRLogistik.LRPackage.BusinessLogic.Tests.csproj", "{A2CAD515-8F51-462A-A853-AEF3CC96ED98}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +35,22 @@ Global
 		{0BE16AE1-9748-41BA-9748-733D97277753}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BE16AE1-9748-41BA-9748-733D97277753}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BE16AE1-9748-41BA-9748-733D97277753}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDC33882-8828-48DD-AB6D-32EE32F970BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDC33882-8828-48DD-AB6D-32EE32F970BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDC33882-8828-48DD-AB6D-32EE32F970BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDC33882-8828-48DD-AB6D-32EE32F970BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED9EC42B-2E96-4FF7-AD3E-4D8182BFF9B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED9EC42B-2E96-4FF7-AD3E-4D8182BFF9B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED9EC42B-2E96-4FF7-AD3E-4D8182BFF9B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED9EC42B-2E96-4FF7-AD3E-4D8182BFF9B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89D6C402-E0E6-446D-89CB-3D7CB72DA30B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89D6C402-E0E6-446D-89CB-3D7CB72DA30B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89D6C402-E0E6-446D-89CB-3D7CB72DA30B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89D6C402-E0E6-446D-89CB-3D7CB72DA30B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2CAD515-8F51-462A-A853-AEF3CC96ED98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2CAD515-8F51-462A-A853-AEF3CC96ED98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2CAD515-8F51-462A-A853-AEF3CC96ED98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2CAD515-8F51-462A-A853-AEF3CC96ED98}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
