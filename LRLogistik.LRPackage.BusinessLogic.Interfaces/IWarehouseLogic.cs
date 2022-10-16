@@ -7,8 +7,12 @@ using System.Threading.Tasks;
 
 namespace LRLogistik.LRPackage.BusinessLogic.Interfaces
 {
-    public interface ISubmissionLogic
+    public interface IWarehouseLogic
     {
-        public object SubmitParcel(Parcel parcel); 
+        public object ExportWarehouse();
+
+        public object ImportWarehouse(Warehouse warehouse);
+
+        public object GetWarehouse(string code); 
     }
 }

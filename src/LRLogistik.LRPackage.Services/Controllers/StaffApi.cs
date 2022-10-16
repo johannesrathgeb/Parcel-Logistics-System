@@ -19,6 +19,8 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using Newtonsoft.Json;
 using LRLogistik.LRPackage.Services.Attributes;
 using LRLogistik.LRPackage.Services.DTOs;
+using AutoMapper;
+using LRLogistik.LRPackage.BusinessLogic;
 
 namespace LRLogistik.LRPackage.Services.Controllers
 {
@@ -28,6 +30,14 @@ namespace LRLogistik.LRPackage.Services.Controllers
     [ApiController]
     public class StaffApiController : ControllerBase
     {
+
+        private readonly IMapper _mapper;
+
+        public StaffApiController(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
         /// <summary>
         /// Report that a Parcel has been delivered at it&#39;s final destination address. 
         /// </summary>
@@ -43,8 +53,21 @@ namespace LRLogistik.LRPackage.Services.Controllers
         public virtual IActionResult ReportParcelDelivery([FromRoute(Name = "trackingId")][Required][RegularExpression("^[A-Z0-9]{9}$")] string trackingId)
         {
 
+            TrackingLogic trackingLogic = new TrackingLogic();
+
+            var result = trackingLogic.ReportDelivery(trackingId);
+
+            if (result.GetType() == typeof(string))
+            {
+                //return new ObjectResult(_mapper.Map<NewParcelInfo>(result));
+                return StatusCode(200, new ObjectResult(result).Value);
+            }
+            else
+            {
+                return StatusCode(400, new ObjectResult(_mapper.Map<DTOs.Error>(result)).Value);
+            }
+
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            return StatusCode(200);
             //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(400, default(Error));
             //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
@@ -68,6 +91,18 @@ namespace LRLogistik.LRPackage.Services.Controllers
         [SwaggerResponse(statusCode: 400, type: typeof(Error), description: "The operation failed due to an error.")]
         public virtual IActionResult ReportParcelHop([FromRoute(Name = "trackingId")][Required][RegularExpression("^[A-Z0-9]{9}$")] string trackingId, [FromRoute(Name = "code")][Required][RegularExpression("^[A-Z]{4}\\d{1,4}$")] string code)
         {
+            var trackingLogic = new TrackingLogic();
+            var result = trackingLogic.ReportHop(trackingId, code);
+
+            if (result.GetType() == typeof(string))
+            {
+                //return new ObjectResult(_mapper.Map<NewParcelInfo>(result));
+                return StatusCode(200, new ObjectResult(result).Value);
+            }
+            else
+            {
+                return StatusCode(400, new ObjectResult(_mapper.Map<DTOs.Error>(result)).Value);
+            }
 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200);

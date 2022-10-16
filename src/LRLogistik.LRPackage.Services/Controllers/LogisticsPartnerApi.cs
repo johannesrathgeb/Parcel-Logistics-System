@@ -57,21 +57,17 @@ namespace LRLogistik.LRPackage.Services.Controllers
         {
             var parcelEntity = _mapper.Map<BusinessLogic.Entities.Parcel>(parcel);
             var transferLogic = new TransferLogic();
-            var irgendwos = transferLogic.TransferPackage(trackingId, parcelEntity);
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(NewParcelInfo));
-            //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(400, default(Error));
-            //TODO: Uncomment the next line to return response 409 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(409);
-            string exampleJson = null;
-            exampleJson = "{\n  \"trackingId\" : \"PYJRB4HZ6\"\n}";
+            var result = transferLogic.TransferPackage(trackingId, parcelEntity);
+
             
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<NewParcelInfo>(exampleJson)
-            : default(NewParcelInfo);
-            //TODO: Change the data returned
-            return new ObjectResult(_mapper.Map<NewParcelInfo>(irgendwos));
+            if(result.GetType() == typeof(BusinessLogic.Entities.Parcel))
+            {
+                //return new ObjectResult(_mapper.Map<NewParcelInfo>(result));
+                return StatusCode(200, new ObjectResult(_mapper.Map<NewParcelInfo>(result)).Value);
+            } else
+            {
+                return StatusCode(400, new ObjectResult(_mapper.Map<DTOs.Error>(result)).Value);
+            }
         }
     }
 }

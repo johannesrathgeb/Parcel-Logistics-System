@@ -1,4 +1,6 @@
-﻿using LRLogistik.LRPackage.BusinessLogic.Interfaces;
+﻿using LRLogistik.LRPackage.BusinessLogic.Entities;
+using LRLogistik.LRPackage.BusinessLogic.Interfaces;
+using LRLogistik.LRPackage.BusinessLogic.Validators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +13,21 @@ namespace LRLogistik.LRPackage.BusinessLogic
     {
         public SubmissionLogic() { }
 
-        public void SubmitPackage(string trackingId)
+
+        public object SubmitParcel(Parcel parcel)
         {
-            throw new NotImplementedException();
+            ParcelValidator recipientValidator = new ParcelValidator();
+
+            var result = recipientValidator.Validate(parcel); 
+
+            if(result.IsValid)
+            {
+                return new Parcel() { TrackingId = "333333333" };
+            } else
+            {
+                return new Error() { ErrorMessage = "string" };
+            }
+
         }
     }
 }

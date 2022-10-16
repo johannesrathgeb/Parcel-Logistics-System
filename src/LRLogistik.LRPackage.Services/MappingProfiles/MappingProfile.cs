@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
-using LRLogistik.LRPackage.BusinessLogic.Entities;
-using LRLogistik.LRPackage.Services.DTOs;
 
 namespace LRLogistik.LRPackage.Services.MappingProfiles
 {
-    public class ParcelProfile : Profile
+    public class MappingProfile : Profile
     {
-        public ParcelProfile()
+        public MappingProfile()
         {
             CreateMap<DTOs.Parcel, BusinessLogic.Entities.Parcel>()
                 .ForMember(dest => dest.Weight, opt => opt.MapFrom(src => src.Weight))
@@ -25,19 +23,27 @@ namespace LRLogistik.LRPackage.Services.MappingProfiles
                 .ReverseMap();
 
 
+            CreateMap<BusinessLogic.Entities.Error, DTOs.Error>().ReverseMap();
 
             CreateMap<DTOs.GeoCoordinate, BusinessLogic.Entities.GeoCoordinate>().ReverseMap();
+
             CreateMap<DTOs.Hop, BusinessLogic.Entities.Hop>().ReverseMap();
+
             CreateMap<DTOs.HopArrival, BusinessLogic.Entities.HopArrival>().ReverseMap();
+
             CreateMap<DTOs.Recipient, BusinessLogic.Entities.Recipient>().ReverseMap();
+
             CreateMap<DTOs.Transferwarehouse, BusinessLogic.Entities.Transferwarehouse>().ReverseMap();
-            CreateMap<DTOs.WarehouseNextHops, BusinessLogic.Entities.WarehouseNextHops>().ReverseMap();
             CreateMap<DTOs.Truck, BusinessLogic.Entities.Truck>()
                 .IncludeBase<DTOs.Hop, BusinessLogic.Entities.Hop>()
                 .ReverseMap();
+
             CreateMap<DTOs.Warehouse, BusinessLogic.Entities.Warehouse>()
                 .IncludeBase<DTOs.Hop, BusinessLogic.Entities.Hop>()
                 .ReverseMap();
+
+            CreateMap<DTOs.WarehouseNextHops, BusinessLogic.Entities.WarehouseNextHops>().ReverseMap();
+
         }
 
 

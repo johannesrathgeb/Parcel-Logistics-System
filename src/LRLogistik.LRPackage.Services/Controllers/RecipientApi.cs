@@ -32,13 +32,13 @@ namespace LRLogistik.LRPackage.Services.Controllers
     [ApiController]
     public class RecipientApiController : ControllerBase
     {
-
         private readonly IMapper _mapper;
 
         public RecipientApiController(IMapper mapper)
         {
             _mapper = mapper;
         }
+
         /// <summary>
         /// Find the latest state of a parcel by its tracking ID. 
         /// </summary>
@@ -51,23 +51,46 @@ namespace LRLogistik.LRPackage.Services.Controllers
         [ValidateModelState]
         [SwaggerOperation("TrackParcel")]
         [SwaggerResponse(statusCode: 200, type: typeof(TrackingInformation), description: "Parcel exists, here&#39;s the tracking information.")]
-        [SwaggerResponse(statusCode: 400, type: typeof(Error), description: "The operation failed due to an error.")]
+        [SwaggerResponse(statusCode: 400, type: typeof(DTOs.Error), description: "The operation failed due to an error.")]
         public virtual IActionResult TrackParcel([FromRoute(Name = "trackingId")][Required][RegularExpression("^[A-Z0-9]{9}$")] string trackingId)
         {
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(TrackingInformation));
-            //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(400, default(Error));
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404);
-            string exampleJson = null;
-            exampleJson = "{\n  \"visitedHops\" : [ {\n    \"dateTime\" : \"2000-01-23T04:56:07.000+00:00\",\n    \"code\" : \"code\",\n    \"description\" : \"description\"\n  }, {\n    \"dateTime\" : \"2000-01-23T04:56:07.000+00:00\",\n    \"code\" : \"code\",\n    \"description\" : \"description\"\n  } ],\n  \"futureHops\" : [ {\n    \"dateTime\" : \"2000-01-23T04:56:07.000+00:00\",\n    \"code\" : \"code\",\n    \"description\" : \"description\"\n  }, {\n    \"dateTime\" : \"2000-01-23T04:56:07.000+00:00\",\n    \"code\" : \"code\",\n    \"description\" : \"description\"\n  } ],\n  \"state\" : \"Pickup\"\n}";
 
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<TrackingInformation>(exampleJson)
-            : default;
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+            TrackingLogic trackingLogic = new TrackingLogic(); 
+
+            var result = trackingLogic.TrackPackage(trackingId);
+
+            if (result.GetType() == typeof(BusinessLogic.Entities.Parcel))
+            {
+                //return new ObjectResult(_mapper.Map<NewParcelInfo>(result));
+                return StatusCode(200, new ObjectResult(_mapper.Map<TrackingInformation>(result)).Value);
+            }
+            else
+            {
+                return StatusCode(400, new ObjectResult(_mapper.Map<DTOs.Error>(result)).Value);
+            }
+
+
+
+
+            var dtoerror = _mapper.Map<DTOs.Error>(result);
+
+
+            /*
+            var parcel = new DTOs.Parcel()
+            {
+                Weight = 2.0f,
+                Recipient = new DTOs.Recipient()
+                {
+                    Name = "aaa"
+                },
+                Sender = new DTOs.Recipient()
+                {
+                    Name = "bbb"
+                }
+            }; 
+            */
+
+             return StatusCode(400, new ObjectResult(dtoerror).Value);
         }
     }
 }

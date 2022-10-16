@@ -59,11 +59,14 @@ namespace LRLogistik.LRPackage.Services
             var config = new MapperConfiguration(cfg => {
                 //cfg.AddProfile<HelperProfile>();
                 //cfg.AddProfile<HopProfile>();
-                cfg.AddProfile<ParcelProfile>();
+                //cfg.AddProfile<ErrorProfile>(); 
+                cfg.AddProfile<MappingProfile>();
             });
             var mapper = config.CreateMapper();
             services.AddSingleton(mapper);
             services.AddMvc();
+
+
 
             // Add framework services.
             services
