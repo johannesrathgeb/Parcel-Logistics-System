@@ -21,6 +21,7 @@ using LRLogistik.LRPackage.Services.Attributes;
 using LRLogistik.LRPackage.Services.DTOs;
 using AutoMapper;
 using LRLogistik.LRPackage.BusinessLogic;
+using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 
 namespace LRLogistik.LRPackage.Services.Controllers
 {
@@ -32,10 +33,18 @@ namespace LRLogistik.LRPackage.Services.Controllers
     {
 
         private readonly IMapper _mapper;
+        private readonly ISubmissionLogic _submissionLogic; 
 
         public SenderApiController(IMapper mapper)
         {
             _mapper = mapper;
+            _submissionLogic = new SubmissionLogic();
+        }
+
+        public SenderApiController(IMapper mapper, ISubmissionLogic submissionLogic)
+        {
+            _mapper = mapper;
+            _submissionLogic = submissionLogic; 
         }
 
         /// <summary>
@@ -56,8 +65,7 @@ namespace LRLogistik.LRPackage.Services.Controllers
         public virtual IActionResult SubmitParcel([FromBody] Parcel parcel)
         {
             var parcelEntity = _mapper.Map<BusinessLogic.Entities.Parcel>(parcel);
-            var submissionLogic = new SubmissionLogic();
-            var result = submissionLogic.SubmitParcel(parcelEntity);
+            var result = _submissionLogic.SubmitParcel(parcelEntity);
 
 
             if (result.GetType() == typeof(BusinessLogic.Entities.Parcel))
@@ -69,9 +77,6 @@ namespace LRLogistik.LRPackage.Services.Controllers
             {
                 return StatusCode(400, new ObjectResult(_mapper.Map<DTOs.Error>(result)).Value);
             }
-
-
-
 
             //TODO: Uncomment the next line to return response 201 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(201, default(NewParcelInfo));

@@ -17,7 +17,7 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             string trackingId = "PYJRB4HZ6";
             //Act
             var response = new BusinessLogic.TrackingLogic().ReportDelivery(trackingId);
-            //Test
+            //Assert
             Assert.AreEqual("Successfully reported hop", response);
         }
 
@@ -28,7 +28,7 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             string trackingId = "123";
             //Act
             var response = new BusinessLogic.TrackingLogic().ReportDelivery(trackingId);
-            //Test
+            //Assert
             Assert.IsInstanceOf<Error>(response);
         }
 

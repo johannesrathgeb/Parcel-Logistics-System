@@ -1,3 +1,4 @@
+using FizzWare.NBuilder;
 using LRLogistik.LRPackage.BusinessLogic.Entities;
 
 namespace LRLogistik.LRPackage.BusinessLogic.Tests
@@ -50,6 +51,8 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
                 State = Parcel.StateEnum.InTransportEnum,
                 TrackingId = "123"
             };
+
+            //var par = Builder<Parcel>.CreateNew().With(x => x.Weight = 0.0f).Build(); 
 
 
             //Act

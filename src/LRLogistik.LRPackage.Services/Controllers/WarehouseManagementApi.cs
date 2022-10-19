@@ -21,6 +21,7 @@ using LRLogistik.LRPackage.Services.Attributes;
 using LRLogistik.LRPackage.Services.DTOs;
 using AutoMapper;
 using LRLogistik.LRPackage.BusinessLogic;
+using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 
 namespace LRLogistik.LRPackage.Services.Controllers
 {
@@ -31,10 +32,12 @@ namespace LRLogistik.LRPackage.Services.Controllers
     public class WarehouseManagementApiController : ControllerBase
     {
         private readonly IMapper _mapper;
+        private readonly IWarehouseLogic _warehouseLogic; 
 
         public WarehouseManagementApiController(IMapper mapper)
         {
             _mapper = mapper;
+            _warehouseLogic = new WarehouseLogic();
         }
 
 
@@ -52,10 +55,7 @@ namespace LRLogistik.LRPackage.Services.Controllers
         [SwaggerResponse(statusCode: 400, type: typeof(Error), description: "The operation failed due to an error.")]
         public virtual IActionResult ExportWarehouses()
         {
-
-            WarehouseLogic warehouseLogic = new WarehouseLogic();
-
-            var result = warehouseLogic.ExportWarehouse();
+            var result = _warehouseLogic.ExportWarehouse();
 
             if (result.GetType() == typeof(BusinessLogic.Entities.Warehouse))
             {
@@ -67,21 +67,12 @@ namespace LRLogistik.LRPackage.Services.Controllers
                 return StatusCode(400, new ObjectResult(_mapper.Map<DTOs.Error>(result)).Value);
             }
 
-
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(Warehouse));
             //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(400, default(Error));
             //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(404);
-            string exampleJson = null;
-            exampleJson = "null";
-
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<Warehouse>(exampleJson)
-            : default;
-            //TODO: Change the data returned
-            return new ObjectResult(example);
         }
 
         /// <summary>
@@ -99,10 +90,7 @@ namespace LRLogistik.LRPackage.Services.Controllers
         [SwaggerResponse(statusCode: 400, type: typeof(Error), description: "The operation failed due to an error.")]
         public virtual IActionResult GetWarehouse([FromRoute(Name = "code")][Required] string code)
         {
-
-            WarehouseLogic warehouseLogic = new WarehouseLogic();
-
-            var result = warehouseLogic.GetWarehouse(code);
+            var result = _warehouseLogic.GetWarehouse(code);
 
             if (result.GetType() == typeof(BusinessLogic.Entities.Hop))
             {
@@ -113,22 +101,12 @@ namespace LRLogistik.LRPackage.Services.Controllers
                 return StatusCode(400, new ObjectResult(_mapper.Map<DTOs.Error>(result)).Value);
             }
 
-
-
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(Hop));
             //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(400, default(Error));
             //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(404);
-            string exampleJson = null;
-            exampleJson = "{\n  \"code\" : \"code\",\n  \"locationName\" : \"locationName\",\n  \"processingDelayMins\" : 0,\n  \"hopType\" : \"hopType\",\n  \"description\" : \"description\",\n  \"locationCoordinates\" : {\n    \"lon\" : 1.4658129805029452,\n    \"lat\" : 6.027456183070403\n  }\n}";
-
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<Hop>(exampleJson)
-            : default;
-            //TODO: Change the data returned
-            return new ObjectResult(example);
         }
 
         /// <summary>
@@ -145,14 +123,9 @@ namespace LRLogistik.LRPackage.Services.Controllers
         [SwaggerResponse(statusCode: 400, type: typeof(Error), description: "The operation failed due to an error.")]
         public virtual IActionResult ImportWarehouses([FromBody] Warehouse warehouse)
         {
-
-            WarehouseLogic warehouseLogic = new WarehouseLogic();
-
             var warehouseEntity = _mapper.Map<BusinessLogic.Entities.Warehouse>(warehouse);
 
-            var result = warehouseLogic.ImportWarehouse(warehouseEntity);
-
-
+            var result = _warehouseLogic.ImportWarehouse(warehouseEntity);
 
             if (result.GetType() == typeof(string))
             {
@@ -163,12 +136,9 @@ namespace LRLogistik.LRPackage.Services.Controllers
                 return StatusCode(400, new ObjectResult(_mapper.Map<DTOs.Error>(result)).Value);
             }
 
-
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(400, default(Error));
-
-            //throw new NotImplementedException();
         }
     }
 }
