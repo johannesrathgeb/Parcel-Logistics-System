@@ -22,6 +22,7 @@ using LRLogistik.LRPackage.Services.DTOs;
 using AutoMapper;
 using LRLogistik.LRPackage.BusinessLogic;
 using LRLogistik.LRPackage.BusinessLogic.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LRLogistik.LRPackage.Services.Controllers
 {
@@ -36,10 +37,18 @@ namespace LRLogistik.LRPackage.Services.Controllers
         private readonly IMapper _mapper;
         private readonly ITransferLogic _transferLogic;
 
+        [ActivatorUtilitiesConstructor]
         public LogisticsPartnerApiController(IMapper mapper)
         {
             _mapper = mapper;
             _transferLogic = new TransferLogic();
+        }
+
+        
+        public LogisticsPartnerApiController(IMapper mapper, ITransferLogic transferLogic)
+        {
+            _mapper = mapper;
+            _transferLogic = transferLogic;
         }
         /// <summary>
         /// Transfer an existing parcel into the system from the service of a logistics partner. 

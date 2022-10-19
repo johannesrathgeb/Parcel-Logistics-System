@@ -22,6 +22,7 @@ using LRLogistik.LRPackage.Services.DTOs;
 using AutoMapper;
 using LRLogistik.LRPackage.BusinessLogic;
 using LRLogistik.LRPackage.BusinessLogic.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LRLogistik.LRPackage.Services.Controllers
 {
@@ -33,8 +34,9 @@ namespace LRLogistik.LRPackage.Services.Controllers
     {
 
         private readonly IMapper _mapper;
-        private readonly ISubmissionLogic _submissionLogic; 
+        private readonly ISubmissionLogic _submissionLogic;
 
+        [ActivatorUtilitiesConstructor]
         public SenderApiController(IMapper mapper)
         {
             _mapper = mapper;

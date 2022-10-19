@@ -22,6 +22,7 @@ using LRLogistik.LRPackage.Services.DTOs;
 using AutoMapper;
 using LRLogistik.LRPackage.BusinessLogic;
 using LRLogistik.LRPackage.BusinessLogic.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LRLogistik.LRPackage.Services.Controllers
 {
@@ -33,12 +34,19 @@ namespace LRLogistik.LRPackage.Services.Controllers
     {
 
         private readonly IMapper _mapper;
-        private readonly ITrackingLogic _trackingLogic; 
+        private readonly ITrackingLogic _trackingLogic;
 
+        [ActivatorUtilitiesConstructor]
         public StaffApiController(IMapper mapper)
         {
             _mapper = mapper;
             _trackingLogic = new TrackingLogic();
+        }
+
+        public StaffApiController(IMapper mapper, ITrackingLogic trackingLogic)
+        {
+            _mapper = mapper;
+            _trackingLogic = trackingLogic;
         }
 
         /// <summary>

@@ -22,6 +22,7 @@ using LRLogistik.LRPackage.Services.DTOs;
 using AutoMapper;
 using LRLogistik.LRPackage.BusinessLogic;
 using LRLogistik.LRPackage.BusinessLogic.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LRLogistik.LRPackage.Services.Controllers
 {
@@ -32,14 +33,20 @@ namespace LRLogistik.LRPackage.Services.Controllers
     public class WarehouseManagementApiController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IWarehouseLogic _warehouseLogic; 
+        private readonly IWarehouseLogic _warehouseLogic;
 
+        [ActivatorUtilitiesConstructor]
         public WarehouseManagementApiController(IMapper mapper)
         {
             _mapper = mapper;
             _warehouseLogic = new WarehouseLogic();
         }
 
+        public WarehouseManagementApiController(IMapper mapper, IWarehouseLogic warehouseLogic)
+        {
+            _mapper = mapper;
+            _warehouseLogic = warehouseLogic;
+        }
 
         /// <summary>
         /// Exports the hierarchy of Warehouse and Truck objects. 
