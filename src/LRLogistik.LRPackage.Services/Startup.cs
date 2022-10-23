@@ -57,9 +57,7 @@ namespace LRLogistik.LRPackage.Services
         {
             // AutoMapper
             var config = new MapperConfiguration(cfg => {
-                //cfg.AddProfile<HelperProfile>();
-                //cfg.AddProfile<HopProfile>();
-                //cfg.AddProfile<ErrorProfile>(); 
+                cfg.AddProfile<BusinessLogic.MappingProfiles.MappingProfile>();    
                 cfg.AddProfile<MappingProfile>();
             });
             var mapper = config.CreateMapper();

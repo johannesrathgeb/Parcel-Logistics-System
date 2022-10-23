@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -7,13 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
-    <PackageReference Include="FluentValidation" Version="11.2.2" />
     <PackageReference Include="NetTopologySuite" Version="2.5.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LRLogistik.LRPackage.BusinessLogic.Interfaces\LRLogistik.LRPackage.BusinessLogic.Interfaces.csproj" />
     <ProjectReference Include="..\LRLogistik.LRPackage.DataAccess.Entities\LRLogistik.LRPackage.DataAccess.Entities.csproj" />
   </ItemGroup>
 
