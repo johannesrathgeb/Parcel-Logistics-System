@@ -1,6 +1,7 @@
 ﻿using LRLogistik.LRPackage.BusinessLogic.Entities;
 using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using LRLogistik.LRPackage.BusinessLogic.Validators;
+using LRLogistik.LRPackage.DataAccess.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,13 @@ namespace LRLogistik.LRPackage.BusinessLogic
 {
     public class SubmissionLogic : ISubmissionLogic
     {
-        public SubmissionLogic() { }
+        /*
+        IParcelRepository _parcelRepository;
 
+        public SubmissionLogic(IParcelRepository repo) {
+            _parcelRepository = repo;
+        }
+        */
 
         public object SubmitParcel(Parcel parcel)
         {

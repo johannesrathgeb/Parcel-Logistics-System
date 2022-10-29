@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LRLogistik.LRPackage.BusinessLogic.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,15 +13,15 @@ namespace LRLogistik.LRPackage.BusinessLogic.MappingProfiles
         public MappingProfile()
         {
             CreateMap<BusinessLogic.Entities.Hop, DataAccess.Entities.Hop>()
-                .ForMember(dest => dest.LocationCoordinates, opt => opt.MapFrom(src => src.LocationCoordinates))
+                .ForMember(dest => dest.LocationCoordinates, opt => opt.ConvertUsing(new GeoPointConverter(), src => src.LocationCoordinates))
                 .ReverseMap();
 
             CreateMap<BusinessLogic.Entities.Transferwarehouse, DataAccess.Entities.Transferwarehouse>()
-                .ForMember(dest => dest.Region, opt => opt.MapFrom(src => src.RegionGeoJson))
+                .ForMember(dest => dest.Region, opt => opt.ConvertUsing(new GeoJsonConverter(), src => src.RegionGeoJson))
                 .ReverseMap();
 
             CreateMap<BusinessLogic.Entities.Truck, DataAccess.Entities.Truck>()
-                .ForMember(dest => dest.Region, opt => opt.MapFrom(src => src.RegionGeoJson))
+                .ForMember(dest => dest.Region, opt => opt.ConvertUsing(new GeoJsonConverter(), src => src.RegionGeoJson))
                 .ReverseMap();
 
             CreateMap<BusinessLogic.Entities.Parcel, DataAccess.Entities.Parcel>().ReverseMap();

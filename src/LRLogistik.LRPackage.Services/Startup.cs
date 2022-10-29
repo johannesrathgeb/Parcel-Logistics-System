@@ -26,6 +26,8 @@ using LRLogistik.LRPackage.Services.OpenApi;
 using LRLogistik.LRPackage.Services.Formatters;
 using AutoMapper;
 using LRLogistik.LRPackage.Services.MappingProfiles;
+using LRLogistik.LRPackage.DataAccess.Sql;
+using Microsoft.EntityFrameworkCore;
 
 namespace LRLogistik.LRPackage.Services
 {
@@ -64,6 +66,8 @@ namespace LRLogistik.LRPackage.Services
             services.AddSingleton(mapper);
             services.AddMvc();
 
+            services.AddDbContext<DBContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("SWKOMDB")));
 
 
             // Add framework services.

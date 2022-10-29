@@ -19,5 +19,8 @@ namespace LRLogistik.LRPackage.DataAccess.Interfaces
 
         // Get by ID
         Parcel GetByTrackingId(string trackingid);
+
+
+
     }
 }
