@@ -5,9 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace LRLogistik.LRPackage.BusinessLogic.Entities
 {
+    [Keyless]
     public class Recipient
     {
 

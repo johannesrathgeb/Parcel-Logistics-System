@@ -66,7 +66,7 @@ namespace LRLogistik.LRPackage.Services
             services.AddSingleton(mapper);
             services.AddMvc();
 
-            services.AddDbContext<DBContext>(options =>
+            services.AddDbContext<SampleContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("SWKOMDB")));
 
 

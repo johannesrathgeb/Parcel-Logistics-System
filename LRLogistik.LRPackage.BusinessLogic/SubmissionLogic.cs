@@ -28,7 +28,22 @@ namespace LRLogistik.LRPackage.BusinessLogic
 
             if(result.IsValid)
             {
+                DataAccess.Sql.ParcelRepository parcelRepository = new DataAccess.Sql.ParcelRepository();
+                Parcel parcel123= new Parcel()
+                {
+                    TrackingId = "111111111",
+                    Weight = 1.0f,
+                    Recipient = new Recipient() { Name = "string", Street = "string", PostalCode = "string", City = "string", Country = "string" },
+                    Sender = new Recipient() { Name = "string", Street = "string", PostalCode = "string", City = "string", Country = "string" },
+                    State = Parcel.StateEnum.InTruckDeliveryEnum,
+                    VisitedHops = new List<HopArrival> { new HopArrival() { Code = "XXXXXX", Description = "string", DateTime = new DateTime() } },
+                    FutureHops = new List<HopArrival> { new HopArrival() { Code = "XXXXXX", Description = "string", DateTime = new DateTime() } },
+
+                };
+                parcelRepository.Create(parcel123);
+
                 return new Parcel() { TrackingId = "333333333" };
+
             } else
             {
                 return new Error() { ErrorMessage = "string" };

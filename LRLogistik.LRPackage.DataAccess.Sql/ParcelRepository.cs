@@ -1,5 +1,7 @@
 ﻿using LRLogistik.LRPackage.DataAccess.Entities;
 using LRLogistik.LRPackage.DataAccess.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,16 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
 {
     public class ParcelRepository : IParcelRepository
     {
+        SampleContext _dbContext = new SampleContext();
+
+
+        [HttpPost]
+        public void Create(BusinessLogic.Entities.Parcel parcel)
+        {
+            _dbContext.Parcels.Add(parcel);
+            _dbContext.SaveChanges();
+        }
+
         public Parcel Create(Parcel p)
         {
             throw new NotImplementedException();
