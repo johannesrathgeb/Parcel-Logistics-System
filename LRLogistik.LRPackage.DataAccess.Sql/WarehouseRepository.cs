@@ -6,13 +6,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace LRLogistik.LRPackage.DataAccess.Sql
 {
-    internal class WarehouseRepository : IWarehouseRepository
+    public class WarehouseRepository : IWarehouseRepository
     {
-        public Warehouse Create(Warehouse w)
+        SampleContext _dbContext = new SampleContext();
+
+        public void Create(Warehouse w)
         {
-            throw new NotImplementedException();
+            _dbContext.Warehouses.Add(w);
+            _dbContext.SaveChanges();
         }
 
         public void Delete(int id)

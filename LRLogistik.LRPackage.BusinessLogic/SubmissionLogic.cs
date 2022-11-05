@@ -3,6 +3,7 @@ using LRLogistik.LRPackage.BusinessLogic.Entities;
 using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using LRLogistik.LRPackage.BusinessLogic.Validators;
 using LRLogistik.LRPackage.DataAccess.Interfaces;
+using LRLogistik.LRPackage.DataAccess.Sql;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -23,12 +24,14 @@ namespace LRLogistik.LRPackage.BusinessLogic
         */
         private readonly IMapper _mapper;
         private static Random random = new Random();
+        IParcelRepository _parcelRepository;
 
 
         [ActivatorUtilitiesConstructor]
         public SubmissionLogic(IMapper mapper)
         {
             _mapper = mapper;
+            _parcelRepository = new ParcelRepository();
         }
 
         public SubmissionLogic()
@@ -46,8 +49,7 @@ namespace LRLogistik.LRPackage.BusinessLogic
             if(result.IsValid)
             {
                 parcel.TrackingId = RandomString(9);
-                DataAccess.Sql.ParcelRepository parcelRepository = new DataAccess.Sql.ParcelRepository();
-                parcelRepository.Create(_mapper.Map<DataAccess.Entities.Parcel>(parcel));
+                _parcelRepository.Create(_mapper.Map<DataAccess.Entities.Parcel>(parcel));
                 
 
                 return new Parcel() { TrackingId = "333333333" };

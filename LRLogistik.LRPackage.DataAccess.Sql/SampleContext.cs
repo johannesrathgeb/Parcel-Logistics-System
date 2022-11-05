@@ -29,7 +29,7 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
 
         public DbSet<DataAccess.Entities.Parcel> Parcels { get; set; }
         
-        //public DbSet<BusinessLogic.Entities.Warehouse> Warehouses { get; set; }
+        public DbSet<DataAccess.Entities.Warehouse> Warehouses { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -41,7 +41,7 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
                    .AddJsonFile("appsettings.json")
                    .Build();
                 var connectionString = configuration.GetConnectionString("SWKOMDB");
-                optionsBuilder.UseSqlServer(connectionString, options => options.EnableRetryOnFailure());
+                optionsBuilder.UseSqlServer(connectionString, x => x.UseNetTopologySuite());
             }
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -66,8 +66,23 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
                 e.HasMany<HopArrival>(p => p.FutureHops);
             });
 
+            modelBuilder.Entity<DataAccess.Entities.Warehouse>(e =>
+            {
+                e.HasMany<WarehouseNextHops>(p => p.NextHops);
+            });
 
+            modelBuilder.Entity<DataAccess.Entities.Hop>(e =>
+            {
+                e.HasDiscriminator<string>("hop_type");
+                e.HasKey(p => p.HopId);
+                e.Property(x => x.HopId).ValueGeneratedOnAdd();
+            });
 
+            modelBuilder.Entity<DataAccess.Entities.WarehouseNextHops>(e =>
+            {
+                e.HasKey(p => p.WarehouseNextHopsId);
+                e.Property(x => x.WarehouseNextHopsId).ValueGeneratedOnAdd();
+            });
         }
     }
 }

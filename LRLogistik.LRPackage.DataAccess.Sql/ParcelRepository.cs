@@ -29,7 +29,7 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
 
         public Parcel GetByTrackingId(string trackingid)
         {
-            throw new NotImplementedException();
+            return _dbContext.Parcels.Single(p => p.TrackingId == trackingid);
         }
 
         public IEnumerable<Parcel> GetByXX(string xx)

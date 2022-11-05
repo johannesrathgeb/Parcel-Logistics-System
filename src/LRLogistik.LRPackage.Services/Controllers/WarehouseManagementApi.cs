@@ -39,7 +39,7 @@ namespace LRLogistik.LRPackage.Services.Controllers
         public WarehouseManagementApiController(IMapper mapper)
         {
             _mapper = mapper;
-            _warehouseLogic = new WarehouseLogic();
+            _warehouseLogic = new WarehouseLogic(_mapper);
         }
 
         public WarehouseManagementApiController(IMapper mapper, IWarehouseLogic warehouseLogic)

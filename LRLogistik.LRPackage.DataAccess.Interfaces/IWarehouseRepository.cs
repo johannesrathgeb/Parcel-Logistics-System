@@ -9,7 +9,7 @@ namespace LRLogistik.LRPackage.DataAccess.Interfaces
 {
     public interface IWarehouseRepository
     {
-        Warehouse Create(Warehouse w);
+        void Create(Warehouse w);
         Warehouse Update(Warehouse w);
         void Delete(int id);
 

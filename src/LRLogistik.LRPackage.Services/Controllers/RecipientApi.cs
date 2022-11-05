@@ -41,7 +41,7 @@ namespace LRLogistik.LRPackage.Services.Controllers
         public RecipientApiController(IMapper mapper)
         {
             _mapper = mapper;
-            _trackingLogic = new TrackingLogic();   
+            _trackingLogic = new TrackingLogic(_mapper);   
         }
 
         public RecipientApiController(IMapper mapper, ITrackingLogic trackingLogic)

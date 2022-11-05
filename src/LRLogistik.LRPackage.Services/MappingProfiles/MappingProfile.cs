@@ -43,7 +43,6 @@ namespace LRLogistik.LRPackage.Services.MappingProfiles
                 .ReverseMap();
 
             CreateMap<DTOs.WarehouseNextHops, BusinessLogic.Entities.WarehouseNextHops>().ReverseMap();
-
         }
 
 

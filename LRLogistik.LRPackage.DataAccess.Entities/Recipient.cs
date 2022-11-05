@@ -10,8 +10,6 @@ namespace LRLogistik.LRPackage.DataAccess.Entities
 {
     public class Recipient
     {
-        private static Random random = new Random();
-   
         public string RecipientId { get; set; }
 
         public string Name { get; set; }

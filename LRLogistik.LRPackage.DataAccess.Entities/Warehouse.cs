@@ -8,7 +8,6 @@ namespace LRLogistik.LRPackage.DataAccess.Entities
 {
     public class Warehouse : Hop
     {
-
         public int Level { get; set; }
 
         public List<WarehouseNextHops> NextHops { get; set; }

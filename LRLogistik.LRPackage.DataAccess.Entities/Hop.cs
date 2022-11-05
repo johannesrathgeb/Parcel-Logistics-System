@@ -9,6 +9,7 @@ namespace LRLogistik.LRPackage.DataAccess.Entities
 {
     public class Hop
     {
+        public string HopId { get; set; }
 
         public string HopType { get; set; }
 
