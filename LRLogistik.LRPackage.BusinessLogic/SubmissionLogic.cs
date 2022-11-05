@@ -31,6 +31,11 @@ namespace LRLogistik.LRPackage.BusinessLogic
             _mapper = mapper;
         }
 
+        public SubmissionLogic()
+        {
+
+        }
+
 
         public object SubmitParcel(Parcel parcel)
         {

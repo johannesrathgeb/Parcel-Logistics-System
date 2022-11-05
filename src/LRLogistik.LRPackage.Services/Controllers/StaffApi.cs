@@ -40,7 +40,7 @@ namespace LRLogistik.LRPackage.Services.Controllers
         public StaffApiController(IMapper mapper)
         {
             _mapper = mapper;
-            _trackingLogic = new TrackingLogic();
+            _trackingLogic = new TrackingLogic(_mapper);
         }
 
         public StaffApiController(IMapper mapper, ITrackingLogic trackingLogic)

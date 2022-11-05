@@ -41,7 +41,7 @@ namespace LRLogistik.LRPackage.Services.Controllers
         public LogisticsPartnerApiController(IMapper mapper)
         {
             _mapper = mapper;
-            _transferLogic = new TransferLogic();
+            _transferLogic = new TransferLogic(_mapper);
         }
 
         

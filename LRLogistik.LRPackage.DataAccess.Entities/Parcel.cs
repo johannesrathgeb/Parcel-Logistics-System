@@ -10,11 +10,13 @@ namespace LRLogistik.LRPackage.DataAccess.Entities
 {
     public class Parcel
     {
+        public int ParcelId { get; set; }
         //Parcel 
         public float Weight { get; set; }
-       
-        public Recipient Recipient { get; set; }
 
+        public Recipient Recipient { get; set; }
+        
+        
         public Recipient Sender { get; set; }
 
         //Tracking information
@@ -29,9 +31,9 @@ namespace LRLogistik.LRPackage.DataAccess.Entities
         }
 
         public StateEnum State { get; set; }
-        
+
         public List<HopArrival> VisitedHops { get; set; }
-        
+
         public List<HopArrival> FutureHops { get; set; }
 
         //NewParcelInfo

@@ -1,6 +1,8 @@
-﻿using LRLogistik.LRPackage.BusinessLogic.Entities;
+﻿using AutoMapper;
+using LRLogistik.LRPackage.BusinessLogic.Entities;
 using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using LRLogistik.LRPackage.BusinessLogic.Validators;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +13,17 @@ namespace LRLogistik.LRPackage.BusinessLogic
 {
     public class TrackingLogic : ITrackingLogic
     {
+        private readonly IMapper _mapper;
 
-        public TrackingLogic() { }
+        [ActivatorUtilitiesConstructor]
+        public TrackingLogic(IMapper mapper) {
+            _mapper = mapper; 
+        }
+
+        public TrackingLogic()
+        {
+            
+        }
 
         public object ReportDelivery(string trackingId)
         {
@@ -58,6 +69,8 @@ namespace LRLogistik.LRPackage.BusinessLogic
 
             if (result.IsValid)
             {
+
+
                 return new Parcel()
                 {
                     TrackingId = "111111111",

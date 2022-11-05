@@ -1,6 +1,8 @@
-﻿using LRLogistik.LRPackage.BusinessLogic.Entities;
+﻿using AutoMapper;
+using LRLogistik.LRPackage.BusinessLogic.Entities;
 using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using LRLogistik.LRPackage.BusinessLogic.Validators;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +14,20 @@ namespace LRLogistik.LRPackage.BusinessLogic
     public class TransferLogic : ITransferLogic
     {
 
-        public TransferLogic() { }
+        //public TransferLogic() { }
+
+        private readonly IMapper _mapper;
+
+        [ActivatorUtilitiesConstructor]
+        public TransferLogic(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
+        public TransferLogic()
+        {
+            
+        }
 
         public object TransferPackage(string trackingId, Parcel parcel)
         {
@@ -25,6 +40,11 @@ namespace LRLogistik.LRPackage.BusinessLogic
 
             if (result_t.IsValid && result_c.IsValid)
             {
+                DataAccess.Sql.ParcelRepository parcelRepository = new DataAccess.Sql.ParcelRepository();
+                parcel.TrackingId = trackingId; 
+                parcelRepository.Create(_mapper.Map<DataAccess.Entities.Parcel>(parcel));
+
+
                 return new Parcel() { TrackingId = "111111111" };
             }
             else

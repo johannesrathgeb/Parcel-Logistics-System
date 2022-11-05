@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,10 +10,11 @@ namespace LRLogistik.LRPackage.DataAccess.Entities
 {
     public class Recipient
     {
-        public int RecipientId { get; set; }
+        private static Random random = new Random();
+   
+        public string RecipientId { get; set; }
 
         public string Name { get; set; }
-
 
         public string Street { get; set; }
 
@@ -23,5 +26,7 @@ namespace LRLogistik.LRPackage.DataAccess.Entities
 
 
         public string Country { get; set; }
+
     }
+
 }

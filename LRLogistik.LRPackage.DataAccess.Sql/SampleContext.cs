@@ -1,4 +1,5 @@
-﻿using LRLogistik.LRPackage.DataAccess.Interfaces;
+﻿using LRLogistik.LRPackage.DataAccess.Entities;
+using LRLogistik.LRPackage.DataAccess.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
@@ -33,15 +34,6 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //base.OnConfiguring(optionsBuilder);
-            //optionsBuilder.UseSqlServer(
-            //    "Server=swkom-sqlserver-1\\SQLEXPRESS;" +
-            //    "DataBase=SWKOMDB;Trusted_Connection=True;");
-            //var dbUser = "sa";
-            //var dbPW = "pass@word1";
-            //optionsBuilder.UseSqlServer(
-            //    $"Server=tcp:sample-sql.database.windows.net,1433;Initial Catalog=sample-db;Persist Security Info=False;User ID={dbUser};Password={dbPW};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-
             if (!optionsBuilder.IsConfigured)
             {
                 IConfigurationRoot configuration = new ConfigurationBuilder()
@@ -54,14 +46,30 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+
+            modelBuilder.Entity<DataAccess.Entities.Recipient>(e =>
+            {
+                //e.ToTable("parcels");
+                e.HasKey(x => x.RecipientId);
+                e.Property(x => x.RecipientId).ValueGeneratedOnAdd(); 
+            });
+
             modelBuilder.Entity<DataAccess.Entities.Parcel>(e =>
             {
-                e.ToTable("parcels");
-                e.HasKey(p => p.TrackingId);
+                //e.ToTable("parcels");
+                e.Property(p => p.ParcelId).ValueGeneratedOnAdd(); 
+                e.HasKey(p => p.ParcelId);
+                e.HasOne<Recipient>(p => p.Recipient);
+                e.HasOne<Recipient>(p => p.Sender);
+                e.HasMany<HopArrival>(p => p.VisitedHops); 
+                e.HasMany<HopArrival>(p => p.FutureHops);
             });
+
+
+
         }
     }
-
 }
 
 
