@@ -11,7 +11,6 @@ namespace LRLogistik.LRPackage.BusinessLogic.Entities
 {
     public class HopArrival
     {
-        [Key]
         public string Code { get; set; }
 
         public string Description { get; set; }

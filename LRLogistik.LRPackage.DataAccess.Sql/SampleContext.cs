@@ -26,7 +26,7 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
             this.Database.EnsureCreated();
         }
 
-        public DbSet<BusinessLogic.Entities.Parcel> Parcels { get; set; }
+        public DbSet<DataAccess.Entities.Parcel> Parcels { get; set; }
         
         //public DbSet<BusinessLogic.Entities.Warehouse> Warehouses { get; set; }
 
@@ -54,8 +54,11 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<BusinessLogic.Entities.Parcel>()
-                .ToTable("parcels");
+            modelBuilder.Entity<DataAccess.Entities.Parcel>(e =>
+            {
+                e.ToTable("parcels");
+                e.HasKey(p => p.TrackingId);
+            });
         }
     }
 

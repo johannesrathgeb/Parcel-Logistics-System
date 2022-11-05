@@ -18,9 +18,7 @@ namespace LRLogistik.LRPackage.BusinessLogic.Entities
 
         public float Weight { get; set; }
 
-        [NotMapped]
         public Recipient Recipient { get; set; }
-        [NotMapped]
         public Recipient Sender { get; set; }
 
         //Tracking information
@@ -35,13 +33,10 @@ namespace LRLogistik.LRPackage.BusinessLogic.Entities
         }
 
         public StateEnum State { get; set; }
-        [NotMapped]
         public List<HopArrival> VisitedHops { get; set; }
-        [NotMapped]
         public List<HopArrival> FutureHops { get; set; }
 
         //NewParcelInfo
-        [Key]
         public string TrackingId { get; set; }
     }
 

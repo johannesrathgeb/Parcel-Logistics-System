@@ -8,6 +8,7 @@ namespace LRLogistik.LRPackage.DataAccess.Entities
 {
     public class Recipient
     {
+        public int RecipientId { get; set; }
 
         public string Name { get; set; }
 

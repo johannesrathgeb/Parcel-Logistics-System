@@ -40,7 +40,7 @@ namespace LRLogistik.LRPackage.Services.Controllers
         public SenderApiController(IMapper mapper)
         {
             _mapper = mapper;
-            _submissionLogic = new SubmissionLogic();
+            _submissionLogic = new SubmissionLogic(_mapper);
         }
 
         public SenderApiController(IMapper mapper, ISubmissionLogic submissionLogic)

@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LRLogistik.LRPackage.BusinessLogic.Entities
 {
-    [Keyless]
     public class Recipient
     {
 

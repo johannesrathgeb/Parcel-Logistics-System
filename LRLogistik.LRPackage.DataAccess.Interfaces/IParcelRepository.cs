@@ -9,7 +9,7 @@ namespace LRLogistik.LRPackage.DataAccess.Interfaces
 {
     public interface IParcelRepository
     {
-        Parcel Create(Parcel p);
+        void Create(Parcel p);
         Parcel Update(Parcel p);
         void Delete(int id);
 

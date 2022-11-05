@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,9 +11,8 @@ namespace LRLogistik.LRPackage.DataAccess.Entities
     public class Parcel
     {
         //Parcel 
-
         public float Weight { get; set; }
-
+       
         public Recipient Recipient { get; set; }
 
         public Recipient Sender { get; set; }
@@ -28,13 +29,12 @@ namespace LRLogistik.LRPackage.DataAccess.Entities
         }
 
         public StateEnum State { get; set; }
-
+        
         public List<HopArrival> VisitedHops { get; set; }
-
+        
         public List<HopArrival> FutureHops { get; set; }
 
         //NewParcelInfo
-
         public string TrackingId { get; set; }
     }
 }

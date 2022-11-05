@@ -1,7 +1,9 @@
-﻿using LRLogistik.LRPackage.BusinessLogic.Entities;
+﻿using AutoMapper;
+using LRLogistik.LRPackage.BusinessLogic.Entities;
 using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using LRLogistik.LRPackage.BusinessLogic.Validators;
 using LRLogistik.LRPackage.DataAccess.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +21,16 @@ namespace LRLogistik.LRPackage.BusinessLogic
             _parcelRepository = repo;
         }
         */
+        private readonly IMapper _mapper;
+        private static Random random = new Random();
+
+
+        [ActivatorUtilitiesConstructor]
+        public SubmissionLogic(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
 
         public object SubmitParcel(Parcel parcel)
         {
@@ -28,19 +40,10 @@ namespace LRLogistik.LRPackage.BusinessLogic
 
             if(result.IsValid)
             {
+                parcel.TrackingId = RandomString(9);
                 DataAccess.Sql.ParcelRepository parcelRepository = new DataAccess.Sql.ParcelRepository();
-                Parcel parcel123= new Parcel()
-                {
-                    TrackingId = "111111111",
-                    Weight = 1.0f,
-                    Recipient = new Recipient() { Name = "string", Street = "string", PostalCode = "string", City = "string", Country = "string" },
-                    Sender = new Recipient() { Name = "string", Street = "string", PostalCode = "string", City = "string", Country = "string" },
-                    State = Parcel.StateEnum.InTruckDeliveryEnum,
-                    VisitedHops = new List<HopArrival> { new HopArrival() { Code = "XXXXXX", Description = "string", DateTime = new DateTime() } },
-                    FutureHops = new List<HopArrival> { new HopArrival() { Code = "XXXXXX", Description = "string", DateTime = new DateTime() } },
-
-                };
-                parcelRepository.Create(parcel123);
+                parcelRepository.Create(_mapper.Map<DataAccess.Entities.Parcel>(parcel));
+                
 
                 return new Parcel() { TrackingId = "333333333" };
 
@@ -49,6 +52,13 @@ namespace LRLogistik.LRPackage.BusinessLogic
                 return new Error() { ErrorMessage = "string" };
             }
 
+        }
+
+        public static string RandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }

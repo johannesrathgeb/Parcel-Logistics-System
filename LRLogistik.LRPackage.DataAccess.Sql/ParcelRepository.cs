@@ -16,15 +16,10 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
 
 
         [HttpPost]
-        public void Create(BusinessLogic.Entities.Parcel parcel)
+        public void Create(Parcel parcel)
         {
             _dbContext.Parcels.Add(parcel);
             _dbContext.SaveChanges();
-        }
-
-        public Parcel Create(Parcel p)
-        {
-            throw new NotImplementedException();
         }
 
         public void Delete(int id)
