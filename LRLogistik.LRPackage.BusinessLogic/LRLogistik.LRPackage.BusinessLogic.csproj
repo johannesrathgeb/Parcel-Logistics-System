@@ -9,10 +9,16 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="FluentValidation" Version="11.2.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.10" />
+    <PackageReference Include="NetTopologySuite" Version="2.5.0" />
+    <PackageReference Include="NetTopologySuite.IO.GeoJSON" Version="2.0.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\LRLogistik.LRPackage.BusinessLogic.Interfaces\LRLogistik.LRPackage.BusinessLogic.Interfaces.csproj" />
+    <ProjectReference Include="..\LRLogistik.LRPackage.DataAccess.Entities\LRLogistik.LRPackage.DataAccess.Entities.csproj" />
+    <ProjectReference Include="..\LRLogistik.LRPackage.DataAccess.Interfaces\LRLogistik.LRPackage.DataAccess.Interfaces.csproj" />
+    <ProjectReference Include="..\LRLogistik.LRPackage.DataAccess.Sql\LRLogistik.LRPackage.DataAccess.Sql.csproj" />
   </ItemGroup>
 
 </Project>

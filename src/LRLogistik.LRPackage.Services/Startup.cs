@@ -26,12 +26,16 @@ using LRLogistik.LRPackage.Services.OpenApi;
 using LRLogistik.LRPackage.Services.Formatters;
 using AutoMapper;
 using LRLogistik.LRPackage.Services.MappingProfiles;
+using LRLogistik.LRPackage.DataAccess.Sql;
+using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.CodeAnalysis;
 
 namespace LRLogistik.LRPackage.Services
 {
     /// <summary>
     /// Startup
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class Startup
     {
 
@@ -57,15 +61,15 @@ namespace LRLogistik.LRPackage.Services
         {
             // AutoMapper
             var config = new MapperConfiguration(cfg => {
-                //cfg.AddProfile<HelperProfile>();
-                //cfg.AddProfile<HopProfile>();
-                //cfg.AddProfile<ErrorProfile>(); 
+                cfg.AddProfile<BusinessLogic.MappingProfiles.MappingProfile>();    
                 cfg.AddProfile<MappingProfile>();
             });
             var mapper = config.CreateMapper();
             services.AddSingleton(mapper);
             services.AddMvc();
 
+            services.AddDbContext<SampleContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("SWKOMDB")));
 
 
             // Add framework services.

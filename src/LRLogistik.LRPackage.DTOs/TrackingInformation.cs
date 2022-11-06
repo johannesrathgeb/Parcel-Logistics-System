@@ -17,12 +17,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using LRLogistik.LRPackage.Services.DTOs.Converters;
+using System.Diagnostics.CodeAnalysis;
 
 namespace LRLogistik.LRPackage.Services.DTOs
 {
     /// <summary>
     /// 
     /// </summary>
+    [ExcludeFromCodeCoverage]
     [DataContract]
     public partial class TrackingInformation 
     {

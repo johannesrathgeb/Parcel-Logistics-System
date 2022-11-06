@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using LRLogistik.LRPackage.BusinessLogic.Converters;
+using System.Diagnostics.CodeAnalysis;
 
 namespace LRLogistik.LRPackage.Services.MappingProfiles
 {
     public class MappingProfile : Profile
     {
+        [ExcludeFromCodeCoverage]
         public MappingProfile()
         {
             CreateMap<DTOs.Parcel, BusinessLogic.Entities.Parcel>()
@@ -43,7 +46,6 @@ namespace LRLogistik.LRPackage.Services.MappingProfiles
                 .ReverseMap();
 
             CreateMap<DTOs.WarehouseNextHops, BusinessLogic.Entities.WarehouseNextHops>().ReverseMap();
-
         }
 
 

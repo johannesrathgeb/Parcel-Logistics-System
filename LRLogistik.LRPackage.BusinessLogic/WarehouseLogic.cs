@@ -1,6 +1,10 @@
-﻿using LRLogistik.LRPackage.BusinessLogic.Entities;
+﻿using AutoMapper;
+using LRLogistik.LRPackage.BusinessLogic.Entities;
 using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using LRLogistik.LRPackage.BusinessLogic.Validators;
+using LRLogistik.LRPackage.DataAccess.Interfaces;
+using LRLogistik.LRPackage.DataAccess.Sql;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +15,37 @@ namespace LRLogistik.LRPackage.BusinessLogic
 {
     public class WarehouseLogic : IWarehouseLogic
     {
+
+        private readonly IMapper _mapper;
+        IWarehouseRepository _warehouseRepository;
+
+        [ActivatorUtilitiesConstructor]
+        public WarehouseLogic(IMapper mapper)
+        {
+            _mapper = mapper;
+            _warehouseRepository = new WarehouseRepository();  
+        }
+
+        public WarehouseLogic(IMapper mapper, IWarehouseRepository repository)
+        {
+            _mapper = mapper;
+            _warehouseRepository = repository; 
+        }
+
+        public object ImportWarehouse(Warehouse warehouse)
+        {
+
+            //DataAccess.Entities.Warehouse h = _mapper.Map<DataAccess.Entities.Warehouse>(warehouse); 
+
+            //_warehouseRepository.Create(h);
+
+            _warehouseRepository.Create(_mapper.Map<DataAccess.Entities.Warehouse>(warehouse));
+
+            return "Successfully loaded";
+
+            //return new Error() {ErrorMessage = "string"};
+        }
+
         public object ExportWarehouse()
         {
             return new Warehouse()
@@ -53,11 +88,6 @@ namespace LRLogistik.LRPackage.BusinessLogic
             }
         }
 
-        public object ImportWarehouse(Warehouse warehouse)
-        {
-            return "Successfully loaded"; 
 
-            //return new Error() {ErrorMessage = "string"};
-        }
     }
 }

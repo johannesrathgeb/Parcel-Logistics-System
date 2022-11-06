@@ -21,6 +21,8 @@ using LRLogistik.LRPackage.Services.Attributes;
 using LRLogistik.LRPackage.Services.DTOs;
 using AutoMapper;
 using LRLogistik.LRPackage.BusinessLogic;
+using LRLogistik.LRPackage.BusinessLogic.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LRLogistik.LRPackage.Services.Controllers
 {
@@ -32,10 +34,19 @@ namespace LRLogistik.LRPackage.Services.Controllers
     {
 
         private readonly IMapper _mapper;
+        private readonly ITrackingLogic _trackingLogic;
 
+        [ActivatorUtilitiesConstructor]
         public StaffApiController(IMapper mapper)
         {
             _mapper = mapper;
+            _trackingLogic = new TrackingLogic(_mapper);
+        }
+
+        public StaffApiController(IMapper mapper, ITrackingLogic trackingLogic)
+        {
+            _mapper = mapper;
+            _trackingLogic = trackingLogic;
         }
 
         /// <summary>
@@ -52,10 +63,7 @@ namespace LRLogistik.LRPackage.Services.Controllers
         [SwaggerResponse(statusCode: 400, type: typeof(Error), description: "The operation failed due to an error.")]
         public virtual IActionResult ReportParcelDelivery([FromRoute(Name = "trackingId")][Required][RegularExpression("^[A-Z0-9]{9}$")] string trackingId)
         {
-
-            TrackingLogic trackingLogic = new TrackingLogic();
-
-            var result = trackingLogic.ReportDelivery(trackingId);
+            var result = _trackingLogic.ReportDelivery(trackingId);
 
             if (result.GetType() == typeof(string))
             {
@@ -91,8 +99,7 @@ namespace LRLogistik.LRPackage.Services.Controllers
         [SwaggerResponse(statusCode: 400, type: typeof(Error), description: "The operation failed due to an error.")]
         public virtual IActionResult ReportParcelHop([FromRoute(Name = "trackingId")][Required][RegularExpression("^[A-Z0-9]{9}$")] string trackingId, [FromRoute(Name = "code")][Required][RegularExpression("^[A-Z]{4}\\d{1,4}$")] string code)
         {
-            var trackingLogic = new TrackingLogic();
-            var result = trackingLogic.ReportHop(trackingId, code);
+            var result = _trackingLogic.ReportHop(trackingId, code);
 
             if (result.GetType() == typeof(string))
             {

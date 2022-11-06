@@ -21,6 +21,8 @@ using LRLogistik.LRPackage.Services.Attributes;
 using LRLogistik.LRPackage.Services.DTOs;
 using AutoMapper;
 using LRLogistik.LRPackage.BusinessLogic;
+using LRLogistik.LRPackage.BusinessLogic.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LRLogistik.LRPackage.Services.Controllers
 {
@@ -33,10 +35,20 @@ namespace LRLogistik.LRPackage.Services.Controllers
     public class LogisticsPartnerApiController : ControllerBase
     {
         private readonly IMapper _mapper;
+        private readonly ITransferLogic _transferLogic;
 
+        [ActivatorUtilitiesConstructor]
         public LogisticsPartnerApiController(IMapper mapper)
         {
             _mapper = mapper;
+            _transferLogic = new TransferLogic(_mapper);
+        }
+
+        
+        public LogisticsPartnerApiController(IMapper mapper, ITransferLogic transferLogic)
+        {
+            _mapper = mapper;
+            _transferLogic = transferLogic;
         }
         /// <summary>
         /// Transfer an existing parcel into the system from the service of a logistics partner. 
@@ -56,8 +68,7 @@ namespace LRLogistik.LRPackage.Services.Controllers
         public virtual IActionResult TransitionParcel([FromRoute (Name = "trackingId")][Required][RegularExpression("^[A-Z0-9]{9}$")]string trackingId, [FromBody]Parcel parcel)
         {
             var parcelEntity = _mapper.Map<BusinessLogic.Entities.Parcel>(parcel);
-            var transferLogic = new TransferLogic();
-            var result = transferLogic.TransferPackage(trackingId, parcelEntity);
+            var result = _transferLogic.TransferPackage(trackingId, parcelEntity);
 
             
             if(result.GetType() == typeof(BusinessLogic.Entities.Parcel))

@@ -1,6 +1,10 @@
-﻿using LRLogistik.LRPackage.BusinessLogic.Entities;
+﻿using AutoMapper;
+using LRLogistik.LRPackage.BusinessLogic.Entities;
 using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using LRLogistik.LRPackage.BusinessLogic.Validators;
+using LRLogistik.LRPackage.DataAccess.Interfaces;
+using LRLogistik.LRPackage.DataAccess.Sql;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +15,30 @@ namespace LRLogistik.LRPackage.BusinessLogic
 {
     public class SubmissionLogic : ISubmissionLogic
     {
-        public SubmissionLogic() { }
+        /*
+        IParcelRepository _parcelRepository;
 
+        public SubmissionLogic(IParcelRepository repo) {
+            _parcelRepository = repo;
+        }
+        */
+        private readonly IMapper _mapper;
+        private static Random random = new Random();
+        IParcelRepository _parcelRepository;
+
+
+        [ActivatorUtilitiesConstructor]
+        public SubmissionLogic(IMapper mapper)
+        {
+            _mapper = mapper;
+            _parcelRepository = new ParcelRepository();
+        }
+
+        public SubmissionLogic(IMapper mapper, IParcelRepository repository)
+        {
+            _mapper = mapper;
+            _parcelRepository = repository; 
+        }
 
         public object SubmitParcel(Parcel parcel)
         {
@@ -22,12 +48,23 @@ namespace LRLogistik.LRPackage.BusinessLogic
 
             if(result.IsValid)
             {
-                return new Parcel() { TrackingId = "333333333" };
+                parcel.TrackingId = RandomString(9);
+                DataAccess.Entities.Parcel p = (DataAccess.Entities.Parcel)_parcelRepository.Create(_mapper.Map<DataAccess.Entities.Parcel>(parcel));
+
+                return _mapper.Map<BusinessLogic.Entities.Parcel>(p);
+
             } else
             {
                 return new Error() { ErrorMessage = "string" };
             }
 
+        }
+
+        public static string RandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }

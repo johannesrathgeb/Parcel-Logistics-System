@@ -22,6 +22,8 @@ using LRLogistik.LRPackage.Services.DTOs;
 using AutoMapper;
 using LRLogistik.LRPackage.BusinessLogic.Entities;
 using LRLogistik.LRPackage.BusinessLogic;
+using LRLogistik.LRPackage.BusinessLogic.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LRLogistik.LRPackage.Services.Controllers
 {
@@ -33,10 +35,19 @@ namespace LRLogistik.LRPackage.Services.Controllers
     public class RecipientApiController : ControllerBase
     {
         private readonly IMapper _mapper;
+        private readonly ITrackingLogic _trackingLogic;
 
+        [ActivatorUtilitiesConstructor]
         public RecipientApiController(IMapper mapper)
         {
             _mapper = mapper;
+            _trackingLogic = new TrackingLogic(_mapper);   
+        }
+
+        public RecipientApiController(IMapper mapper, ITrackingLogic trackingLogic)
+        {
+            _mapper = mapper;
+            _trackingLogic = trackingLogic;
         }
 
         /// <summary>
@@ -55,9 +66,8 @@ namespace LRLogistik.LRPackage.Services.Controllers
         public virtual IActionResult TrackParcel([FromRoute(Name = "trackingId")][Required][RegularExpression("^[A-Z0-9]{9}$")] string trackingId)
         {
 
-            TrackingLogic trackingLogic = new TrackingLogic(); 
 
-            var result = trackingLogic.TrackPackage(trackingId);
+            var result = _trackingLogic.TrackPackage(trackingId);
 
             if (result.GetType() == typeof(BusinessLogic.Entities.Parcel))
             {
@@ -68,29 +78,6 @@ namespace LRLogistik.LRPackage.Services.Controllers
             {
                 return StatusCode(400, new ObjectResult(_mapper.Map<DTOs.Error>(result)).Value);
             }
-
-
-
-
-            var dtoerror = _mapper.Map<DTOs.Error>(result);
-
-
-            /*
-            var parcel = new DTOs.Parcel()
-            {
-                Weight = 2.0f,
-                Recipient = new DTOs.Recipient()
-                {
-                    Name = "aaa"
-                },
-                Sender = new DTOs.Recipient()
-                {
-                    Name = "bbb"
-                }
-            }; 
-            */
-
-             return StatusCode(400, new ObjectResult(dtoerror).Value);
         }
     }
 }

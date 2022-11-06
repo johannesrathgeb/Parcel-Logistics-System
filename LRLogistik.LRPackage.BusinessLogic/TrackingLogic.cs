@@ -1,6 +1,10 @@
-﻿using LRLogistik.LRPackage.BusinessLogic.Entities;
+﻿using AutoMapper;
+using LRLogistik.LRPackage.BusinessLogic.Entities;
 using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using LRLogistik.LRPackage.BusinessLogic.Validators;
+using LRLogistik.LRPackage.DataAccess.Interfaces;
+using LRLogistik.LRPackage.DataAccess.Sql;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +15,20 @@ namespace LRLogistik.LRPackage.BusinessLogic
 {
     public class TrackingLogic : ITrackingLogic
     {
+        private readonly IMapper _mapper;
+        IParcelRepository _parcelRepository;  
 
-        public TrackingLogic() { }
+        [ActivatorUtilitiesConstructor]
+        public TrackingLogic(IMapper mapper) {
+            _mapper = mapper;
+            _parcelRepository = new ParcelRepository(); 
+        }
+
+        public TrackingLogic(IMapper mapper, IParcelRepository repository)
+        {
+            _mapper = mapper;
+            _parcelRepository = repository; 
+        }
 
         public object ReportDelivery(string trackingId)
         {
@@ -58,6 +74,11 @@ namespace LRLogistik.LRPackage.BusinessLogic
 
             if (result.IsValid)
             {
+
+                return _mapper.Map<BusinessLogic.Entities.Parcel>(_parcelRepository.GetByTrackingId(trackingId));
+
+
+                /*
                 return new Parcel()
                 {
                     TrackingId = "111111111",
@@ -68,6 +89,7 @@ namespace LRLogistik.LRPackage.BusinessLogic
                     VisitedHops = new List<HopArrival> { new HopArrival() { Code = "XXXXXX", Description = "string", DateTime = new DateTime() } },
                     FutureHops = new List<HopArrival> { new HopArrival() { Code = "XXXXXX", Description = "string", DateTime = new DateTime() } },
                 };
+                */
             }
             else
             {
