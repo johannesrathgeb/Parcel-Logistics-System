@@ -4,6 +4,7 @@ using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using LRLogistik.LRPackage.BusinessLogic.Validators;
 using LRLogistik.LRPackage.DataAccess.Interfaces;
 using LRLogistik.LRPackage.DataAccess.Sql;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +16,10 @@ namespace LRLogistik.LRPackage.BusinessLogic
     public class WarehouseLogic : IWarehouseLogic
     {
 
-        IMapper _mapper;
-        IWarehouseRepository _warehouseRepository;  
+        private readonly IMapper _mapper;
+        IWarehouseRepository _warehouseRepository;
 
-
+        [ActivatorUtilitiesConstructor]
         public WarehouseLogic(IMapper mapper)
         {
             _mapper = mapper;
@@ -28,9 +29,11 @@ namespace LRLogistik.LRPackage.BusinessLogic
         public object ImportWarehouse(Warehouse warehouse)
         {
 
-            DataAccess.Entities.Warehouse h = _mapper.Map<DataAccess.Entities.Warehouse>(warehouse); 
+            //DataAccess.Entities.Warehouse h = _mapper.Map<DataAccess.Entities.Warehouse>(warehouse); 
 
-            _warehouseRepository.Create(h);
+            //_warehouseRepository.Create(h);
+
+            _warehouseRepository.Create(_mapper.Map<DataAccess.Entities.Warehouse>(warehouse));
 
             return "Successfully loaded";
 
