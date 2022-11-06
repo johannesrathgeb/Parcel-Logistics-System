@@ -28,12 +28,14 @@ using AutoMapper;
 using LRLogistik.LRPackage.Services.MappingProfiles;
 using LRLogistik.LRPackage.DataAccess.Sql;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.CodeAnalysis;
 
 namespace LRLogistik.LRPackage.Services
 {
     /// <summary>
     /// Startup
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class Startup
     {
 

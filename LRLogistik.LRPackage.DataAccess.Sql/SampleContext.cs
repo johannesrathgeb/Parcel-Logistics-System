@@ -38,7 +38,7 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
             {
                 IConfigurationRoot configuration = new ConfigurationBuilder()
                    .SetBasePath(Directory.GetCurrentDirectory())
-                   .AddJsonFile("appsettings.json")
+                   .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json")
                    .Build();
                 var connectionString = configuration.GetConnectionString("SWKOMDB");
                 optionsBuilder.UseSqlServer(connectionString, x => x.UseNetTopologySuite());
