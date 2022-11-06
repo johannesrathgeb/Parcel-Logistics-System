@@ -2,12 +2,14 @@
 using LRLogistik.LRPackage.BusinessLogic.Converters;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace LRLogistik.LRPackage.BusinessLogic.MappingProfiles
 {
+    [ExcludeFromCodeCoverage]
     public class MappingProfile : Profile
     {
         public MappingProfile()

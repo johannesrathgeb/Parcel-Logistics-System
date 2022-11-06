@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.SqlServer;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;    
@@ -15,6 +16,7 @@ using System.Threading.Tasks;
 
 namespace LRLogistik.LRPackage.DataAccess.Sql
 {
+    [ExcludeFromCodeCoverage]
     public class SampleContext : DbContext
     {
         public SampleContext(DbContextOptions<SampleContext> options) : base(options) 

@@ -19,12 +19,14 @@ using Newtonsoft.Json;
 using JsonSubTypes;
 using Swashbuckle.AspNetCore.Annotations;
 using LRLogistik.LRPackage.Services.DTOs.Converters;
+using System.Diagnostics.CodeAnalysis;
 
 namespace LRLogistik.LRPackage.Services.DTOs
-{ 
+{
     /// <summary>
     /// 
     /// </summary>
+    [ExcludeFromCodeCoverage]
     [DataContract]
     [JsonConverter(typeof(JsonSubtypes), "HopType")]
     [SwaggerDiscriminator("HopType")]
