@@ -38,10 +38,12 @@ namespace LRLogistik.LRPackage.BusinessLogic
         public object TransferPackage(string trackingId, Parcel parcel)
         {
             TrackingIdValidator trackingIdValidator = new TrackingIdValidator();
-            ParcelValidator recipientValidator = new ParcelValidator();
+            ParcelValidator parcelValidator = new ParcelValidator();
+            RecipientValidator recipientValidator = new RecipientValidator(); 
 
             var result_t = trackingIdValidator.Validate(trackingId);
-            var result_c = recipientValidator.Validate(parcel);
+            var result_c = parcelValidator.Validate(parcel);
+            //var result_r = recipientValidator.Validate(parcel.Recipient);
 
 
             if (result_t.IsValid && result_c.IsValid)

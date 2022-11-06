@@ -42,11 +42,13 @@ namespace LRLogistik.LRPackage.BusinessLogic
 
         public object SubmitParcel(Parcel parcel)
         {
-            ParcelValidator recipientValidator = new ParcelValidator();
+            ParcelValidator parcelValidator = new ParcelValidator();
+            RecipientValidator recipientValidator = new RecipientValidator(); 
 
-            var result = recipientValidator.Validate(parcel); 
+            var result = parcelValidator.Validate(parcel);
+            //var result_r = recipientValidator.Validate(parcel.Recipient);
 
-            if(result.IsValid)
+            if (result.IsValid)
             {
                 parcel.TrackingId = RandomString(9);
                 DataAccess.Entities.Parcel p = (DataAccess.Entities.Parcel)_parcelRepository.Create(_mapper.Map<DataAccess.Entities.Parcel>(parcel));

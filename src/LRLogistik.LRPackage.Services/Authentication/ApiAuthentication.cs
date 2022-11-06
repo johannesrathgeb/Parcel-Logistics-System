@@ -38,6 +38,7 @@ namespace LRLogistik.LRPackage.Services.Authentication
     /// <summary>
     /// Enforce that an api key is present.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class ApiKeyRequirementHandler : AuthorizationHandler<ApiKeyRequirement>
     {
         /// <copydoc cref="AuthorizationHandler{T}.HandleRequirementAsync" />
