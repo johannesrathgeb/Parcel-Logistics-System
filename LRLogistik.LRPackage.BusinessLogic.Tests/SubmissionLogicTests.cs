@@ -1,64 +1,89 @@
+using AutoMapper;
 using FizzWare.NBuilder;
 using LRLogistik.LRPackage.BusinessLogic.Entities;
+using LRLogistik.LRPackage.BusinessLogic.MappingProfiles;
+using LRLogistik.LRPackage.DataAccess.Interfaces;
+using Moq;
 
 namespace LRLogistik.LRPackage.BusinessLogic.Tests
 {
     public class SubmissionLogicTests
     {
+
         [Test]
         public void SubmitValidParcel()
         {
-            //Arrange
-            Parcel parcel = new Parcel()
+            //ARRANGE
+            DataAccess.Entities.Parcel DALParcel = new DataAccess.Entities.Parcel() { TrackingId = "333333333" };
+
+            var config = new MapperConfiguration(cfg => {
+                cfg.AddProfile<MappingProfile>();
+            });
+            var mapper = config.CreateMapper();
+
+            var BLParcel = new Parcel()
             {
-                Weight = 3.0f,
-                Recipient = new Recipient() 
-                {
-                    Name = "nameR",
-                    Street = "streetR",
-                    PostalCode = "postalCodeR",
-                    City = "cityR",
-                    Country = "countryR"
-                },
-                Sender = new Recipient()
-                {
-                    Name = "nameS",
-                    Street = "streetS",
-                    PostalCode = "postalCodeS",
-                    City = "cityS",
-                    Country = "countryS"
-                },
-                State = Parcel.StateEnum.InTransportEnum,
-                TrackingId = "123"
+                TrackingId = "111111111",
+                Weight = 1.0f,
+                Recipient = new Recipient() { Name = "string", Street = "string", PostalCode = "string", City = "string", Country = "string" },
+                Sender = new Recipient() { Name = "string", Street = "string", PostalCode = "string", City = "string", Country = "string" },
+                State = Parcel.StateEnum.InTruckDeliveryEnum,
+                VisitedHops = new List<HopArrival> { new HopArrival() { Code = "XXXXXX", Description = "string", DateTime = new DateTime() } },
+                FutureHops = new List<HopArrival> { new HopArrival() { Code = "XXXXXX", Description = "string", DateTime = new DateTime() } },
             };
 
+            var parcelRepositoryMock = new Mock<IParcelRepository>(); 
 
-            //Act
-            var response = new BusinessLogic.SubmissionLogic().SubmitParcel(parcel);
-            //Test
-            Assert.IsInstanceOf<Parcel>(response);
+            parcelRepositoryMock
+                .Setup(m => m.Create(It.IsAny<DataAccess.Entities.Parcel>()))
+                .Returns(DALParcel);
+
+            IParcelRepository parcelRepository = parcelRepositoryMock.Object;
+
+            SubmissionLogic submissionLogic = new SubmissionLogic(mapper, parcelRepository);
+
+            //ACT & ASSERT
+            
+            Assert.NotNull(submissionLogic.SubmitParcel(BLParcel));
+            
         }
 
         [Test]
-        public void SubmitInvalidParcel()
+        public void SubmitInvalidValidParcel()
         {
-            //Arrange
-            Parcel parcel = new Parcel()
+            //ARRANGE
+            DataAccess.Entities.Parcel DALParcel = new DataAccess.Entities.Parcel() { TrackingId = "333333333" };
+
+            var config = new MapperConfiguration(cfg => {
+                cfg.AddProfile<MappingProfile>();
+            });
+            var mapper = config.CreateMapper();
+
+            var BLParcel = new Parcel()
             {
+                TrackingId = "333333333",
                 Weight = 0.0f,
-                Recipient = null,
-                Sender = null,
-                State = Parcel.StateEnum.InTransportEnum,
-                TrackingId = "123"
+                Recipient = new Recipient() { Name = "string", Street = "string", PostalCode = "string", City = "string", Country = "string" },
+                Sender = new Recipient() { Name = "string", Street = "string", PostalCode = "string", City = "string", Country = "string" },
+                State = Parcel.StateEnum.InTruckDeliveryEnum,
+                VisitedHops = new List<HopArrival> { new HopArrival() { Code = "XXXXXX", Description = "string", DateTime = new DateTime() } },
+                FutureHops = new List<HopArrival> { new HopArrival() { Code = "XXXXXX", Description = "string", DateTime = new DateTime() } },
             };
 
-            //var par = Builder<Parcel>.CreateNew().With(x => x.Weight = 0.0f).Build(); 
+            var parcelRepositoryMock = new Mock<IParcelRepository>();
 
+            parcelRepositoryMock
+                .Setup(m => m.Create(It.IsAny<DataAccess.Entities.Parcel>()))
+                .Returns(DALParcel);
 
-            //Act
-            var response = new BusinessLogic.SubmissionLogic().SubmitParcel(parcel);
-            //Test
-            Assert.IsInstanceOf<Error>(response);
+            IParcelRepository parcelRepository = parcelRepositoryMock.Object;
+
+            SubmissionLogic submissionLogic = new SubmissionLogic(mapper, parcelRepository);
+
+            //ACT & ASSERT
+
+            Assert.IsInstanceOf<Error>(submissionLogic.SubmitParcel(BLParcel));
+
         }
     }
 }

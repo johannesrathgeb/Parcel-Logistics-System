@@ -1,4 +1,8 @@
-﻿using LRLogistik.LRPackage.BusinessLogic.Entities;
+﻿using AutoMapper;
+using LRLogistik.LRPackage.BusinessLogic.Entities;
+using LRLogistik.LRPackage.BusinessLogic.MappingProfiles;
+using LRLogistik.LRPackage.DataAccess.Interfaces;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,56 +13,147 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
 {
     public class TransferLogicTests
     {
+
         [Test]
-        public void TransferValidPackage()
+        public void TransferValidParcel()
         {
-            //Arrange
-            string trackingId = "PYJRB4HZ6";
-            Parcel parcel = new Parcel()
+            //ARRANGE
+            DataAccess.Entities.Parcel DALParcel = new DataAccess.Entities.Parcel() { TrackingId = "333333333" };
+
+            var config = new MapperConfiguration(cfg => {
+                cfg.AddProfile<MappingProfile>();
+            });
+            var mapper = config.CreateMapper();
+
+
+            string trackingId = "333333333";
+
+            var BLParcel = new Parcel()
             {
-                Weight = 3.0f,
-                Recipient = new Recipient()
-                {
-                    Name = "nameR",
-                    Street = "streetR",
-                    PostalCode = "postalCodeR",
-                    City = "cityR",
-                    Country = "countryR"
-                },
-                Sender = new Recipient()
-                {
-                    Name = "nameS",
-                    Street = "streetS",
-                    PostalCode = "postalCodeS",
-                    City = "cityS",
-                    Country = "countryS"
-                },
-                State = Parcel.StateEnum.InTransportEnum,
-                TrackingId = "123"
-            }; 
-            //Act
-            var response = new BusinessLogic.TransferLogic().TransferPackage(trackingId, parcel);
-            //Test
-            Assert.IsInstanceOf<Parcel>(response);
+                Weight = 1.0f,
+                Recipient = new Recipient() { Name = "string", Street = "string", PostalCode = "string", City = "string", Country = "string" },
+                Sender = new Recipient() { Name = "string", Street = "string", PostalCode = "string", City = "string", Country = "string" },
+                State = Parcel.StateEnum.InTruckDeliveryEnum,
+                VisitedHops = new List<HopArrival> { new HopArrival() { Code = "XXXXXX", Description = "string", DateTime = new DateTime() } },
+                FutureHops = new List<HopArrival> { new HopArrival() { Code = "XXXXXX", Description = "string", DateTime = new DateTime() } },
+            };
+
+            var parcelRepositoryMock = new Mock<IParcelRepository>();
+
+            parcelRepositoryMock
+                .Setup(m => m.Create(It.IsAny<DataAccess.Entities.Parcel>()))
+                .Returns(DALParcel);
+
+            IParcelRepository parcelRepository = parcelRepositoryMock.Object;
+
+            TransferLogic transferLogic = new TransferLogic(mapper, parcelRepository);
+
+            //ACT & ASSERT
+
+            Assert.NotNull(transferLogic.TransferPackage(trackingId, BLParcel));
+
         }
 
         [Test]
-        public void TransferInvalidPackage()
+        public void TransferInvalidParcel()
         {
-            //Arrange
-            string trackingId = "123";
-            Parcel parcel = new Parcel()
+            //ARRANGE
+            DataAccess.Entities.Parcel DALParcel = new DataAccess.Entities.Parcel() { TrackingId = "333333333" };
+
+            var config = new MapperConfiguration(cfg => {
+                cfg.AddProfile<MappingProfile>();
+            });
+            var mapper = config.CreateMapper();
+
+
+            string trackingId = "333";
+
+            var BLParcel = new Parcel()
             {
-                Weight = 0.0f,
-                Recipient = null,
-                Sender = null,
-                State = Parcel.StateEnum.InTransportEnum,
-                TrackingId = "123"
+                Weight = 1.0f,
+                Recipient = new Recipient() { Name = "string", Street = "string", PostalCode = "string", City = "string", Country = "string" },
+                Sender = new Recipient() { Name = "string", Street = "string", PostalCode = "string", City = "string", Country = "string" },
+                State = Parcel.StateEnum.InTruckDeliveryEnum,
+                VisitedHops = new List<HopArrival> { new HopArrival() { Code = "XXXXXX", Description = "string", DateTime = new DateTime() } },
+                FutureHops = new List<HopArrival> { new HopArrival() { Code = "XXXXXX", Description = "string", DateTime = new DateTime() } },
             };
-            //Act
-            var response = new BusinessLogic.TransferLogic().TransferPackage(trackingId, parcel);
-            //Test
-            Assert.IsInstanceOf<Error>(response);
+
+            var parcelRepositoryMock = new Mock<IParcelRepository>();
+
+            parcelRepositoryMock
+                .Setup(m => m.Create(It.IsAny<DataAccess.Entities.Parcel>()))
+                .Returns(DALParcel);
+
+            IParcelRepository parcelRepository = parcelRepositoryMock.Object;
+
+            TransferLogic transferLogic = new TransferLogic(mapper, parcelRepository);
+
+            //ACT & ASSERT
+
+            Assert.IsInstanceOf<Error>(transferLogic.TransferPackage(trackingId, BLParcel));
         }
+
+
+        //[Test]
+        //public void TransferValidPackage()
+        //{
+
+        //    var config = new MapperConfiguration(cfg => {
+        //        cfg.AddProfile<MappingProfile>();
+        //    });
+        //    var mapper = config.CreateMapper();
+        //    //Arrange
+        //    string trackingId = "PYJRB4HZ6";
+        //    Parcel parcel = new Parcel()
+        //    {
+        //        Weight = 3.0f,
+        //        Recipient = new Recipient()
+        //        {
+        //            Name = "nameR",
+        //            Street = "streetR",
+        //            PostalCode = "postalCodeR",
+        //            City = "cityR",
+        //            Country = "countryR"
+        //        },
+        //        Sender = new Recipient()
+        //        {
+        //            Name = "nameS",
+        //            Street = "streetS",
+        //            PostalCode = "postalCodeS",
+        //            City = "cityS",
+        //            Country = "countryS"
+        //        },
+        //        State = Parcel.StateEnum.InTransportEnum,
+        //        TrackingId = "123"
+        //    }; 
+        //    //Act
+        //    var response = new BusinessLogic.TransferLogic(mapper).TransferPackage(trackingId, parcel);
+        //    //Test
+        //    Assert.IsInstanceOf<Parcel>(response);
+        //}
+
+        //[Test]
+        //public void TransferInvalidPackage()
+        //{
+
+        //    var config = new MapperConfiguration(cfg => {
+        //        cfg.AddProfile<MappingProfile>();
+        //    });
+        //    var mapper = config.CreateMapper();
+        //    //Arrange
+        //    string trackingId = "123";
+        //    Parcel parcel = new Parcel()
+        //    {
+        //        Weight = 0.0f,
+        //        Recipient = null,
+        //        Sender = null,
+        //        State = Parcel.StateEnum.InTransportEnum,
+        //        TrackingId = "123"
+        //    };
+        //    //Act
+        //    var response = new BusinessLogic.TransferLogic(mapper).TransferPackage(trackingId, parcel);
+        //    //Test
+        //    Assert.IsInstanceOf<Error>(response);
+        //}
     }
 }

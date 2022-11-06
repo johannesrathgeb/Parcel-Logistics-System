@@ -34,11 +34,11 @@ namespace LRLogistik.LRPackage.BusinessLogic
             _parcelRepository = new ParcelRepository();
         }
 
-        public SubmissionLogic()
+        public SubmissionLogic(IMapper mapper, IParcelRepository repository)
         {
-
+            _mapper = mapper;
+            _parcelRepository = repository; 
         }
-
 
         public object SubmitParcel(Parcel parcel)
         {
@@ -49,10 +49,9 @@ namespace LRLogistik.LRPackage.BusinessLogic
             if(result.IsValid)
             {
                 parcel.TrackingId = RandomString(9);
-                _parcelRepository.Create(_mapper.Map<DataAccess.Entities.Parcel>(parcel));
-                
+                DataAccess.Entities.Parcel p = _parcelRepository.Create(_mapper.Map<DataAccess.Entities.Parcel>(parcel));
 
-                return new Parcel() { TrackingId = "333333333" };
+                return _mapper.Map<BusinessLogic.Entities.Parcel>(p);
 
             } else
             {

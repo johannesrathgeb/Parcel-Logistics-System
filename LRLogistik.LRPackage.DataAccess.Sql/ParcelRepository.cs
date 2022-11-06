@@ -16,10 +16,12 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
 
 
         [HttpPost]
-        public void Create(Parcel parcel)
+        public Parcel Create(Parcel parcel)
         {
             _dbContext.Parcels.Add(parcel);
             _dbContext.SaveChanges();
+
+            return new Parcel { TrackingId = parcel.TrackingId };
         }
 
         public void Delete(int id)

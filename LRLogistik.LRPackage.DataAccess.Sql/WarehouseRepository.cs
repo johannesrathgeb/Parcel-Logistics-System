@@ -13,10 +13,11 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
     {
         SampleContext _dbContext = new SampleContext();
 
-        public void Create(Warehouse w)
+        public Warehouse Create(Warehouse w)
         {
             _dbContext.Warehouses.Add(w);
             _dbContext.SaveChanges();
+            return w; 
         }
 
         public void Delete(int id)

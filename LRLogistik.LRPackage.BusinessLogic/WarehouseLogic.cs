@@ -26,6 +26,12 @@ namespace LRLogistik.LRPackage.BusinessLogic
             _warehouseRepository = new WarehouseRepository();  
         }
 
+        public WarehouseLogic(IMapper mapper, IWarehouseRepository repository)
+        {
+            _mapper = mapper;
+            _warehouseRepository = repository; 
+        }
+
         public object ImportWarehouse(Warehouse warehouse)
         {
 

@@ -29,9 +29,10 @@ namespace LRLogistik.LRPackage.BusinessLogic
             _parcelRepository = new ParcelRepository(); 
         }
 
-        public TransferLogic()
+        public TransferLogic(IMapper mapper, IParcelRepository repository)
         {
-            
+            _mapper = mapper;
+            _parcelRepository = repository; 
         }
 
         public object TransferPackage(string trackingId, Parcel parcel)
