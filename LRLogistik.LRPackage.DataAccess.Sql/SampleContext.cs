@@ -73,17 +73,30 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
                 e.HasMany<WarehouseNextHops>(p => p.NextHops);
             });
 
-            modelBuilder.Entity<DataAccess.Entities.Hop>(e =>
-            {
-                e.HasDiscriminator<string>("hop_type");
-                e.HasKey(p => p.HopId);
-                e.Property(x => x.HopId).ValueGeneratedOnAdd();
-            });
+            modelBuilder.Entity<Hop>()
+                          .HasDiscriminator<string>("HopType")
+                          .HasValue<Warehouse>("Level")
+                          .HasValue<Transferwarehouse>("Region")
+                          .HasValue<Transferwarehouse>("LogisticPartner")
+                          .HasValue<Transferwarehouse>("LogisticPartnerUrl")
+                          .HasValue<Truck>("Region")
+                          .HasValue<Truck>("NumberPlate");
 
-            modelBuilder.Entity<DataAccess.Entities.WarehouseNextHops>(e =>
+            modelBuilder.Entity<Hop>()
+                .Property(h => h.LocationCoordinates).HasColumnType("geometry");
+
+            modelBuilder.Entity<Transferwarehouse>()
+                .Property(t => t.Region).HasColumnType("geometry");
+
+            modelBuilder.Entity<Truck>()
+                .Property(t => t.Region).HasColumnType("geometry");
+
+            modelBuilder.Entity<WarehouseNextHops>(e =>
             {
-                e.HasKey(p => p.WarehouseNextHopsId);
-                e.Property(x => x.WarehouseNextHopsId).ValueGeneratedOnAdd();
+                e.HasKey(w => w.WarehouseNextHopsId);
+                e.Property(w => w.WarehouseNextHopsId).ValueGeneratedOnAdd();
+                e.Property(w => w.TraveltimeMins).IsRequired();
+                e.HasOne<Hop>(w => w.Hop);
             });
         }
     }
