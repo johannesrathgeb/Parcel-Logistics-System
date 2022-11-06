@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -9,6 +10,7 @@ namespace LRLogistik.LRPackage.Services.Authentication
     /// <summary>
     /// A requirement that an ApiKey must be present.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class ApiKeyRequirement : IAuthorizationRequirement
     {
         /// <summary>

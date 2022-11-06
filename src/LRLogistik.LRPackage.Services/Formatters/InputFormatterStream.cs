@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 namespace LRLogistik.LRPackage.Services.Formatters
 {
     // Input Type Formatter to allow model binding to Streams
+    [ExcludeFromCodeCoverage]
     public class InputFormatterStream : InputFormatter
     {
         public InputFormatterStream()

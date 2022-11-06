@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 
@@ -7,6 +8,7 @@ namespace LRLogistik.LRPackage.Services.OpenApi
     /// <summary>
     /// Replacement utilities from Swashbuckle.AspNetCore.SwaggerGen which are not in 5.x
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public static class TypeExtensions
     {
         /// <summary>

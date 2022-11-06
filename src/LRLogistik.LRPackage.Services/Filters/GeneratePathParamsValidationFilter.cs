@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.OpenApi.Models;
@@ -9,6 +10,7 @@ namespace LRLogistik.LRPackage.Services.Filters
     /// <summary>
     /// Path Parameter Validation Rules Filter
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class GeneratePathParamsValidationFilter : IOperationFilter
     {
         /// <summary>

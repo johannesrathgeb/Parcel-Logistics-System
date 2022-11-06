@@ -3,12 +3,14 @@ using LRLogistik.LRPackage.BusinessLogic.Entities;
 using NetTopologySuite.Geometries;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace LRLogistik.LRPackage.BusinessLogic.Converters
 {
+    [ExcludeFromCodeCoverage]
     public class GeoPointConverter :
      IValueConverter<GeoCoordinate, NetTopologySuite.Geometries.Point>,
      IValueConverter<NetTopologySuite.Geometries.Point, GeoCoordinate>,

@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Newtonsoft.Json;
 
@@ -8,6 +9,7 @@ namespace LRLogistik.LRPackage.Services.DTOs.Converters
     /// <summary>
     /// Custom string to enum converter
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class CustomEnumConverter<T> : TypeConverter
     {
         /// <summary>

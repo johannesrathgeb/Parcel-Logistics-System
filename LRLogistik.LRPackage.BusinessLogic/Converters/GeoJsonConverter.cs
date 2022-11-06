@@ -4,12 +4,14 @@ using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace LRLogistik.LRPackage.BusinessLogic.Converters
 {
+    [ExcludeFromCodeCoverage]
     public class GeoJsonConverter :
             IValueConverter<string, NetTopologySuite.Geometries.Geometry>,
             IValueConverter<NetTopologySuite.Geometries.Geometry, string>
