@@ -9,15 +9,12 @@ namespace LRLogistik.LRPackage.DataAccess.Interfaces
 {
     public interface IWarehouseRepository
     {
-        Warehouse Create(Warehouse w);
+        object Create(Warehouse w);
         Warehouse Update(Warehouse w);
-        void Delete(int id);
+        void Delete(string id);
 
-        // Example with multiple GETs
-        IEnumerable<Warehouse> GetByXX(string xx);
-        Warehouse GetByYY(int yy);
 
         // Get by ID
-        Warehouse GetByTrackingId(string trackingid);
+        object GetByHopId(string id);
     }
 }

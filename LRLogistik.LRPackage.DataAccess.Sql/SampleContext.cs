@@ -29,9 +29,9 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
             this.Database.EnsureCreated();
         }
 
-        public DbSet<DataAccess.Entities.Parcel> Parcels { get; set; }
+        public virtual DbSet<DataAccess.Entities.Parcel> Parcels { get; set; }
         
-        public DbSet<DataAccess.Entities.Warehouse> Warehouses { get; set; }
+        public virtual DbSet<DataAccess.Entities.Warehouse> Warehouses { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

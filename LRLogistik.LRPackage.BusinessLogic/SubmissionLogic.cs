@@ -49,7 +49,7 @@ namespace LRLogistik.LRPackage.BusinessLogic
             if(result.IsValid)
             {
                 parcel.TrackingId = RandomString(9);
-                DataAccess.Entities.Parcel p = _parcelRepository.Create(_mapper.Map<DataAccess.Entities.Parcel>(parcel));
+                DataAccess.Entities.Parcel p = (DataAccess.Entities.Parcel)_parcelRepository.Create(_mapper.Map<DataAccess.Entities.Parcel>(parcel));
 
                 return _mapper.Map<BusinessLogic.Entities.Parcel>(p);
 

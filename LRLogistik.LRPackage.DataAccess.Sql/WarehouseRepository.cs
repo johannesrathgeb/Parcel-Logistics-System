@@ -11,33 +11,49 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
 {
     public class WarehouseRepository : IWarehouseRepository
     {
-        SampleContext _dbContext = new SampleContext();
+        SampleContext _dbContext;
 
-        public Warehouse Create(Warehouse w)
+        public WarehouseRepository(SampleContext dbContext)
         {
+            _dbContext = dbContext;
+        }
+
+        public WarehouseRepository()
+        {
+            _dbContext = new SampleContext();
+        }
+
+        public object Create(Warehouse w)
+        {
+            if(w == null)
+            {
+                return new Entities.Error() { ErrorMessage = "string" };
+            }
             _dbContext.Warehouses.Add(w);
             _dbContext.SaveChanges();
             return w; 
         }
 
-        public void Delete(int id)
+        public void Delete(string id)
         {
-            throw new NotImplementedException();
+            Entities.Warehouse warehouse = _dbContext.Warehouses.SingleOrDefault(w => w.HopId == id);
+
+            if (warehouse != null)
+            {
+                _dbContext.Remove(warehouse);
+                _dbContext.SaveChanges();
+            }
         }
 
-        public Warehouse GetByTrackingId(string trackingid)
+        public object GetByHopId(string id)
         {
-            throw new NotImplementedException();
-        }
+            Entities.Warehouse warehouse = _dbContext.Warehouses.SingleOrDefault(w => w.HopId == id);
 
-        public IEnumerable<Warehouse> GetByXX(string xx)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Warehouse GetByYY(int yy)
-        {
-            throw new NotImplementedException();
+            if (warehouse == null)
+            {
+                return new Entities.Error() { ErrorMessage = "string" };
+            }
+            return warehouse;
         }
 
         public Warehouse Update(Warehouse w)
