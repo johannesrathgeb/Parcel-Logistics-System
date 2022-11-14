@@ -13,9 +13,9 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
     {
         SampleContext _dbContext;
 
-        public WarehouseRepository()
+        public WarehouseRepository(SampleContext context)
         {
-            _dbContext = new SampleContext();
+            _dbContext = context;
         }
 
         public object Create(Warehouse w)
