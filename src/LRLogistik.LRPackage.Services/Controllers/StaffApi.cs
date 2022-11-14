@@ -36,13 +36,6 @@ namespace LRLogistik.LRPackage.Services.Controllers
         private readonly IMapper _mapper;
         private readonly ITrackingLogic _trackingLogic;
 
-        [ActivatorUtilitiesConstructor]
-        public StaffApiController(IMapper mapper)
-        {
-            _mapper = mapper;
-            _trackingLogic = new TrackingLogic(_mapper);
-        }
-
         public StaffApiController(IMapper mapper, ITrackingLogic trackingLogic)
         {
             _mapper = mapper;

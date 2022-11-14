@@ -37,13 +37,6 @@ namespace LRLogistik.LRPackage.Services.Controllers
         private readonly IMapper _mapper;
         private readonly ITransferLogic _transferLogic;
 
-        [ActivatorUtilitiesConstructor]
-        public LogisticsPartnerApiController(IMapper mapper)
-        {
-            _mapper = mapper;
-            _transferLogic = new TransferLogic(_mapper);
-        }
-
         
         public LogisticsPartnerApiController(IMapper mapper, ITransferLogic transferLogic)
         {

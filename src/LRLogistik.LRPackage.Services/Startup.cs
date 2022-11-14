@@ -29,6 +29,9 @@ using LRLogistik.LRPackage.Services.MappingProfiles;
 using LRLogistik.LRPackage.DataAccess.Sql;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.CodeAnalysis;
+using LRLogistik.LRPackage.BusinessLogic.Interfaces;
+using LRLogistik.LRPackage.BusinessLogic;
+using LRLogistik.LRPackage.DataAccess.Interfaces;
 
 namespace LRLogistik.LRPackage.Services
 {
@@ -59,6 +62,16 @@ namespace LRLogistik.LRPackage.Services
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
+            //Interfaces BL
+            services.AddTransient<IWarehouseLogic, WarehouseLogic>();
+            services.AddTransient<ISubmissionLogic, SubmissionLogic>();
+            services.AddTransient<ITrackingLogic, TrackingLogic>();
+            services.AddTransient<ITransferLogic, TransferLogic>();
+
+            //Interfaces DAL
+            services.AddTransient<IParcelRepository, ParcelRepository>();
+            services.AddTransient <IWarehouseRepository, WarehouseRepository>();
+
             // AutoMapper
             var config = new MapperConfiguration(cfg => {
                 cfg.AddProfile<BusinessLogic.MappingProfiles.MappingProfile>();    

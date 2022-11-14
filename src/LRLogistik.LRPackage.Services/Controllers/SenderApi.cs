@@ -36,13 +36,6 @@ namespace LRLogistik.LRPackage.Services.Controllers
         private readonly IMapper _mapper;
         private readonly ISubmissionLogic _submissionLogic;
 
-        [ActivatorUtilitiesConstructor]
-        public SenderApiController(IMapper mapper)
-        {
-            _mapper = mapper;
-            _submissionLogic = new SubmissionLogic(_mapper);
-        }
-
         public SenderApiController(IMapper mapper, ISubmissionLogic submissionLogic)
         {
             _mapper = mapper;

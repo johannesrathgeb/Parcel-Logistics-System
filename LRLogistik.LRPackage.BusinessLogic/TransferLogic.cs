@@ -21,14 +21,6 @@ namespace LRLogistik.LRPackage.BusinessLogic
         private readonly IMapper _mapper;
         IParcelRepository _parcelRepository;
 
-
-        [ActivatorUtilitiesConstructor]
-        public TransferLogic(IMapper mapper)
-        {
-            _mapper = mapper;
-            _parcelRepository = new ParcelRepository(); 
-        }
-
         public TransferLogic(IMapper mapper, IParcelRepository repository)
         {
             _mapper = mapper;

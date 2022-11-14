@@ -15,11 +15,6 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
     {
         SampleContext _dbContext;
 
-        public ParcelRepository()
-        {
-            _dbContext = new SampleContext();
-        }
-
         public ParcelRepository(SampleContext context)
         {
             _dbContext = context;

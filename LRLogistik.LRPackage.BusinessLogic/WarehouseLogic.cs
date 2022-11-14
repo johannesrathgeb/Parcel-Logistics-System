@@ -19,13 +19,6 @@ namespace LRLogistik.LRPackage.BusinessLogic
         private readonly IMapper _mapper;
         IWarehouseRepository _warehouseRepository;
 
-        [ActivatorUtilitiesConstructor]
-        public WarehouseLogic(IMapper mapper)
-        {
-            _mapper = mapper;
-            _warehouseRepository = new WarehouseRepository();  
-        }
-
         public WarehouseLogic(IMapper mapper, IWarehouseRepository repository)
         {
             _mapper = mapper;

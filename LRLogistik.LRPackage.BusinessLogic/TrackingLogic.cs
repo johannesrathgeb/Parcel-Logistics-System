@@ -18,12 +18,6 @@ namespace LRLogistik.LRPackage.BusinessLogic
         private readonly IMapper _mapper;
         IParcelRepository _parcelRepository;  
 
-        [ActivatorUtilitiesConstructor]
-        public TrackingLogic(IMapper mapper) {
-            _mapper = mapper;
-            _parcelRepository = new ParcelRepository(); 
-        }
-
         public TrackingLogic(IMapper mapper, IParcelRepository repository)
         {
             _mapper = mapper;

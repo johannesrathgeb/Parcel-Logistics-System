@@ -15,24 +15,9 @@ namespace LRLogistik.LRPackage.BusinessLogic
 {
     public class SubmissionLogic : ISubmissionLogic
     {
-        /*
-        IParcelRepository _parcelRepository;
-
-        public SubmissionLogic(IParcelRepository repo) {
-            _parcelRepository = repo;
-        }
-        */
         private readonly IMapper _mapper;
         private static Random random = new Random();
         IParcelRepository _parcelRepository;
-
-
-        [ActivatorUtilitiesConstructor]
-        public SubmissionLogic(IMapper mapper)
-        {
-            _mapper = mapper;
-            _parcelRepository = new ParcelRepository();
-        }
 
         public SubmissionLogic(IMapper mapper, IParcelRepository repository)
         {

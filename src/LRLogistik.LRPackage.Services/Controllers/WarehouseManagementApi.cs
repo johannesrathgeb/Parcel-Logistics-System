@@ -35,13 +35,6 @@ namespace LRLogistik.LRPackage.Services.Controllers
         private readonly IMapper _mapper;
         private readonly IWarehouseLogic _warehouseLogic;
 
-        [ActivatorUtilitiesConstructor]
-        public WarehouseManagementApiController(IMapper mapper)
-        {
-            _mapper = mapper;
-            _warehouseLogic = new WarehouseLogic(_mapper);
-        }
-
         public WarehouseManagementApiController(IMapper mapper, IWarehouseLogic warehouseLogic)
         {
             _mapper = mapper;
