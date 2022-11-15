@@ -11,10 +11,20 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
+  ConnectionStrings.SWKOMDB: "Server=tcp:ledrat.database.windows.net,1433;Initial Catalog=LRLogistikDB;Persist Security Info=False;User ID=ledrat;Password=pass@word1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
 
 steps:
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
+
+
+- task: FileTransform@1
+  displayName: 'File transformation: appsettings.json'
+  inputs:
+    folderPath: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    targetFiles: '**/appsettings.json'
+    fileType: json
+
 
 - task: DotNetCoreCLI@2
   displayName: "dotnet test"
