@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using FizzWare.NBuilder;
+using LRLogistik.LRPackage.BusinessLogic;
 using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using LRLogistik.LRPackage.Services.Controllers;
 using LRLogistik.LRPackage.Services.MappingProfiles;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using RandomDataGenerator.FieldOptions;
@@ -39,7 +41,10 @@ namespace LRLogistik.LRPackage.Services.Tests
 
             ITrackingLogic trackingLogic = trackingLogicMock.Object;
 
-            RecipientApiController recipientApi = new RecipientApiController(mapper, trackingLogic);
+            var loggerMock = new Mock<ILogger<RecipientApiController>>();
+            ILogger<RecipientApiController> logger = loggerMock.Object;
+
+            RecipientApiController recipientApi = new RecipientApiController(mapper, trackingLogic, logger);
 
             //ACT
             var result = recipientApi.TrackParcel(randomTrackingId) as ObjectResult;
@@ -71,7 +76,10 @@ namespace LRLogistik.LRPackage.Services.Tests
 
             ITrackingLogic trackingLogic = trackingLogicMock.Object;
 
-            RecipientApiController recipientApi = new RecipientApiController(mapper, trackingLogic);
+            var loggerMock = new Mock<ILogger<RecipientApiController>>();
+            ILogger<RecipientApiController> logger = loggerMock.Object;
+
+            RecipientApiController recipientApi = new RecipientApiController(mapper, trackingLogic, logger);
 
             //ACT
             var result = recipientApi.TrackParcel(randomTrackingId) as ObjectResult;

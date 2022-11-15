@@ -2,6 +2,7 @@
 using LRLogistik.LRPackage.BusinessLogic.Entities;
 using LRLogistik.LRPackage.BusinessLogic.MappingProfiles;
 using LRLogistik.LRPackage.DataAccess.Interfaces;
+using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -46,7 +47,10 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
 
             IParcelRepository parcelRepository = parcelRepositoryMock.Object;
 
-            TransferLogic transferLogic = new TransferLogic(mapper, parcelRepository);
+            var loggerMock = new Mock<ILogger<TransferLogic>>();
+            ILogger<TransferLogic> logger = loggerMock.Object;
+
+            TransferLogic transferLogic = new TransferLogic(mapper, parcelRepository, logger);
 
             //ACT & ASSERT
 
@@ -86,7 +90,10 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
 
             IParcelRepository parcelRepository = parcelRepositoryMock.Object;
 
-            TransferLogic transferLogic = new TransferLogic(mapper, parcelRepository);
+            var loggerMock = new Mock<ILogger<TransferLogic>>();
+            ILogger<TransferLogic> logger = loggerMock.Object;
+
+            TransferLogic transferLogic = new TransferLogic(mapper, parcelRepository, logger);
 
             //ACT & ASSERT
 

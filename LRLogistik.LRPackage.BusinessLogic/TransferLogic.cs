@@ -1,4 +1,4 @@
-﻿,using AutoMapper;
+﻿using AutoMapper;
 using LRLogistik.LRPackage.BusinessLogic.Entities;
 using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using LRLogistik.LRPackage.BusinessLogic.Validators;
@@ -18,7 +18,7 @@ namespace LRLogistik.LRPackage.BusinessLogic
     public class TransferLogic : ITransferLogic
     {
         private readonly IMapper _mapper;
-        private readonly ILogger _logger
+        private readonly ILogger _logger;
         IParcelRepository _parcelRepository;
 
         public TransferLogic(IMapper mapper, IParcelRepository repository, ILogger<TransferLogic> logger)

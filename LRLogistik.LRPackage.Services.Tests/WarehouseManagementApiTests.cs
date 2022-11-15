@@ -4,6 +4,7 @@ using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using LRLogistik.LRPackage.Services.Controllers;
 using LRLogistik.LRPackage.Services.MappingProfiles;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using RandomDataGenerator.FieldOptions;
@@ -35,7 +36,10 @@ namespace LRLogistik.LRPackage.Services.Tests
 
             IWarehouseLogic warehouseLogic = warehouseLogicMock.Object;
 
-            WarehouseManagementApiController warehouseManagementApi = new WarehouseManagementApiController(mapper, warehouseLogic);
+            var loggerMock = new Mock<ILogger<WarehouseManagementApiController>>();
+            ILogger<WarehouseManagementApiController> logger = loggerMock.Object;
+
+            WarehouseManagementApiController warehouseManagementApi = new WarehouseManagementApiController(mapper, warehouseLogic, logger);
 
             //ACT
             var result = warehouseManagementApi.ExportWarehouses() as ObjectResult;
@@ -61,7 +65,10 @@ namespace LRLogistik.LRPackage.Services.Tests
 
             IWarehouseLogic warehouseLogic = warehouseLogicMock.Object;
 
-            WarehouseManagementApiController warehouseManagementApi = new WarehouseManagementApiController(mapper, warehouseLogic);
+            var loggerMock = new Mock<ILogger<WarehouseManagementApiController>>();
+            ILogger<WarehouseManagementApiController> logger = loggerMock.Object;
+
+            WarehouseManagementApiController warehouseManagementApi = new WarehouseManagementApiController(mapper, warehouseLogic, logger);
 
             //ACT
             var result = warehouseManagementApi.ExportWarehouses() as ObjectResult;
@@ -87,7 +94,10 @@ namespace LRLogistik.LRPackage.Services.Tests
 
             IWarehouseLogic warehouseLogic = warehouseLogicMock.Object;
 
-            WarehouseManagementApiController warehouseManagementApi = new WarehouseManagementApiController(mapper, warehouseLogic);
+            var loggerMock = new Mock<ILogger<WarehouseManagementApiController>>();
+            ILogger<WarehouseManagementApiController> logger = loggerMock.Object;
+
+            WarehouseManagementApiController warehouseManagementApi = new WarehouseManagementApiController(mapper, warehouseLogic, logger);
 
             //ACT
             var result = warehouseManagementApi.ImportWarehouses(Builder<DTOs.Warehouse>.CreateNew().Build()) as ObjectResult;
@@ -113,7 +123,10 @@ namespace LRLogistik.LRPackage.Services.Tests
 
             IWarehouseLogic warehouseLogic = warehouseLogicMock.Object;
 
-            WarehouseManagementApiController warehouseManagementApi = new WarehouseManagementApiController(mapper, warehouseLogic);
+            var loggerMock = new Mock<ILogger<WarehouseManagementApiController>>();
+            ILogger<WarehouseManagementApiController> logger = loggerMock.Object;
+
+            WarehouseManagementApiController warehouseManagementApi = new WarehouseManagementApiController(mapper, warehouseLogic, logger);
 
             //ACT
             var result = warehouseManagementApi.ImportWarehouses(Builder<DTOs.Warehouse>.CreateNew().Build()) as ObjectResult;
@@ -142,7 +155,10 @@ namespace LRLogistik.LRPackage.Services.Tests
 
             IWarehouseLogic warehouseLogic = warehouseLogicMock.Object;
 
-            WarehouseManagementApiController warehouseManagementApi = new WarehouseManagementApiController(mapper, warehouseLogic);
+            var loggerMock = new Mock<ILogger<WarehouseManagementApiController>>();
+            ILogger<WarehouseManagementApiController> logger = loggerMock.Object;
+
+            WarehouseManagementApiController warehouseManagementApi = new WarehouseManagementApiController(mapper, warehouseLogic, logger);
 
             //ACT
             var result = warehouseManagementApi.GetWarehouse(randomTrackingCode) as ObjectResult;
@@ -171,7 +187,10 @@ namespace LRLogistik.LRPackage.Services.Tests
 
             IWarehouseLogic warehouseLogic = warehouseLogicMock.Object;
 
-            WarehouseManagementApiController warehouseManagementApi = new WarehouseManagementApiController(mapper, warehouseLogic);
+            var loggerMock = new Mock<ILogger<WarehouseManagementApiController>>();
+            ILogger<WarehouseManagementApiController> logger = loggerMock.Object;
+
+            WarehouseManagementApiController warehouseManagementApi = new WarehouseManagementApiController(mapper, warehouseLogic, logger);
 
             //ACT
             var result = warehouseManagementApi.GetWarehouse(randomTrackingCode) as ObjectResult;

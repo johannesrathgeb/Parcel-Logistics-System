@@ -3,6 +3,7 @@ using FizzWare.NBuilder;
 using LRLogistik.LRPackage.BusinessLogic.Entities;
 using LRLogistik.LRPackage.BusinessLogic.MappingProfiles;
 using LRLogistik.LRPackage.DataAccess.Interfaces;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace LRLogistik.LRPackage.BusinessLogic.Tests
@@ -40,7 +41,10 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
 
             IParcelRepository parcelRepository = parcelRepositoryMock.Object;
 
-            SubmissionLogic submissionLogic = new SubmissionLogic(mapper, parcelRepository);
+            var loggerMock = new Mock<ILogger<SubmissionLogic>>();
+            ILogger<SubmissionLogic> logger =loggerMock.Object;
+
+            SubmissionLogic submissionLogic = new SubmissionLogic(mapper, parcelRepository, logger);
 
             //ACT & ASSERT
             
@@ -78,7 +82,10 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
 
             IParcelRepository parcelRepository = parcelRepositoryMock.Object;
 
-            SubmissionLogic submissionLogic = new SubmissionLogic(mapper, parcelRepository);
+            var loggerMock = new Mock<ILogger<SubmissionLogic>>();
+            ILogger<SubmissionLogic> logger = loggerMock.Object;
+
+            SubmissionLogic submissionLogic = new SubmissionLogic(mapper, parcelRepository, logger);
 
             //ACT & ASSERT
 

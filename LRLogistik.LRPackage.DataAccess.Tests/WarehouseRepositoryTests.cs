@@ -2,7 +2,9 @@
 using LRLogistik.LRPackage.DataAccess.Entities;
 using LRLogistik.LRPackage.DataAccess.Sql;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -104,7 +106,9 @@ namespace LRLogistik.LRPackage.DataAccess.Tests
         public void GetWarehouseByValidID()
         {
             // Arrange
-            var repository = new WarehouseRepository(_mockedDbContext);
+            var loggerMock = new Mock<ILogger<WarehouseRepository>>();
+            ILogger<WarehouseRepository> logger = loggerMock.Object;
+            var repository = new WarehouseRepository(_mockedDbContext, logger);
 
             // Act
             var result = repository.GetByHopId("1234");
@@ -117,7 +121,9 @@ namespace LRLogistik.LRPackage.DataAccess.Tests
         public void GetWarehouseByInvalidID()
         {
             // Arrange
-            var repository = new WarehouseRepository(_mockedDbContext);
+            var loggerMock = new Mock<ILogger<WarehouseRepository>>();
+            ILogger<WarehouseRepository> logger = loggerMock.Object;
+            var repository = new WarehouseRepository(_mockedDbContext, logger);
 
             // Act
             var result = repository.GetByHopId("1");
@@ -130,7 +136,9 @@ namespace LRLogistik.LRPackage.DataAccess.Tests
         public void DeleteValid()
         {
             // Arrange
-            var repository = new WarehouseRepository(_mockedDbContext);
+            var loggerMock = new Mock<ILogger<WarehouseRepository>>();
+            ILogger<WarehouseRepository> logger = loggerMock.Object;
+            var repository = new WarehouseRepository(_mockedDbContext, logger);
 
             // Act
             repository.Delete("1234");
@@ -143,7 +151,9 @@ namespace LRLogistik.LRPackage.DataAccess.Tests
         public void DeleteInvalid()
         {
             // Arrange
-            var repository = new WarehouseRepository(_mockedDbContext);
+            var loggerMock = new Mock<ILogger<WarehouseRepository>>();
+            ILogger<WarehouseRepository> logger = loggerMock.Object;
+            var repository = new WarehouseRepository(_mockedDbContext, logger);
 
             // Act
             repository.Delete("1");
@@ -157,7 +167,9 @@ namespace LRLogistik.LRPackage.DataAccess.Tests
         public void CreateValidWarehouse()
         {
             // Arrange
-            var repository = new WarehouseRepository(_mockedDbContext);
+            var loggerMock = new Mock<ILogger<WarehouseRepository>>();
+            ILogger<WarehouseRepository> logger = loggerMock.Object;
+            var repository = new WarehouseRepository(_mockedDbContext, logger);
             Warehouse warehouse = new Warehouse()
             {
                 HopId = "123456",
@@ -198,7 +210,9 @@ namespace LRLogistik.LRPackage.DataAccess.Tests
         public void CreateInvalidWarehouse()
         {
             // Arrange
-            var repository = new WarehouseRepository(_mockedDbContext);
+            var loggerMock = new Mock<ILogger<WarehouseRepository>>();
+            ILogger<WarehouseRepository> logger = loggerMock.Object;
+            var repository = new WarehouseRepository(_mockedDbContext, logger);
 
             // Act
             var result = repository.Create(null);

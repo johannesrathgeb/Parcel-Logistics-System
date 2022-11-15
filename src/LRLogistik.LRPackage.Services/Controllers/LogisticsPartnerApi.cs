@@ -23,6 +23,7 @@ using AutoMapper;
 using LRLogistik.LRPackage.BusinessLogic;
 using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace LRLogistik.LRPackage.Services.Controllers
 {
@@ -35,13 +36,15 @@ namespace LRLogistik.LRPackage.Services.Controllers
     public class LogisticsPartnerApiController : ControllerBase
     {
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
         private readonly ITransferLogic _transferLogic;
 
         
-        public LogisticsPartnerApiController(IMapper mapper, ITransferLogic transferLogic)
+        public LogisticsPartnerApiController(IMapper mapper, ITransferLogic transferLogic, ILogger<LogisticsPartnerApiController> logger)
         {
             _mapper = mapper;
             _transferLogic = transferLogic;
+            _logger = logger;
         }
         /// <summary>
         /// Transfer an existing parcel into the system from the service of a logistics partner. 
@@ -60,7 +63,9 @@ namespace LRLogistik.LRPackage.Services.Controllers
         [SwaggerResponse(statusCode: 400, type: typeof(Error), description: "The operation failed due to an error.")]
         public virtual IActionResult TransitionParcel([FromRoute (Name = "trackingId")][Required][RegularExpression("^[A-Z0-9]{9}$")]string trackingId, [FromBody]Parcel parcel)
         {
+            _logger.LogInformation($"Transitioning Parcel: {JsonConvert.SerializeObject(parcel)}");
             var parcelEntity = _mapper.Map<BusinessLogic.Entities.Parcel>(parcel);
+            _logger.LogInformation($"Parcel mapped to BL: {JsonConvert.SerializeObject(parcel)}");
             var result = _transferLogic.TransferPackage(trackingId, parcelEntity);
 
             
@@ -70,6 +75,7 @@ namespace LRLogistik.LRPackage.Services.Controllers
                 return StatusCode(200, new ObjectResult(_mapper.Map<NewParcelInfo>(result)).Value);
             } else
             {
+                _logger.LogDebug($"Parcel Transition was invalid");
                 return StatusCode(400, new ObjectResult(_mapper.Map<DTOs.Error>(result)).Value);
             }
         }

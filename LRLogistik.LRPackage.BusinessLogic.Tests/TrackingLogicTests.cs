@@ -3,6 +3,7 @@ using LRLogistik.LRPackage.BusinessLogic.Entities;
 using LRLogistik.LRPackage.BusinessLogic.MappingProfiles;
 using LRLogistik.LRPackage.BusinessLogic.Validators;
 using LRLogistik.LRPackage.DataAccess.Interfaces;
+using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -23,13 +24,16 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             var parcelRepositoryMock = new Mock<IParcelRepository>();
             IParcelRepository parcelRepository = parcelRepositoryMock.Object;
 
+            var loggerMock = new Mock<ILogger<TrackingLogic>>();
+            ILogger<TrackingLogic> logger = loggerMock.Object;
+
             var config = new MapperConfiguration(cfg => {
                 cfg.AddProfile<MappingProfile>();
             });
             var mapper = config.CreateMapper();
             string trackingId = "PYJRB4HZ6";
             //Act
-            var response = new BusinessLogic.TrackingLogic(mapper, parcelRepository).ReportDelivery(trackingId);
+            var response = new BusinessLogic.TrackingLogic(mapper, parcelRepository, logger).ReportDelivery(trackingId);
             //Assert
             Assert.AreEqual("Successfully reported hop", response);
         }
@@ -41,13 +45,16 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             var parcelRepositoryMock = new Mock<IParcelRepository>();
             IParcelRepository parcelRepository = parcelRepositoryMock.Object;
 
+            var loggerMock = new Mock<ILogger<TrackingLogic>>();
+            ILogger<TrackingLogic> logger = loggerMock.Object;
+
             var config = new MapperConfiguration(cfg => {
                 cfg.AddProfile<MappingProfile>();
             });
             var mapper = config.CreateMapper();
             string trackingId = "123";
             //Act
-            var response = new BusinessLogic.TrackingLogic(mapper, parcelRepository).ReportDelivery(trackingId);
+            var response = new BusinessLogic.TrackingLogic(mapper, parcelRepository, logger).ReportDelivery(trackingId);
             //Assert
             Assert.IsInstanceOf<Error>(response);
         }
@@ -59,6 +66,9 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             var parcelRepositoryMock = new Mock<IParcelRepository>();
             IParcelRepository parcelRepository = parcelRepositoryMock.Object;
 
+            var loggerMock = new Mock<ILogger<TrackingLogic>>();
+            ILogger<TrackingLogic> logger = loggerMock.Object;
+
             var config = new MapperConfiguration(cfg => {
                 cfg.AddProfile<MappingProfile>();
             });
@@ -66,7 +76,7 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             string trackingId = "PYJRB4HZ6";
             string code = "ABCD1234";
             //Act
-            var response = new BusinessLogic.TrackingLogic(mapper, parcelRepository).ReportHop(trackingId, code);
+            var response = new BusinessLogic.TrackingLogic(mapper, parcelRepository, logger).ReportHop(trackingId, code);
             //Test
             Assert.AreEqual("Successfully reported hop", response);
         }
@@ -78,6 +88,9 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             var parcelRepositoryMock = new Mock<IParcelRepository>();
             IParcelRepository parcelRepository = parcelRepositoryMock.Object;
 
+            var loggerMock = new Mock<ILogger<TrackingLogic>>();
+            ILogger<TrackingLogic> logger = loggerMock.Object;
+
             var config = new MapperConfiguration(cfg => {
                 cfg.AddProfile<MappingProfile>();
             });
@@ -85,7 +98,7 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             string trackingId = "123";
             string code = "ABCD";
             //Act
-            var response = new BusinessLogic.TrackingLogic(mapper, parcelRepository).ReportHop(trackingId, code);
+            var response = new BusinessLogic.TrackingLogic(mapper, parcelRepository , logger).ReportHop(trackingId, code);
             //Test
             Assert.IsInstanceOf<Error>(response);
         }
@@ -143,7 +156,10 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
 
             IParcelRepository parcelRepository = parcelRepositoryMock.Object;
 
-            TrackingLogic trackingLogic= new TrackingLogic(mapper, parcelRepository);
+            var loggerMock = new Mock<ILogger<TrackingLogic>>();
+            ILogger<TrackingLogic> logger = loggerMock.Object;
+
+            TrackingLogic trackingLogic= new TrackingLogic(mapper, parcelRepository, logger);
 
             //ACT & ASSERT
 
@@ -171,7 +187,10 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
 
             IParcelRepository parcelRepository = parcelRepositoryMock.Object;
 
-            TrackingLogic trackingLogic = new TrackingLogic(mapper, parcelRepository);
+            var loggerMock = new Mock<ILogger<TrackingLogic>>();
+            ILogger<TrackingLogic> logger = loggerMock.Object;
+
+            TrackingLogic trackingLogic = new TrackingLogic(mapper, parcelRepository, logger);
 
             //ACT & ASSERT
 

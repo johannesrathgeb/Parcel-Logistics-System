@@ -3,6 +3,7 @@ using FizzWare.NBuilder;
 using LRLogistik.LRPackage.BusinessLogic.Entities;
 using LRLogistik.LRPackage.BusinessLogic.MappingProfiles;
 using LRLogistik.LRPackage.DataAccess.Interfaces;
+using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -21,12 +22,15 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             var warehouseRepositoryMock = new Mock<IWarehouseRepository>();
             IWarehouseRepository warehouseRepository = warehouseRepositoryMock.Object;
 
+            var loggerMock = new Mock<ILogger<WarehouseLogic>>();
+            ILogger<WarehouseLogic> logger = loggerMock.Object;
+
             var config = new MapperConfiguration(cfg => {
                 cfg.AddProfile<MappingProfile>();
             });
             var mapper = config.CreateMapper();
             //Act
-            var response = new BusinessLogic.WarehouseLogic(mapper, warehouseRepository).ExportWarehouse();
+            var response = new BusinessLogic.WarehouseLogic(mapper, warehouseRepository, logger).ExportWarehouse();
             //Test
             Assert.IsInstanceOf<Warehouse>(response);
         }
@@ -38,13 +42,16 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             var warehouseRepositoryMock = new Mock<IWarehouseRepository>();
             IWarehouseRepository warehouseRepository = warehouseRepositoryMock.Object;
 
+            var loggerMock = new Mock<ILogger<WarehouseLogic>>();
+            ILogger<WarehouseLogic> logger = loggerMock.Object;
+
             var config = new MapperConfiguration(cfg => {
                 cfg.AddProfile<MappingProfile>();
             });
             var mapper = config.CreateMapper();
             string code = "ABCD1234";
             //Act
-            var response = new BusinessLogic.WarehouseLogic(mapper, warehouseRepository).GetWarehouse(code);
+            var response = new BusinessLogic.WarehouseLogic(mapper, warehouseRepository, logger).GetWarehouse(code);
             //Test
             Assert.IsInstanceOf<Hop>(response);
         }
@@ -56,13 +63,16 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             var warehouseRepositoryMock = new Mock<IWarehouseRepository>();
             IWarehouseRepository warehouseRepository = warehouseRepositoryMock.Object;
 
+            var loggerMock = new Mock<ILogger<WarehouseLogic>>();
+            ILogger<WarehouseLogic> logger = loggerMock.Object;
+
             var config = new MapperConfiguration(cfg => {
                 cfg.AddProfile<MappingProfile>();
             });
             var mapper = config.CreateMapper();
             string code = "ABCD";
             //Act
-            var response = new BusinessLogic.WarehouseLogic(mapper, warehouseRepository).GetWarehouse(code);
+            var response = new BusinessLogic.WarehouseLogic(mapper, warehouseRepository, logger).GetWarehouse(code);
             //Test
             Assert.IsInstanceOf<Error>(response);
         }
@@ -91,7 +101,10 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
 
             IWarehouseRepository warehouseRepository = warehouseRepositoryMock.Object;
 
-            WarehouseLogic warehouseLogic = new WarehouseLogic(mapper, warehouseRepository);
+            var loggerMock = new Mock<ILogger<WarehouseLogic>>();
+            ILogger<WarehouseLogic> logger = loggerMock.Object;
+
+            WarehouseLogic warehouseLogic = new WarehouseLogic(mapper, warehouseRepository, logger);
 
             //ACT & ASSERT
 

@@ -82,7 +82,7 @@ namespace LRLogistik.LRPackage.Services
             services.AddMvc();
 
             services.AddDbContext<SampleContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("SWKOMDB")));
+            options.UseSqlServer(Configuration.GetConnectionString("SWKOMDB"), opt => opt.UseNetTopologySuite()));
 
 
             // Add framework services.
