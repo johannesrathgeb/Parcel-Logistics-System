@@ -32,11 +32,11 @@ steps:
     reports: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
     targetdir: '$(Build.SourcesDirectory)/coverageresults'
 
- - task: PublishCodeCoverageResults@1
-   displayName: 'Publish code coverage report'
-   inputs:
-      codeCoverageTool: 'Cobertura'
-      summaryFileLocation: '$(Build.SourcesDirectory)/coverageresults/Cobertura.xml'
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish code coverage report'
+  inputs:
+    codeCoverageTool: 'Cobertura'
+    summaryFileLocation: '$(Build.SourcesDirectory)/coverageresults/Cobertura.xml'
 
 - task: CopyFiles@2
   inputs:
