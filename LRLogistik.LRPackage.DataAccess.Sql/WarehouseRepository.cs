@@ -13,6 +13,7 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
 {
     public class WarehouseRepository : IWarehouseRepository
     {
+        private static Random random = new Random();
         SampleContext _dbContext;
         private readonly ILogger _logger;
         public WarehouseRepository(SampleContext context, ILogger<WarehouseRepository> logger)
@@ -23,40 +24,42 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
 
         public object Create(Warehouse w)
         {
-            _logger.LogInformation($"Creating Warehouse in DB: {JsonConvert.SerializeObject(w)}");
             if (w == null)
             {
                 _logger.LogDebug($"Warehouse Creation was invalid");
                 return new Entities.Error() { ErrorMessage = "string" };
             }
+            _logger.LogInformation($"Creating Warehouse in DB: {JsonConvert.SerializeObject(w.HopId)}");
             _dbContext.Warehouses.Add(w);
             _dbContext.SaveChanges();
-            _logger.LogInformation($"Warehouse successfully created: {JsonConvert.SerializeObject(w)}");
+            _logger.LogInformation($"Warehouse successfully created: {JsonConvert.SerializeObject(w.HopId)}");
             return w; 
         }
 
         public void Delete(string id)
         {
             Entities.Warehouse warehouse = _dbContext.Warehouses.SingleOrDefault(w => w.HopId == id);
-            _logger.LogInformation($"Deleting warehouse from DB: {JsonConvert.SerializeObject(warehouse)}");
-            if (warehouse != null)
+            if (warehouse == null)
             {
-                _dbContext.Remove(warehouse);
-                _dbContext.SaveChanges();
-                _logger.LogInformation($"Warehouse deleted: {JsonConvert.SerializeObject(warehouse)}");
+                _logger.LogDebug($"Warehouse Deletion was invalid; Warehouse doesn't exist");
+                return; 
             }
+            _logger.LogInformation($"Deleting warehouse from DB: {JsonConvert.SerializeObject(warehouse.HopId)}");
+            _dbContext.Remove(warehouse);
+            _dbContext.SaveChanges();
+            _logger.LogInformation($"Warehouse deleted");
         }
 
         public object GetByHopId(string id)
         {
             _logger.LogInformation($"Getting Warehouse from DB: {JsonConvert.SerializeObject(id)}");
             Entities.Warehouse warehouse = _dbContext.Warehouses.SingleOrDefault(w => w.HopId == id);
-            _logger.LogInformation($"Warehouse found in DB: {JsonConvert.SerializeObject(warehouse)}");
             if (warehouse == null)
             {
                 _logger.LogDebug($"Getting Warehouse was invalid");
                 return new Entities.Error() { ErrorMessage = "string" };
             }
+            _logger.LogInformation($"Warehouse found in DB: {JsonConvert.SerializeObject(warehouse.HopId)}");
             return warehouse;
         }
 
@@ -64,5 +67,6 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
         {
             throw new NotImplementedException();
         }
+
     }
 }

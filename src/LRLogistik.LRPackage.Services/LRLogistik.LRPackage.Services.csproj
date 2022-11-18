@@ -33,9 +33,4 @@
     <ProjectReference Include="..\..\LRLogistik.LRPackage.DataAccess.Sql\LRLogistik.LRPackage.DataAccess.Sql.csproj" />
     <ProjectReference Include="..\LRLogistik.LRPackage.DTOs\LRLogistik.LRPackage.Services.DTOs.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Update="appsettings.Development.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
 </Project>

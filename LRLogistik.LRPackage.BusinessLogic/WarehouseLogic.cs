@@ -31,7 +31,6 @@ namespace LRLogistik.LRPackage.BusinessLogic
 
         public object ImportWarehouse(Warehouse warehouse)
         {
-
             //DataAccess.Entities.Warehouse h = _mapper.Map<DataAccess.Entities.Warehouse>(warehouse); 
 
             //_warehouseRepository.Create(h);

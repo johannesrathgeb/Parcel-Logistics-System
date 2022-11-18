@@ -12,8 +12,20 @@ namespace LRLogistik.LRPackage.BusinessLogic.Converters
 {
     public class GeoJsonConverter :
             IValueConverter<string, NetTopologySuite.Geometries.Geometry>,
-            IValueConverter<NetTopologySuite.Geometries.Geometry, string>
+            IValueConverter<NetTopologySuite.Geometries.Geometry, string>,
+            ITypeConverter<string, NetTopologySuite.Geometries.Geometry>,
+            ITypeConverter<NetTopologySuite.Geometries.Geometry, string>
     {
+        public Geometry Convert(string source, Geometry dest, ResolutionContext context)
+        {
+            return this.Convert(source, context);
+        }
+        public string Convert(Geometry source, string dest, ResolutionContext context)
+        {
+            return this.Convert(source, context);
+        }
+
+
         public NetTopologySuite.Geometries.Geometry Convert(string source, ResolutionContext context)
         {
             var serializer = NetTopologySuite.IO.GeoJsonSerializer.CreateDefault();
