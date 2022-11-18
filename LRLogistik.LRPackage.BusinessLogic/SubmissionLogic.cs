@@ -31,13 +31,8 @@ namespace LRLogistik.LRPackage.BusinessLogic
 
         public object SubmitParcel(Parcel parcel)
         {
-<<<<<<< HEAD
-            ParcelValidator parcelValidator = new ParcelValidator();
-            RecipientValidator recipientValidator = new RecipientValidator(); 
-=======
             _logger.LogInformation($"Submitting parcel {JsonConvert.SerializeObject(parcel)}");
-            ParcelValidator recipientValidator = new ParcelValidator();
->>>>>>> dev1
+            ParcelValidator parcelValidator = new ParcelValidator();
 
             var result = parcelValidator.Validate(parcel);
             //var result_r = recipientValidator.Validate(parcel.Recipient);
