@@ -26,24 +26,6 @@ steps:
     arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
     publishTestResults: true
   
-- task: PublishCodeCoverageResults@1
-  displayName: 'Publish code coverage report'
-  inputs:
-    codeCoverageTool: "Cobertura"
-    summaryFileLocation: "**/*coverage.cobertura.xml"
-
-- task: CopyFiles@2
-  inputs:
-    targetFolder: '$(Build.ArtifactStagingDirectory)'    
-
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: 'src/LRLogistik.LRPackage.Services/bin/$(buildConfiguration)/'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
-
-
-
 - task: reportgenerator@5
   displayName: "Merge Codecoverage Results"
   inputs:
@@ -55,3 +37,13 @@ steps:
    inputs:
       codeCoverageTool: 'Cobertura'
       summaryFileLocation: '$(Build.SourcesDirectory)/coverageresults/Cobertura.xml'
+
+- task: CopyFiles@2
+  inputs:
+    targetFolder: '$(Build.ArtifactStagingDirectory)'    
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: 'src/LRLogistik.LRPackage.Services/bin/$(buildConfiguration)/'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
