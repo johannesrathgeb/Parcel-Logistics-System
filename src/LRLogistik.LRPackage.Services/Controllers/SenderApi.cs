@@ -23,6 +23,7 @@ using AutoMapper;
 using LRLogistik.LRPackage.BusinessLogic;
 using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace LRLogistik.LRPackage.Services.Controllers
 {
@@ -34,19 +35,14 @@ namespace LRLogistik.LRPackage.Services.Controllers
     {
 
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
         private readonly ISubmissionLogic _submissionLogic;
 
-        [ActivatorUtilitiesConstructor]
-        public SenderApiController(IMapper mapper)
+        public SenderApiController(IMapper mapper, ISubmissionLogic submissionLogic, ILogger<SenderApiController> logger)
         {
             _mapper = mapper;
-            _submissionLogic = new SubmissionLogic(_mapper);
-        }
-
-        public SenderApiController(IMapper mapper, ISubmissionLogic submissionLogic)
-        {
-            _mapper = mapper;
-            _submissionLogic = submissionLogic; 
+            _submissionLogic = submissionLogic;
+            _logger = logger;
         }
 
         /// <summary>
@@ -66,7 +62,9 @@ namespace LRLogistik.LRPackage.Services.Controllers
         [SwaggerResponse(statusCode: 404, type: typeof(Error), description: "The address of sender or receiver was not found.")]
         public virtual IActionResult SubmitParcel([FromBody] Parcel parcel)
         {
+            _logger.LogInformation($"Submitting Parcel: {JsonConvert.SerializeObject(parcel)}");
             var parcelEntity = _mapper.Map<BusinessLogic.Entities.Parcel>(parcel);
+            _logger.LogInformation($"Parcel mapped to BL: {JsonConvert.SerializeObject(parcel)}");
             var result = _submissionLogic.SubmitParcel(parcelEntity);
 
 
@@ -77,6 +75,7 @@ namespace LRLogistik.LRPackage.Services.Controllers
             }
             else
             {
+                _logger.LogDebug($"Parcel Submission was invalid");
                 return StatusCode(400, new ObjectResult(_mapper.Map<DTOs.Error>(result)).Value);
             }
 

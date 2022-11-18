@@ -5,6 +5,8 @@ using LRLogistik.LRPackage.BusinessLogic.Validators;
 using LRLogistik.LRPackage.DataAccess.Interfaces;
 using LRLogistik.LRPackage.DataAccess.Sql;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,28 +17,20 @@ namespace LRLogistik.LRPackage.BusinessLogic
 {
     public class TransferLogic : ITransferLogic
     {
-
-        //public TransferLogic() { }
-
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
         IParcelRepository _parcelRepository;
 
-
-        [ActivatorUtilitiesConstructor]
-        public TransferLogic(IMapper mapper)
-        {
-            _mapper = mapper;
-            _parcelRepository = new ParcelRepository(); 
-        }
-
-        public TransferLogic(IMapper mapper, IParcelRepository repository)
+        public TransferLogic(IMapper mapper, IParcelRepository repository, ILogger<TransferLogic> logger)
         {
             _mapper = mapper;
             _parcelRepository = repository; 
+            _logger = logger;
         }
 
         public object TransferPackage(string trackingId, Parcel parcel)
         {
+            _logger.LogInformation($"Transferring Package: {JsonConvert.SerializeObject(parcel)}");
             TrackingIdValidator trackingIdValidator = new TrackingIdValidator();
             ParcelValidator parcelValidator = new ParcelValidator();
             RecipientValidator recipientValidator = new RecipientValidator(); 
@@ -49,6 +43,8 @@ namespace LRLogistik.LRPackage.BusinessLogic
             if (result_t.IsValid && result_c.IsValid)
             {
                 parcel.TrackingId = trackingId;
+                _logger.LogInformation($"Package updated with TrackingId: {JsonConvert.SerializeObject(parcel)}");
+                _logger.LogInformation($"Mapping Package to DataAccessLayer: {JsonConvert.SerializeObject(parcel)}");
                 _parcelRepository.Create(_mapper.Map<DataAccess.Entities.Parcel>(parcel));
 
 
@@ -56,6 +52,7 @@ namespace LRLogistik.LRPackage.BusinessLogic
             }
             else
             {
+                _logger.LogDebug($"TrackingId or Recipient was invalid!");
                 return new Error() { ErrorMessage = "string" };
             }
 

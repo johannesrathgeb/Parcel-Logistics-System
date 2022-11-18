@@ -36,15 +36,7 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                IConfigurationRoot configuration = new ConfigurationBuilder()
-                   .SetBasePath(Directory.GetCurrentDirectory())
-                   .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json")
-                   .Build();
-                var connectionString = configuration.GetConnectionString("SWKOMDB");
-                optionsBuilder.UseSqlServer(connectionString, x => x.UseNetTopologySuite());
-            }
+
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -82,8 +74,13 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
                           .HasValue<Truck>("Region")
                           .HasValue<Truck>("NumberPlate");
 
-            modelBuilder.Entity<Hop>()
-                .Property(h => h.LocationCoordinates).HasColumnType("geometry");
+
+            modelBuilder.Entity<Hop>(e =>
+            {
+                e.Property(x => x.HopId).ValueGeneratedOnAdd();
+                e.Property(h => h.LocationCoordinates).HasColumnType("geometry");
+            });
+
 
             modelBuilder.Entity<Transferwarehouse>()
                 .Property(t => t.Region).HasColumnType("geometry");

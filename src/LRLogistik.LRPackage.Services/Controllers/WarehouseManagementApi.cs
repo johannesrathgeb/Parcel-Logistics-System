@@ -23,6 +23,7 @@ using AutoMapper;
 using LRLogistik.LRPackage.BusinessLogic;
 using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace LRLogistik.LRPackage.Services.Controllers
 {
@@ -33,19 +34,14 @@ namespace LRLogistik.LRPackage.Services.Controllers
     public class WarehouseManagementApiController : ControllerBase
     {
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
         private readonly IWarehouseLogic _warehouseLogic;
 
-        [ActivatorUtilitiesConstructor]
-        public WarehouseManagementApiController(IMapper mapper)
-        {
-            _mapper = mapper;
-            _warehouseLogic = new WarehouseLogic(_mapper);
-        }
-
-        public WarehouseManagementApiController(IMapper mapper, IWarehouseLogic warehouseLogic)
+        public WarehouseManagementApiController(IMapper mapper, IWarehouseLogic warehouseLogic, ILogger<WarehouseManagementApiController> logger)
         {
             _mapper = mapper;
             _warehouseLogic = warehouseLogic;
+            _logger = logger;
         }
 
         /// <summary>
@@ -62,6 +58,7 @@ namespace LRLogistik.LRPackage.Services.Controllers
         [SwaggerResponse(statusCode: 400, type: typeof(Error), description: "The operation failed due to an error.")]
         public virtual IActionResult ExportWarehouses()
         {
+            _logger.LogInformation($"Exporting Warehouse");
             var result = _warehouseLogic.ExportWarehouse();
 
             if (result.GetType() == typeof(BusinessLogic.Entities.Warehouse))
@@ -71,6 +68,7 @@ namespace LRLogistik.LRPackage.Services.Controllers
             }
             else
             {
+                _logger.LogDebug($"Warehouse Export was invalid");
                 return StatusCode(400, new ObjectResult(_mapper.Map<DTOs.Error>(result)).Value);
             }
 
@@ -97,6 +95,7 @@ namespace LRLogistik.LRPackage.Services.Controllers
         [SwaggerResponse(statusCode: 400, type: typeof(Error), description: "The operation failed due to an error.")]
         public virtual IActionResult GetWarehouse([FromRoute(Name = "code")][Required] string code)
         {
+            _logger.LogInformation($"Getting Warehouse : {JsonConvert.SerializeObject(code)}");
             var result = _warehouseLogic.GetWarehouse(code);
 
             if (result.GetType() == typeof(BusinessLogic.Entities.Hop))
@@ -105,6 +104,7 @@ namespace LRLogistik.LRPackage.Services.Controllers
             }
             else
             {
+                _logger.LogDebug($"Getting Warehouse was invalid");
                 return StatusCode(400, new ObjectResult(_mapper.Map<DTOs.Error>(result)).Value);
             }
 
@@ -130,7 +130,9 @@ namespace LRLogistik.LRPackage.Services.Controllers
         [SwaggerResponse(statusCode: 400, type: typeof(Error), description: "The operation failed due to an error.")]
         public virtual IActionResult ImportWarehouses([FromBody] Warehouse warehouse)
         {
+            _logger.LogInformation($"Importing Warehouse: {JsonConvert.SerializeObject(warehouse)}");
             var warehouseEntity = _mapper.Map<BusinessLogic.Entities.Warehouse>(warehouse);
+            _logger.LogInformation($"Warehouse mapped to BL: {JsonConvert.SerializeObject(warehouse)}");
 
             var result = _warehouseLogic.ImportWarehouse(warehouseEntity);
 
@@ -140,6 +142,7 @@ namespace LRLogistik.LRPackage.Services.Controllers
             }
             else
             {
+                _logger.LogDebug($"Warehouse import was invalid");
                 return StatusCode(400, new ObjectResult(_mapper.Map<DTOs.Error>(result)).Value);
             }
 

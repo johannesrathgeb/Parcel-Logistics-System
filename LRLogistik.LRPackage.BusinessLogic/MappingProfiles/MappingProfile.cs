@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LRLogistik.LRPackage.BusinessLogic.Converters;
+using NetTopologySuite.Geometries;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -14,6 +15,7 @@ namespace LRLogistik.LRPackage.BusinessLogic.MappingProfiles
     {
         public MappingProfile()
         {
+            /*
             CreateMap<BusinessLogic.Entities.Hop, DataAccess.Entities.Hop>()
                 .ForMember(dest => dest.LocationCoordinates, opt => opt.ConvertUsing(new GeoPointConverter(), src => src.LocationCoordinates))
                 .ReverseMap();
@@ -26,6 +28,21 @@ namespace LRLogistik.LRPackage.BusinessLogic.MappingProfiles
                 .ForMember(dest => dest.Region, opt => opt.ConvertUsing(new GeoJsonConverter(), src => src.RegionGeoJson))
                 .IncludeBase<BusinessLogic.Entities.Hop, DataAccess.Entities.Hop>()
                 .ReverseMap();
+            */
+
+            CreateMap<BusinessLogic.Entities.GeoCoordinate, Point>()
+            .ConvertUsing(new GeoPointConverter());
+
+            CreateMap<Point, BusinessLogic.Entities.GeoCoordinate>()
+                .ConvertUsing(new GeoPointConverter());
+
+            
+            CreateMap<string, Geometry>()
+                .ConvertUsing(new GeoJsonConverter());
+
+            CreateMap<Geometry, string>()
+                .ConvertUsing(new GeoJsonConverter());
+            
 
             CreateMap<BusinessLogic.Entities.Parcel, DataAccess.Entities.Parcel>().ReverseMap();
             CreateMap<BusinessLogic.Entities.Error, DataAccess.Entities.Error>().ReverseMap();
@@ -36,6 +53,9 @@ namespace LRLogistik.LRPackage.BusinessLogic.MappingProfiles
                 .ReverseMap();
             CreateMap<BusinessLogic.Entities.WarehouseNextHops, DataAccess.Entities.WarehouseNextHops>().ReverseMap();
             CreateMap<BusinessLogic.Entities.Hop, DataAccess.Entities.Hop>().ReverseMap();
+
+            CreateMap<BusinessLogic.Entities.Truck, DataAccess.Entities.Truck>().ReverseMap();
+            CreateMap<BusinessLogic.Entities.Transferwarehouse, DataAccess.Entities.Transferwarehouse>().ReverseMap();
         }
     }
 }

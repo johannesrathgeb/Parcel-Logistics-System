@@ -24,6 +24,8 @@ using LRLogistik.LRPackage.BusinessLogic.Entities;
 using LRLogistik.LRPackage.BusinessLogic;
 using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using LRLogistik.LRPackage.DataAccess.Entities;
 
 namespace LRLogistik.LRPackage.Services.Controllers
 {
@@ -35,19 +37,14 @@ namespace LRLogistik.LRPackage.Services.Controllers
     public class RecipientApiController : ControllerBase
     {
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
         private readonly ITrackingLogic _trackingLogic;
 
-        [ActivatorUtilitiesConstructor]
-        public RecipientApiController(IMapper mapper)
-        {
-            _mapper = mapper;
-            _trackingLogic = new TrackingLogic(_mapper);   
-        }
-
-        public RecipientApiController(IMapper mapper, ITrackingLogic trackingLogic)
+        public RecipientApiController(IMapper mapper, ITrackingLogic trackingLogic, ILogger<RecipientApiController> logger)
         {
             _mapper = mapper;
             _trackingLogic = trackingLogic;
+            _logger = logger;
         }
 
         /// <summary>
@@ -65,7 +62,7 @@ namespace LRLogistik.LRPackage.Services.Controllers
         [SwaggerResponse(statusCode: 400, type: typeof(DTOs.Error), description: "The operation failed due to an error.")]
         public virtual IActionResult TrackParcel([FromRoute(Name = "trackingId")][Required][RegularExpression("^[A-Z0-9]{9}$")] string trackingId)
         {
-
+            _logger.LogInformation($"Tracking Parcel with Id: {JsonConvert.SerializeObject(trackingId)}");
 
             var result = _trackingLogic.TrackPackage(trackingId);
 
@@ -76,6 +73,7 @@ namespace LRLogistik.LRPackage.Services.Controllers
             }
             else
             {
+                _logger.LogDebug($"Parcel Tracking was invalid");
                 return StatusCode(400, new ObjectResult(_mapper.Map<DTOs.Error>(result)).Value);
             }
         }

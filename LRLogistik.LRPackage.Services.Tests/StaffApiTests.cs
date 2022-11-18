@@ -4,6 +4,7 @@ using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using LRLogistik.LRPackage.Services.Controllers;
 using LRLogistik.LRPackage.Services.MappingProfiles;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using RandomDataGenerator.FieldOptions;
@@ -38,7 +39,10 @@ namespace LRLogistik.LRPackage.Services.Tests
 
             ITrackingLogic trackingLogic = trackingLogicMock.Object;
 
-            StaffApiController staffApi = new StaffApiController(mapper, trackingLogic);
+            var loggerMock = new Mock<ILogger<StaffApiController>>();
+            ILogger<StaffApiController> logger = loggerMock.Object;
+
+            StaffApiController staffApi = new StaffApiController(mapper, trackingLogic, logger);
 
             //ACT
             var result = staffApi.ReportParcelDelivery(randomTrackingId) as ObjectResult;
@@ -67,7 +71,10 @@ namespace LRLogistik.LRPackage.Services.Tests
 
             ITrackingLogic trackingLogic = trackingLogicMock.Object;
 
-            StaffApiController staffApi = new StaffApiController(mapper, trackingLogic);
+            var loggerMock = new Mock<ILogger<StaffApiController>>();
+            ILogger<StaffApiController> logger = loggerMock.Object;
+
+            StaffApiController staffApi = new StaffApiController(mapper, trackingLogic, logger);
 
             //ACT
             var result = staffApi.ReportParcelDelivery(randomTrackingId) as ObjectResult;
@@ -98,7 +105,10 @@ namespace LRLogistik.LRPackage.Services.Tests
 
             ITrackingLogic trackingLogic = trackingLogicMock.Object;
 
-            StaffApiController staffApi = new StaffApiController(mapper, trackingLogic);
+            var loggerMock = new Mock<ILogger<StaffApiController>>();
+            ILogger<StaffApiController> logger = loggerMock.Object;
+
+            StaffApiController staffApi = new StaffApiController(mapper, trackingLogic, logger);
 
             //ACT
             var result = staffApi.ReportParcelHop(randomTrackingId, randomTrackingCode) as ObjectResult;
@@ -128,7 +138,10 @@ namespace LRLogistik.LRPackage.Services.Tests
                 .Returns(Builder<BusinessLogic.Entities.Error>.CreateNew().Build());
             ITrackingLogic trackingLogic = trackingLogicMock.Object;
 
-            StaffApiController staffApi = new StaffApiController(mapper, trackingLogic);
+            var loggerMock = new Mock<ILogger<StaffApiController>>();
+            ILogger<StaffApiController> logger = loggerMock.Object;
+
+            StaffApiController staffApi = new StaffApiController(mapper, trackingLogic, logger);
 
             //ACT
             var result = staffApi.ReportParcelHop(randomTrackingId, randomTrackingCode) as ObjectResult;

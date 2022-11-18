@@ -2,6 +2,8 @@ using EntityFrameworkCore.Testing.Moq.Helpers;
 using LRLogistik.LRPackage.DataAccess.Entities;
 using LRLogistik.LRPackage.DataAccess.Sql;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Moq;
 
 namespace LRLogistik.LRPackage.DataAccess.Tests
 {
@@ -85,7 +87,9 @@ namespace LRLogistik.LRPackage.DataAccess.Tests
         public void GetParcelByValidID()
         {
             // Arrange
-            var repository = new ParcelRepository(_mockedDbContext);
+            var loggerMock = new Mock<ILogger<ParcelRepository>>();
+            ILogger<ParcelRepository> logger = loggerMock.Object;
+            var repository = new ParcelRepository(_mockedDbContext, logger);
 
             // Act
             var result = repository.GetByTrackingId("M5OEG8LWD");
@@ -98,7 +102,9 @@ namespace LRLogistik.LRPackage.DataAccess.Tests
         public void GetParcelByInvalidID()
         {
             // Arrange
-            var repository = new ParcelRepository(_mockedDbContext);
+            var loggerMock = new Mock<ILogger<ParcelRepository>>();
+            ILogger<ParcelRepository> logger = loggerMock.Object;
+            var repository = new ParcelRepository(_mockedDbContext, logger);
 
             // Act
             var result = repository.GetByTrackingId("123");
@@ -111,7 +117,9 @@ namespace LRLogistik.LRPackage.DataAccess.Tests
         public void CreateValidParcel()
         {
             // Arrange
-            var repository = new ParcelRepository(_mockedDbContext);
+            var loggerMock = new Mock<ILogger<ParcelRepository>>();
+            ILogger<ParcelRepository> logger = loggerMock.Object;
+            var repository = new ParcelRepository(_mockedDbContext, logger);
             Parcel parcel = new Parcel()
             {
                 Weight = 2,
@@ -145,7 +153,9 @@ namespace LRLogistik.LRPackage.DataAccess.Tests
         public void CreateInvalidParcel()
         {
             // Arrange
-            var repository = new ParcelRepository(_mockedDbContext);
+            var loggerMock = new Mock<ILogger<ParcelRepository>>();
+            ILogger<ParcelRepository> logger = loggerMock.Object;
+            var repository = new ParcelRepository(_mockedDbContext, logger);
 
             // Act
             var result = repository.Create(null);
@@ -158,7 +168,9 @@ namespace LRLogistik.LRPackage.DataAccess.Tests
         public void DeleteValid()
         {
             // Arrange
-            var repository = new ParcelRepository(_mockedDbContext);
+            var loggerMock = new Mock<ILogger<ParcelRepository>>();
+            ILogger<ParcelRepository> logger = loggerMock.Object;
+            var repository = new ParcelRepository(_mockedDbContext, logger);
 
             // Act
             repository.Delete("M5OEG8LWD");
@@ -171,7 +183,9 @@ namespace LRLogistik.LRPackage.DataAccess.Tests
         public void DeleteInvalid()
         {
             // Arrange
-            var repository = new ParcelRepository(_mockedDbContext);
+            var loggerMock = new Mock<ILogger<ParcelRepository>>();
+            ILogger<ParcelRepository> logger = loggerMock.Object;
+            var repository = new ParcelRepository(_mockedDbContext, logger);
 
             // Act
             repository.Delete("XYXYG8LWY");

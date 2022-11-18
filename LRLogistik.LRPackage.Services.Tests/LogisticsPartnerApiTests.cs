@@ -4,6 +4,7 @@ using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using LRLogistik.LRPackage.Services.Controllers;
 using LRLogistik.LRPackage.Services.MappingProfiles;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using RandomDataGenerator.FieldOptions;
@@ -39,7 +40,10 @@ namespace LRLogistik.LRPackage.Services.Tests
 
             ITransferLogic transferLogic = transferLogicMock.Object;
 
-            LogisticsPartnerApiController logisticsPartnerApi = new LogisticsPartnerApiController(mapper, transferLogic);
+            var loggerMock = new Mock<ILogger<LogisticsPartnerApiController>>();
+            ILogger<LogisticsPartnerApiController> logger = loggerMock.Object;
+
+            LogisticsPartnerApiController logisticsPartnerApi = new LogisticsPartnerApiController(mapper, transferLogic, logger);
 
             //ACT
             var result = logisticsPartnerApi.TransitionParcel(randomTrackingId, DTOParcel) as ObjectResult;
@@ -69,7 +73,10 @@ namespace LRLogistik.LRPackage.Services.Tests
 
             ITransferLogic transferLogic = transferLogicMock.Object;
 
-            LogisticsPartnerApiController logisticsPartnerApi = new LogisticsPartnerApiController(mapper, transferLogic);
+            var loggerMock = new Mock<ILogger<LogisticsPartnerApiController>>();
+            ILogger<LogisticsPartnerApiController> logger = loggerMock.Object;
+
+            LogisticsPartnerApiController logisticsPartnerApi = new LogisticsPartnerApiController(mapper, transferLogic, logger);
 
             //ACT
             var result = logisticsPartnerApi.TransitionParcel(randomTrackingId, DTOParcel) as ObjectResult;

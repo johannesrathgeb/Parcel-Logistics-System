@@ -4,6 +4,7 @@ using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using LRLogistik.LRPackage.Services.Controllers;
 using LRLogistik.LRPackage.Services.MappingProfiles;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -35,7 +36,10 @@ namespace LRLogistik.LRPackage.Services.Tests
 
             ISubmissionLogic submissionLogic = submisssionLogicMock.Object;
 
-            SenderApiController senderApi = new SenderApiController(mapper, submissionLogic);
+            var loggerMock = new Mock<ILogger<SenderApiController>>();
+            ILogger<SenderApiController> logger = loggerMock.Object;
+
+            SenderApiController senderApi = new SenderApiController(mapper, submissionLogic, logger);
 
             //ACT
             var result = senderApi.SubmitParcel(DTOParcel) as ObjectResult;
@@ -64,7 +68,10 @@ namespace LRLogistik.LRPackage.Services.Tests
 
             ISubmissionLogic submissionLogic = submisssionLogicMock.Object;
 
-            SenderApiController senderApi = new SenderApiController(mapper, submissionLogic);
+            var loggerMock = new Mock<ILogger<SenderApiController>>();
+            ILogger<SenderApiController> logger = loggerMock.Object;
+
+            SenderApiController senderApi = new SenderApiController(mapper, submissionLogic, logger);
 
             //ACT
             var result = senderApi.SubmitParcel(DTOParcel) as ObjectResult;
