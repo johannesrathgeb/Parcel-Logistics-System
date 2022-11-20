@@ -15,6 +15,7 @@ namespace LRLogistik.LRPackage.DataAccess.Tests
         public void Setup()
         {
             // create in-memory database
+            //
             var options = new DbContextOptionsBuilder<SampleContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
             var dbContextToMock = new SampleContext(options);
