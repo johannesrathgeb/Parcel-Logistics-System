@@ -19,13 +19,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LRLogistik.LRPackage.Servic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LRLogistik.LRPackage.BusinessLogic.Tests", "LRLogistik.LRPackage.BusinessLogic.Tests\LRLogistik.LRPackage.BusinessLogic.Tests.csproj", "{4B45308E-82D7-419D-8BC5-3D6F3B21432A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LRLogistik.LRPackage.DataAccess.Entities", "LRLogistik.LRPackage.DataAccess.Entities\LRLogistik.LRPackage.DataAccess.Entities.csproj", "{319B76CE-D285-4A40-8623-E2E948A1D362}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LRLogistik.LRPackage.DataAccess.Entities", "LRLogistik.LRPackage.DataAccess.Entities\LRLogistik.LRPackage.DataAccess.Entities.csproj", "{319B76CE-D285-4A40-8623-E2E948A1D362}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LRLogistik.LRPackage.DataAccess.Interfaces", "LRLogistik.LRPackage.DataAccess.Interfaces\LRLogistik.LRPackage.DataAccess.Interfaces.csproj", "{5B079066-1536-4EC6-870F-E5508FF7CB9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LRLogistik.LRPackage.DataAccess.Interfaces", "LRLogistik.LRPackage.DataAccess.Interfaces\LRLogistik.LRPackage.DataAccess.Interfaces.csproj", "{5B079066-1536-4EC6-870F-E5508FF7CB9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LRLogistik.LRPackage.DataAccess.Sql", "LRLogistik.LRPackage.DataAccess.Sql\LRLogistik.LRPackage.DataAccess.Sql.csproj", "{1E758B56-2C3E-4B24-86BF-79BC556C47EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LRLogistik.LRPackage.DataAccess.Sql", "LRLogistik.LRPackage.DataAccess.Sql\LRLogistik.LRPackage.DataAccess.Sql.csproj", "{1E758B56-2C3E-4B24-86BF-79BC556C47EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LRLogistik.LRPackage.DataAccess.Tests", "LRLogistik.LRPackage.DataAccess.Tests\LRLogistik.LRPackage.DataAccess.Tests.csproj", "{71FDD3DC-5637-40C2-A5A8-938687A48BE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LRLogistik.LRPackage.DataAccess.Tests", "LRLogistik.LRPackage.DataAccess.Tests\LRLogistik.LRPackage.DataAccess.Tests.csproj", "{71FDD3DC-5637-40C2-A5A8-938687A48BE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LRLogistik.LRPackage.ServiceAgents.Interfaces", "LRLogistik.LRPackage.ServiceAgents.Interfaces\LRLogistik.LRPackage.ServiceAgents.Interfaces.csproj", "{AB360DCA-AA71-4AB3-94D1-B6DD77BBB835}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LRLogistik.LRPackage.ServiceAgents", "LRLogistik.LRPackage.ServiceAgents\LRLogistik.LRPackage.ServiceAgents.csproj", "{965CEC6E-9F68-4AC8-804F-3C86FC2D5FEB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LRLogistik.LRPackage.ServiceAgents.Tests", "LRLogistik.LRPackage.ServiceAgents.Tests\LRLogistik.LRPackage.ServiceAgents.Tests.csproj", "{7FB8E0E8-D0E8-4D97-B210-A47ECFC1C319}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +87,18 @@ Global
 		{71FDD3DC-5637-40C2-A5A8-938687A48BE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71FDD3DC-5637-40C2-A5A8-938687A48BE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71FDD3DC-5637-40C2-A5A8-938687A48BE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB360DCA-AA71-4AB3-94D1-B6DD77BBB835}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB360DCA-AA71-4AB3-94D1-B6DD77BBB835}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB360DCA-AA71-4AB3-94D1-B6DD77BBB835}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB360DCA-AA71-4AB3-94D1-B6DD77BBB835}.Release|Any CPU.Build.0 = Release|Any CPU
+		{965CEC6E-9F68-4AC8-804F-3C86FC2D5FEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{965CEC6E-9F68-4AC8-804F-3C86FC2D5FEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{965CEC6E-9F68-4AC8-804F-3C86FC2D5FEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{965CEC6E-9F68-4AC8-804F-3C86FC2D5FEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FB8E0E8-D0E8-4D97-B210-A47ECFC1C319}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FB8E0E8-D0E8-4D97-B210-A47ECFC1C319}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FB8E0E8-D0E8-4D97-B210-A47ECFC1C319}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FB8E0E8-D0E8-4D97-B210-A47ECFC1C319}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
