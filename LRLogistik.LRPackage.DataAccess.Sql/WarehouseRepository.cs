@@ -30,7 +30,7 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
                 return new Entities.Error() { ErrorMessage = "string" };
             }
             _logger.LogInformation($"Creating Warehouse in DB: {JsonConvert.SerializeObject(w.HopId)}");
-            _dbContext.Warehouses.Add(w);
+            _dbContext.Hops.Add(w);
             _dbContext.SaveChanges();
             _logger.LogInformation($"Warehouse successfully created: {JsonConvert.SerializeObject(w.HopId)}");
             return w; 
@@ -38,7 +38,7 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
 
         public void Delete(string id)
         {
-            Entities.Warehouse warehouse = _dbContext.Warehouses.SingleOrDefault(w => w.HopId == id);
+            Entities.Warehouse warehouse = (Warehouse) _dbContext.Hops.SingleOrDefault(w => w.HopId == id);
             if (warehouse == null)
             {
                 _logger.LogDebug($"Warehouse Deletion was invalid; Warehouse doesn't exist");
@@ -53,7 +53,7 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
         public object GetByHopId(string id)
         {
             _logger.LogInformation($"Getting Warehouse from DB: {JsonConvert.SerializeObject(id)}");
-            Entities.Warehouse warehouse = _dbContext.Warehouses.SingleOrDefault(w => w.HopId == id);
+            Entities.Warehouse warehouse = (Warehouse) _dbContext.Hops.SingleOrDefault(w => w.HopId == id);
             if (warehouse == null)
             {
                 _logger.LogDebug($"Getting Warehouse was invalid");

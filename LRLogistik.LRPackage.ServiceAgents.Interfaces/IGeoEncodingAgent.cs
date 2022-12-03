@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace LRLogistik.LRPackage.ServiceAgents.Interfaces
 {
-    public interface IEncodingAgent
+    public interface IGeoEncodingAgent
     {
-        //public GeoCoordinate EncodeAddress(Address a);
+        public GeoCoordinate EncodeAddress(Recipient r);
     }
 }

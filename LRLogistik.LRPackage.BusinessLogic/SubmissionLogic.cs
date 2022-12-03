@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LRLogistik.LRPackage.ServiceAgents;
 
 namespace LRLogistik.LRPackage.BusinessLogic
 {
@@ -31,6 +32,11 @@ namespace LRLogistik.LRPackage.BusinessLogic
 
         public object SubmitParcel(Parcel parcel)
         {
+            //TEST!!!
+            ServiceAgents.BingEncodingAgent bingEncodingAgent = new BingEncodingAgent();
+            bingEncodingAgent.EncodeAddress(parcel.Recipient);
+            //TEST!!!
+
             _logger.LogInformation($"Submitting parcel {JsonConvert.SerializeObject(parcel)}");
             ParcelValidator recipientValidator = new ParcelValidator();
 

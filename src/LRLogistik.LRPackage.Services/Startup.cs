@@ -62,6 +62,7 @@ namespace LRLogistik.LRPackage.Services
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
+
             //Interfaces BL
             services.AddTransient<IWarehouseLogic, WarehouseLogic>();
             services.AddTransient<ISubmissionLogic, SubmissionLogic>();

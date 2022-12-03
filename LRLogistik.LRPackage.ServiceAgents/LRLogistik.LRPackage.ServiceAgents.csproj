@@ -6,4 +6,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="BingMapsRESTToolkit" Version="1.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LRLogistik.LRPackage.ServiceAgents.Interfaces\LRLogistik.LRPackage.ServiceAgents.Interfaces.csproj" />
+  </ItemGroup>
+
 </Project>

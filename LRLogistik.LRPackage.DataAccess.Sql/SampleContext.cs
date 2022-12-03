@@ -31,7 +31,7 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
 
         public virtual DbSet<DataAccess.Entities.Parcel> Parcels { get; set; }
         
-        public virtual DbSet<DataAccess.Entities.Warehouse> Warehouses { get; set; }
+        public virtual DbSet<DataAccess.Entities.Hop> Hops { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

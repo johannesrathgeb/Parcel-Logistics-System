@@ -19,6 +19,7 @@
     <ProjectReference Include="..\LRLogistik.LRPackage.DataAccess.Entities\LRLogistik.LRPackage.DataAccess.Entities.csproj" />
     <ProjectReference Include="..\LRLogistik.LRPackage.DataAccess.Interfaces\LRLogistik.LRPackage.DataAccess.Interfaces.csproj" />
     <ProjectReference Include="..\LRLogistik.LRPackage.DataAccess.Sql\LRLogistik.LRPackage.DataAccess.Sql.csproj" />
+    <ProjectReference Include="..\LRLogistik.LRPackage.ServiceAgents\LRLogistik.LRPackage.ServiceAgents.csproj" />
   </ItemGroup>
 
 </Project>
