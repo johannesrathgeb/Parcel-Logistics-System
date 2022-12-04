@@ -8,11 +8,11 @@ namespace LRLogistik.LRPackage.BusinessLogic.Interfaces
 {
     public interface ITrackingLogic
     {
-        public object TrackPackage(string trackingId);
+        public Entities.Parcel TrackPackage(string trackingId);
 
-        public object ReportDelivery(string trackingId);
+        public string ReportDelivery(string trackingId);
 
-        public object ReportHop(string trackingId, string code); 
+        public string ReportHop(string trackingId, string code); 
 
     }
 }

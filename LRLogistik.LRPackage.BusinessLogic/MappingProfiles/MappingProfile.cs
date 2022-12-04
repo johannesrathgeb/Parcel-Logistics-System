@@ -45,7 +45,6 @@ namespace LRLogistik.LRPackage.BusinessLogic.MappingProfiles
             
 
             CreateMap<BusinessLogic.Entities.Parcel, DataAccess.Entities.Parcel>().ReverseMap();
-            CreateMap<BusinessLogic.Entities.Error, DataAccess.Entities.Error>().ReverseMap();
             CreateMap<BusinessLogic.Entities.HopArrival, DataAccess.Entities.HopArrival>().ReverseMap();
             CreateMap<BusinessLogic.Entities.Recipient, DataAccess.Entities.Recipient>().ReverseMap();
             CreateMap<BusinessLogic.Entities.Warehouse, DataAccess.Entities.Warehouse>()

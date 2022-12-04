@@ -24,6 +24,7 @@ using LRLogistik.LRPackage.BusinessLogic;
 using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using LRLogistik.LRPackage.BusinessLogic.Exceptions;
 
 namespace LRLogistik.LRPackage.Services.Controllers
 {
@@ -59,18 +60,17 @@ namespace LRLogistik.LRPackage.Services.Controllers
         [SwaggerResponse(statusCode: 400, type: typeof(Error), description: "The operation failed due to an error.")]
         public virtual IActionResult ReportParcelDelivery([FromRoute(Name = "trackingId")][Required][RegularExpression("^[A-Z0-9]{9}$")] string trackingId)
         {
-            _logger.LogInformation($"Reporting Parcel Delivery: {JsonConvert.SerializeObject(trackingId)}");
-            var result = _trackingLogic.ReportDelivery(trackingId);
+            try
+            {
+                _logger.LogInformation($"Reporting Parcel Delivery: {JsonConvert.SerializeObject(trackingId)}");
+                var result = _trackingLogic.ReportDelivery(trackingId);
 
-            if (result.GetType() == typeof(string))
-            {
-                //return new ObjectResult(_mapper.Map<NewParcelInfo>(result));
-                return StatusCode(200, new ObjectResult(result).Value);
+                return Ok(new ObjectResult(result));     
             }
-            else
+            catch(BusinessLogicNotFoundException e)
             {
-                _logger.LogDebug($"Reporting Parcel Delivery was invalid");
-                return StatusCode(400, new ObjectResult(_mapper.Map<DTOs.Error>(result)).Value);
+                _logger.LogError($"Reporting Parcel Delivery was invalid");
+                return BadRequest(new Error { ErrorMessage = e.Message});
             }
 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
@@ -97,18 +97,17 @@ namespace LRLogistik.LRPackage.Services.Controllers
         [SwaggerResponse(statusCode: 400, type: typeof(Error), description: "The operation failed due to an error.")]
         public virtual IActionResult ReportParcelHop([FromRoute(Name = "trackingId")][Required][RegularExpression("^[A-Z0-9]{9}$")] string trackingId, [FromRoute(Name = "code")][Required][RegularExpression("^[A-Z]{4}\\d{1,4}$")] string code)
         {
-            _logger.LogInformation($"Reporting Parcel Hop: {JsonConvert.SerializeObject(trackingId)}");
-            var result = _trackingLogic.ReportHop(trackingId, code);
-
-            if (result.GetType() == typeof(string))
+            try
             {
-                //return new ObjectResult(_mapper.Map<NewParcelInfo>(result));
-                return StatusCode(200, new ObjectResult(result).Value);
+                _logger.LogInformation($"Reporting Parcel Hop: {JsonConvert.SerializeObject(trackingId)}");
+                var result = _trackingLogic.ReportHop(trackingId, code);
+
+                return Ok(new ObjectResult(result));               
             }
-            else
+            catch (BusinessLogicNotFoundException e)
             {
                 _logger.LogDebug($"Reporting Parcel Hop was invalid");
-                return StatusCode(400, new ObjectResult(_mapper.Map<DTOs.Error>(result)).Value);
+                return BadRequest(new Error { ErrorMessage = e.Message });
             }
 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...

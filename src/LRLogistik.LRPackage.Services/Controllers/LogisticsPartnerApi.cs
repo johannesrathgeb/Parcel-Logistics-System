@@ -24,6 +24,7 @@ using LRLogistik.LRPackage.BusinessLogic;
 using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using LRLogistik.LRPackage.BusinessLogic.Exceptions;
 
 namespace LRLogistik.LRPackage.Services.Controllers
 {
@@ -63,20 +64,20 @@ namespace LRLogistik.LRPackage.Services.Controllers
         [SwaggerResponse(statusCode: 400, type: typeof(Error), description: "The operation failed due to an error.")]
         public virtual IActionResult TransitionParcel([FromRoute (Name = "trackingId")][Required][RegularExpression("^[A-Z0-9]{9}$")]string trackingId, [FromBody]Parcel parcel)
         {
-            _logger.LogInformation($"Transitioning Parcel: {JsonConvert.SerializeObject(parcel)}");
-            var parcelEntity = _mapper.Map<BusinessLogic.Entities.Parcel>(parcel);
-            _logger.LogInformation($"Parcel mapped to BL: {JsonConvert.SerializeObject(parcel)}");
-            var result = _transferLogic.TransferPackage(trackingId, parcelEntity);
 
-            
-            if(result.GetType() == typeof(BusinessLogic.Entities.Parcel))
+            try
             {
-                //return new ObjectResult(_mapper.Map<NewParcelInfo>(result));
-                return StatusCode(200, new ObjectResult(_mapper.Map<NewParcelInfo>(result)).Value);
-            } else
+                _logger.LogInformation($"Transitioning Parcel: {JsonConvert.SerializeObject(parcel)}");
+                var parcelEntity = _mapper.Map<BusinessLogic.Entities.Parcel>(parcel);
+                _logger.LogInformation($"Parcel mapped to BL: {JsonConvert.SerializeObject(parcel)}");
+                var result = _transferLogic.TransferPackage(trackingId, parcelEntity);
+
+                return Ok(_mapper.Map<NewParcelInfo>(result));
+            }
+            catch (BusinessLogicNotFoundException e)
             {
-                _logger.LogDebug($"Parcel Transition was invalid");
-                return StatusCode(400, new ObjectResult(_mapper.Map<DTOs.Error>(result)).Value);
+                _logger.LogError($"Parcel Transition was invalid");
+                return BadRequest(new Error { ErrorMessage = e.Message });
             }
         }
     }

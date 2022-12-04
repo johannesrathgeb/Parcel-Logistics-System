@@ -26,6 +26,7 @@ using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using LRLogistik.LRPackage.DataAccess.Entities;
+using LRLogistik.LRPackage.BusinessLogic.Exceptions;
 
 namespace LRLogistik.LRPackage.Services.Controllers
 {
@@ -62,19 +63,18 @@ namespace LRLogistik.LRPackage.Services.Controllers
         [SwaggerResponse(statusCode: 400, type: typeof(DTOs.Error), description: "The operation failed due to an error.")]
         public virtual IActionResult TrackParcel([FromRoute(Name = "trackingId")][Required][RegularExpression("^[A-Z0-9]{9}$")] string trackingId)
         {
-            _logger.LogInformation($"Tracking Parcel with Id: {JsonConvert.SerializeObject(trackingId)}");
-
-            var result = _trackingLogic.TrackPackage(trackingId);
-
-            if (result.GetType() == typeof(BusinessLogic.Entities.Parcel))
+            try
             {
-                //return new ObjectResult(_mapper.Map<NewParcelInfo>(result));
-                return StatusCode(200, new ObjectResult(_mapper.Map<TrackingInformation>(result)).Value);
+                _logger.LogInformation($"Tracking Parcel with Id: {JsonConvert.SerializeObject(trackingId)}");
+
+                var result = _trackingLogic.TrackPackage(trackingId);
+
+                return Ok(_mapper.Map<TrackingInformation>(result));               
             }
-            else
+            catch(BusinessLogicNotFoundException e)
             {
-                _logger.LogDebug($"Parcel Tracking was invalid");
-                return StatusCode(400, new ObjectResult(_mapper.Map<DTOs.Error>(result)).Value);
+                _logger.LogError($"Parcel Tracking was invalid");
+                return BadRequest(new Error {ErrorMessage =  e.Message });
             }
         }
     }

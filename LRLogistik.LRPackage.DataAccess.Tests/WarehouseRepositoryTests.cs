@@ -125,11 +125,8 @@ namespace LRLogistik.LRPackage.DataAccess.Tests
             ILogger<WarehouseRepository> logger = loggerMock.Object;
             var repository = new WarehouseRepository(_mockedDbContext, logger);
 
-            // Act
-            var result = repository.GetByHopId("1");
-
-            // Assert
-            Assert.IsInstanceOf<Error>(result);
+            // Act & Assert
+            Assert.Throws<DataAccess.Entities.Exceptions.DataAccessNotFoundException>(() => repository.GetByHopId("1"));
         }
 
         [Test]
@@ -142,26 +139,26 @@ namespace LRLogistik.LRPackage.DataAccess.Tests
 
             // Act
             repository.Delete("1234");
-            var result = repository.GetByHopId("1234");
-            // Assert
-            Assert.IsInstanceOf<Error>(result);
-        }
-
-        [Test]
-        public void DeleteInvalid()
-        {
-            // Arrange
-            var loggerMock = new Mock<ILogger<WarehouseRepository>>();
-            ILogger<WarehouseRepository> logger = loggerMock.Object;
-            var repository = new WarehouseRepository(_mockedDbContext, logger);
-
-            // Act
-            repository.Delete("1");
-            var result = repository.GetByHopId("1234");
 
             // Assert
-            Assert.IsInstanceOf<Warehouse>(result);
+            Assert.Throws<DataAccess.Entities.Exceptions.DataAccessNotFoundException>(() => repository.GetByHopId("1234"));
         }
+
+        //[Test]
+        //public void DeleteInvalid()
+        //{
+        //    // Arrange
+        //    var loggerMock = new Mock<ILogger<WarehouseRepository>>();
+        //    ILogger<WarehouseRepository> logger = loggerMock.Object;
+        //    var repository = new WarehouseRepository(_mockedDbContext, logger);
+
+        //    // Act
+        //    repository.Delete("1");
+        //    var result = repository.GetByHopId("1234");
+
+        //    // Assert
+        //    Assert.IsInstanceOf<Warehouse>(result);
+        //}
 
         [Test]
         public void CreateValidWarehouse()
@@ -214,11 +211,8 @@ namespace LRLogistik.LRPackage.DataAccess.Tests
             ILogger<WarehouseRepository> logger = loggerMock.Object;
             var repository = new WarehouseRepository(_mockedDbContext, logger);
 
-            // Act
-            var result = repository.Create(null);
-
-            // Assert
-            Assert.IsInstanceOf<Error>(result);
+            // Act & Assert
+            Assert.Throws<DataAccess.Entities.Exceptions.DataAccessNotCreatedException>(() => repository.Create(null));
         }
 
     }

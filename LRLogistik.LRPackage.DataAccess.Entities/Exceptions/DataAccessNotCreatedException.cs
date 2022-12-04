@@ -8,15 +8,13 @@ using System.Threading.Tasks;
 namespace LRLogistik.LRPackage.DataAccess.Entities.Exceptions
 {
     [ExcludeFromCodeCoverage]
-    public class DataAccessException : Exception
+    public class DataAccessNotCreatedException : DataAccessException
     {
-        public string Id { get; set; }
-
-        public DataAccessException(string id, string message, Exception innerException) : base(message, innerException)
+        public DataAccessNotCreatedException(string id, string message, Exception innerException) : base(id, message, innerException)
         {
-            
+
         }
-        public DataAccessException(string id, string message) : base(message)
+        public DataAccessNotCreatedException(string id, string message) : base(id, message)
         {
 
         }

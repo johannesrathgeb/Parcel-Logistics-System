@@ -88,8 +88,7 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             SubmissionLogic submissionLogic = new SubmissionLogic(mapper, parcelRepository, logger);
 
             //ACT & ASSERT
-
-            Assert.IsInstanceOf<Error>(submissionLogic.SubmitParcel(BLParcel));
+            Assert.Throws<BusinessLogic.Exceptions.BusinessLogicNotFoundException>(() => submissionLogic.SubmitParcel(BLParcel));
 
         }
     }

@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LRLogistik.LRPackage.ServiceAgents;
+using LRLogistik.LRPackage.BusinessLogic.Exceptions;
 
 namespace LRLogistik.LRPackage.BusinessLogic
 {
@@ -30,29 +31,32 @@ namespace LRLogistik.LRPackage.BusinessLogic
             _logger = logger;
         }
 
-        public object SubmitParcel(Parcel parcel)
+        public Parcel SubmitParcel(Parcel parcel)
         {
-            //TEST!!!
-            ServiceAgents.BingEncodingAgent bingEncodingAgent = new BingEncodingAgent();
-            bingEncodingAgent.EncodeAddress(parcel.Recipient);
-            //TEST!!!
 
-            _logger.LogInformation($"Submitting parcel {JsonConvert.SerializeObject(parcel)}");
-            ParcelValidator recipientValidator = new ParcelValidator();
-
-            var result = recipientValidator.Validate(parcel); 
-
-            if(result.IsValid)
+            try
             {
+                ParcelValidator recipientValidator = new ParcelValidator();
+                var result = recipientValidator.Validate(parcel);
+                if(result.IsValid == false)
+                {
+                    throw new BusinessLogicValidationException("ValidateParcel", "Parcel was invalid");
+                }
                 parcel.TrackingId = RandomString(9);
                 _logger.LogInformation($"New TrackingId created: {JsonConvert.SerializeObject(parcel.TrackingId)}");
                 DataAccess.Entities.Parcel p = (DataAccess.Entities.Parcel)_parcelRepository.Create(_mapper.Map<DataAccess.Entities.Parcel>(parcel));
                 _logger.LogInformation($"Parcel submitted to DAL");
                 return _mapper.Map<BusinessLogic.Entities.Parcel>(p);
-            } else
+            }
+            catch (DataAccess.Entities.Exceptions.DataAccessNotCreatedException e)
             {
-                _logger.LogDebug($"Recipient was invalid!");
-                return new Error() { ErrorMessage = "string" };
+                _logger.LogError($"Parcel with ID {parcel.TrackingId} not created in DB");
+                throw new BusinessLogic.Exceptions.BusinessLogicNotFoundException("SubmitParcel", "Parcel was not submitted", e);
+            }
+            catch (BusinessLogicValidationException e) 
+            {
+                _logger.LogError($"Parcel with ID {parcel.TrackingId} not created in DB");
+                throw new BusinessLogic.Exceptions.BusinessLogicNotFoundException("SubmitParcel", "Parcel was not submitted", e);
             }
         }
 

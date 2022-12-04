@@ -67,7 +67,7 @@ namespace LRLogistik.LRPackage.Services.Tests
 
             trackingLogicMock
                 .Setup(m => m.ReportDelivery(It.IsAny<string>()))
-                .Returns(Builder<BusinessLogic.Entities.Error>.CreateNew().Build());
+                .Throws<BusinessLogic.Exceptions.BusinessLogicNotFoundException>();
 
             ITrackingLogic trackingLogic = trackingLogicMock.Object;
 
@@ -135,7 +135,7 @@ namespace LRLogistik.LRPackage.Services.Tests
 
             trackingLogicMock
                 .Setup(m => m.ReportHop(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(Builder<BusinessLogic.Entities.Error>.CreateNew().Build());
+                .Throws<BusinessLogic.Exceptions.BusinessLogicNotFoundException>();
             ITrackingLogic trackingLogic = trackingLogicMock.Object;
 
             var loggerMock = new Mock<ILogger<StaffApiController>>();

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LRLogistik.LRPackage.BusinessLogic.Entities;
+using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using LRLogistik.LRPackage.BusinessLogic.MappingProfiles;
 using LRLogistik.LRPackage.DataAccess.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -96,8 +97,7 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             TransferLogic transferLogic = new TransferLogic(mapper, parcelRepository, logger);
 
             //ACT & ASSERT
-
-            Assert.IsInstanceOf<Error>(transferLogic.TransferPackage(trackingId, BLParcel));
+            Assert.Throws<BusinessLogic.Exceptions.BusinessLogicNotFoundException>(() => transferLogic.TransferPackage(trackingId, BLParcel));
         }
 
 

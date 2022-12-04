@@ -9,11 +9,11 @@ namespace LRLogistik.LRPackage.DataAccess.Interfaces
 {
     public interface IParcelRepository
     {
-        object Create(Parcel p);
+        Parcel Create(Parcel p);
         Parcel Update(Parcel p);
         void Delete(string TrackingId);
 
         // Get by ID
-        object GetByTrackingId(string trackingid);
+        Parcel GetByTrackingId(string trackingid);
     }
 }

@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LRLogistik.LRPackage.BusinessLogic.Entities\LRLogistik.LRPackage.BusinessLogic.Entities.csproj" />
     <ProjectReference Include="..\LRLogistik.LRPackage.BusinessLogic\LRLogistik.LRPackage.BusinessLogic.csproj" />
     <ProjectReference Include="..\LRLogistik.LRPackage.DataAccess.Entities\LRLogistik.LRPackage.DataAccess.Entities.csproj" />
     <ProjectReference Include="..\LRLogistik.LRPackage.DataAccess.Interfaces\LRLogistik.LRPackage.DataAccess.Interfaces.csproj" />

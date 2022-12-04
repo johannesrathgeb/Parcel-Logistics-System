@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LRLogistik.LRPackage.BusinessLogic.Entities;
+using LRLogistik.LRPackage.BusinessLogic.Exceptions;
 using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using LRLogistik.LRPackage.BusinessLogic.Validators;
 using LRLogistik.LRPackage.DataAccess.Interfaces;
@@ -28,77 +29,82 @@ namespace LRLogistik.LRPackage.BusinessLogic
             _logger = logger;
         }
 
-        public object ReportDelivery(string trackingId)
+        public string ReportDelivery(string trackingId)
         {
-            _logger.LogInformation($"Reporting delivery of TrackingId: {JsonConvert.SerializeObject(trackingId)}");
-            TrackingIdValidator trackingIdValidator = new TrackingIdValidator();
-
-            var result = trackingIdValidator.Validate(trackingId);
-
-            if (result.IsValid)
+            try
             {
-                return "Successfully reported hop";
+                TrackingIdValidator trackingIdValidator = new TrackingIdValidator();
+                var result = trackingIdValidator.Validate(trackingId);
+                if (!result.IsValid)
+                {
+                    throw new BusinessLogicValidationException("ValidateTrackingId", "Tracking Id Validation was invalid");
+                }
+                _logger.LogInformation($"Reporting delivery of TrackingId: {JsonConvert.SerializeObject(trackingId)}");
+                return "Successfully reported delivery";
             }
-            else
+            catch(BusinessLogicValidationException e)
             {
-                _logger.LogDebug($"TrackingId was invalid!");
-                return new Error() { ErrorMessage = "string" };
+                _logger.LogError($"TrackingId was invalid!");
+                throw new BusinessLogic.Exceptions.BusinessLogicNotFoundException("ReportDelivery", "Delivery was not reported", e);
             }
         }
 
-        public object ReportHop(string trackingId, string code)
+        public string ReportHop(string trackingId, string code)
         {
-            _logger.LogInformation($"Reporting Hop of TrackingId: {JsonConvert.SerializeObject(trackingId)} and code: {JsonConvert.SerializeObject(code)}");
-            TrackingIdValidator trackingIdValidator = new TrackingIdValidator();
-            TrackingCodeValidator trackingCodeValidator = new TrackingCodeValidator();
-
-            var result_t = trackingIdValidator.Validate(trackingId);
-            var result_c = trackingCodeValidator.Validate(code);
-
-            if (result_t.IsValid && result_c.IsValid)
+            try
             {
+                TrackingIdValidator trackingIdValidator = new TrackingIdValidator();
+                TrackingCodeValidator trackingCodeValidator = new TrackingCodeValidator();
+
+                var result_t = trackingIdValidator.Validate(trackingId);
+                var result_c = trackingCodeValidator.Validate(code);
+
+                if(!result_t.IsValid) 
+                {
+                    throw new BusinessLogicValidationException("ValidateTrackingId", "Tracking ID was invalid");
+                }
+                else if(!result_c.IsValid) 
+                {
+                    throw new BusinessLogicValidationException("ValidateTrackingCode", "Tracking Code was invalid");
+                }
+                _logger.LogInformation($"Reporting Hop of TrackingId: {JsonConvert.SerializeObject(trackingId)} and code: {JsonConvert.SerializeObject(code)}");
                 return "Successfully reported hop";
             }
-            else
+            catch(BusinessLogicValidationException e) 
             {
-                _logger.LogDebug($"TrackingId or Code was invalid!");
-                return new Error() { ErrorMessage = "string" };
+                _logger.LogError($"TrackingId or Code was invalid!");
+                throw new BusinessLogicNotFoundException("ReportHop", "Hop was not reported", e);
             }
         }
 
-        public object TrackPackage(string trackingId)
+        public Parcel TrackPackage(string trackingId)
         {
-            _logger.LogInformation($"Tracking Package with TrackingId: {JsonConvert.SerializeObject(trackingId)}");
-            TrackingIdValidator trackingIdValidator = new TrackingIdValidator();
-
-            var result = trackingIdValidator.Validate(trackingId);
-
-            if (result.IsValid)
+            try
             {
+                TrackingIdValidator trackingIdValidator = new TrackingIdValidator();
+
+                var result = trackingIdValidator.Validate(trackingId);
+
+                if(!result.IsValid) 
+                {
+                    throw new BusinessLogicValidationException("ValidateTrackingId", "Tracking Id was invalid");
+                }
+
+                _logger.LogInformation($"Tracking Package with TrackingId: {JsonConvert.SerializeObject(trackingId)}");
                 var parcel = _mapper.Map<BusinessLogic.Entities.Parcel>(_parcelRepository.GetByTrackingId(trackingId));
                 _logger.LogInformation($"Found Parcel to track: {JsonConvert.SerializeObject(parcel)}");
                 return parcel;
-
-
-                /*
-                return new Parcel()
-                {
-                    TrackingId = "111111111",
-                    Weight = 0.0f,
-                    Recipient = new Recipient() { Name = "string", Street = "string", PostalCode = "string", City = "string", Country = "string" },
-                    Sender = new Recipient() { Name = "string", Street = "string", PostalCode = "string", City = "string", Country = "string" },
-                    State = Parcel.StateEnum.InTruckDeliveryEnum,
-                    VisitedHops = new List<HopArrival> { new HopArrival() { Code = "XXXXXX", Description = "string", DateTime = new DateTime() } },
-                    FutureHops = new List<HopArrival> { new HopArrival() { Code = "XXXXXX", Description = "string", DateTime = new DateTime() } },
-                };
-                */
             }
-            else
+            catch(BusinessLogicValidationException e)
             {
-                _logger.LogDebug($"TrackingId was invalid!");
-                return new Error() { ErrorMessage = "string" };
+                _logger.LogError($"TrackingId was invalid!");
+                throw new BusinessLogicNotFoundException("TrackPackage", "Package wasn't tracked", e);
             }
-
+            catch(DataAccess.Entities.Exceptions.DataAccessNotFoundException e)
+            {
+                _logger.LogError($"Parcel was not found!");
+                throw new BusinessLogicNotFoundException("TrackPackage", "Package wasn't tracked", e);
+            }
         }
 
     }

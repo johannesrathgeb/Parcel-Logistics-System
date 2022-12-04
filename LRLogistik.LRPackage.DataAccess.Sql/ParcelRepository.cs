@@ -1,6 +1,7 @@
 ﻿using LRLogistik.LRPackage.BusinessLogic.Entities;
 using LRLogistik.LRPackage.DataAccess.Entities;
 using LRLogistik.LRPackage.DataAccess.Interfaces;
+using LRLogistik.LRPackage.Services.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
@@ -25,43 +26,52 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
         }
 
         [HttpPost]
-        public object Create(Entities.Parcel parcel)
+        public Entities.Parcel Create(Entities.Parcel parcel)
         {
             _logger.LogInformation($"Creating parcel in DB: {JsonConvert.SerializeObject(parcel)}");
-            if (parcel == null)
+            try
             {
-                _logger.LogDebug($"Parcel Creation was invalid");
-                return new Entities.Error() { ErrorMessage = "string" };
+                _dbContext.Parcels.Add(parcel);
+                _dbContext.SaveChanges();
+                _logger.LogInformation($"Parcel successfully created: {JsonConvert.SerializeObject(parcel)}");
+                return new Entities.Parcel { TrackingId = parcel.TrackingId };
             }
-            _dbContext.Parcels.Add(parcel);
-            _dbContext.SaveChanges();
-            _logger.LogInformation($"Parcel successfully created: {JsonConvert.SerializeObject(parcel)}");
-            return new Entities.Parcel { TrackingId = parcel.TrackingId };
+            catch(ArgumentNullException e)
+            {
+                _logger.LogError($"Parcel Creation was invalid");
+                throw new Entities.Exceptions.DataAccessNotCreatedException("Create", "Parcel was not created", e);
+            }
         }
 
         public void Delete(string TrackingId)
         {
-            Entities.Parcel parcel = _dbContext.Parcels.SingleOrDefault(p => p.TrackingId == TrackingId);
+            Entities.Parcel parcel = GetByTrackingId(TrackingId);
             _logger.LogInformation($"Deleting parcel from DB: {JsonConvert.SerializeObject(parcel)}");
-            if (parcel != null)
+            try
             {
                 _dbContext.Remove(parcel);
                 _dbContext.SaveChanges();
                 _logger.LogInformation($"Parcel deleted: {JsonConvert.SerializeObject(parcel)}");
             }
+            catch (InvalidOperationException e)
+            {
+                _logger.LogError($"Deleting Parcel was invalid");
+                throw new Entities.Exceptions.DataAccessNotFoundException("Delete", "Parcel with Id " + TrackingId + " was not deleted", e);
+            }
         }
 
-        public object GetByTrackingId(string trackingid)
+        public Entities.Parcel GetByTrackingId(string trackingid)
         {
             _logger.LogInformation($"Getting Parcel from DB: {JsonConvert.SerializeObject(trackingid)}");
-            Entities.Parcel parcel = _dbContext.Parcels.SingleOrDefault(p => p.TrackingId == trackingid);
-            _logger.LogInformation($"Parcel found in DB: {JsonConvert.SerializeObject(parcel)}");
-            if (parcel == null)
+            try
             {
-                _logger.LogDebug($"Getting Parcel was invalid");
-                return new Entities.Error() { ErrorMessage = "string" };
+                return _dbContext.Parcels.Single(p => p.TrackingId == trackingid);
             }
-            return parcel;
+            catch(InvalidOperationException e)
+            {
+                _logger.LogError($"Getting Parcel was invalid");
+                throw new Entities.Exceptions.DataAccessNotFoundException("GetByTrackingId", "Parcel with Id " + trackingid + " not found", e);
+            }
         }
 
         public Entities.Parcel Update(Entities.Parcel p)

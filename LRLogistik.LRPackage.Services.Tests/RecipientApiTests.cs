@@ -71,7 +71,7 @@ namespace LRLogistik.LRPackage.Services.Tests
 
             trackingLogicMock
                 .Setup(m => m.TrackPackage(It.IsAny<string>()))
-                .Returns(Builder<BusinessLogic.Entities.Error>.CreateNew().Build());
+                .Throws<BusinessLogic.Exceptions.BusinessLogicNotFoundException>();
 
 
             ITrackingLogic trackingLogic = trackingLogicMock.Object;
