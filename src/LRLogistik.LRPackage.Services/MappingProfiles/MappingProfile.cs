@@ -26,8 +26,6 @@ namespace LRLogistik.LRPackage.Services.MappingProfiles
                 .ReverseMap();
 
 
-            CreateMap<BusinessLogic.Entities.Error, DTOs.Error>().ReverseMap();
-
             CreateMap<DTOs.GeoCoordinate, BusinessLogic.Entities.GeoCoordinate>().ReverseMap();
 
             CreateMap<DTOs.Hop, BusinessLogic.Entities.Hop>().ReverseMap();

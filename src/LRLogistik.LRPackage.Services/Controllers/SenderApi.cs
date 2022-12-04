@@ -24,6 +24,7 @@ using LRLogistik.LRPackage.BusinessLogic;
 using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using LRLogistik.LRPackage.BusinessLogic.Exceptions;
 
 namespace LRLogistik.LRPackage.Services.Controllers
 {
@@ -62,21 +63,20 @@ namespace LRLogistik.LRPackage.Services.Controllers
         [SwaggerResponse(statusCode: 404, type: typeof(Error), description: "The address of sender or receiver was not found.")]
         public virtual IActionResult SubmitParcel([FromBody] Parcel parcel)
         {
-            _logger.LogInformation($"Submitting Parcel: {JsonConvert.SerializeObject(parcel)}");
-            var parcelEntity = _mapper.Map<BusinessLogic.Entities.Parcel>(parcel);
-            _logger.LogInformation($"Parcel mapped to BL: {JsonConvert.SerializeObject(parcel)}");
-            var result = _submissionLogic.SubmitParcel(parcelEntity);
-
-
-            if (result.GetType() == typeof(BusinessLogic.Entities.Parcel))
+            try
             {
-                //return new ObjectResult(_mapper.Map<NewParcelInfo>(result));
-                return StatusCode(201, new ObjectResult(_mapper.Map<NewParcelInfo>(result)).Value);
+                _logger.LogInformation($"Submitting Parcel: {JsonConvert.SerializeObject(parcel)}");
+                var parcelEntity = _mapper.Map<BusinessLogic.Entities.Parcel>(parcel);
+                _logger.LogInformation($"Parcel mapped to BL: {JsonConvert.SerializeObject(parcel)}");
+                var result = _submissionLogic.SubmitParcel(parcelEntity);
+
+                return Created("", _mapper.Map<NewParcelInfo>(result));
+                //return StatusCode(201, new ObjectResult(_mapper.Map<NewParcelInfo>(result)).Value);
             }
-            else
+            catch(BusinessLogicNotFoundException e)
             {
-                _logger.LogDebug($"Parcel Submission was invalid");
-                return StatusCode(400, new ObjectResult(_mapper.Map<DTOs.Error>(result)).Value);
+                _logger.LogError($"Parcel Submission was invalid");
+                return BadRequest(new Error { ErrorMessage= e.Message });
             }
 
             //TODO: Uncomment the next line to return response 201 or use other options such as return this.NotFound(), return this.BadRequest(..), ...

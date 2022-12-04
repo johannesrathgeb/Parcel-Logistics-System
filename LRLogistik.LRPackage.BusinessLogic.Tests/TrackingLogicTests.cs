@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LRLogistik.LRPackage.BusinessLogic.Entities;
+using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using LRLogistik.LRPackage.BusinessLogic.MappingProfiles;
 using LRLogistik.LRPackage.BusinessLogic.Validators;
 using LRLogistik.LRPackage.DataAccess.Interfaces;
@@ -15,8 +16,6 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
 {
     public class TrackingLogicTests
     {
-
-
         [Test]
         public void ReportValidDelivery()
         {
@@ -35,7 +34,7 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             //Act
             var response = new BusinessLogic.TrackingLogic(mapper, parcelRepository, logger).ReportDelivery(trackingId);
             //Assert
-            Assert.AreEqual("Successfully reported hop", response);
+            Assert.AreEqual("Successfully reported delivery", response);
         }
 
         [Test]
@@ -53,10 +52,10 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             });
             var mapper = config.CreateMapper();
             string trackingId = "123";
-            //Act
-            var response = new BusinessLogic.TrackingLogic(mapper, parcelRepository, logger).ReportDelivery(trackingId);
-            //Assert
-            Assert.IsInstanceOf<Error>(response);
+            var trackingLogic = new BusinessLogic.TrackingLogic(mapper, parcelRepository, logger);
+
+            //ACT & ASSERT
+            Assert.Throws<BusinessLogic.Exceptions.BusinessLogicNotFoundException>(() => trackingLogic.ReportDelivery(trackingId));
         }
 
         [Test]
@@ -97,10 +96,11 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             var mapper = config.CreateMapper();
             string trackingId = "123";
             string code = "ABCD";
-            //Act
-            var response = new BusinessLogic.TrackingLogic(mapper, parcelRepository , logger).ReportHop(trackingId, code);
-            //Test
-            Assert.IsInstanceOf<Error>(response);
+
+            var trackingLogic = new BusinessLogic.TrackingLogic(mapper, parcelRepository, logger);
+
+            //ACT & ASSERT
+            Assert.Throws<BusinessLogic.Exceptions.BusinessLogicNotFoundException>(() => trackingLogic.ReportHop(trackingId, code));
         }
 
         //[Test]
@@ -193,8 +193,7 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             TrackingLogic trackingLogic = new TrackingLogic(mapper, parcelRepository, logger);
 
             //ACT & ASSERT
-
-            Assert.IsInstanceOf<Error>(trackingLogic.TrackPackage(trackingId));
+            Assert.Throws<BusinessLogic.Exceptions.BusinessLogicNotFoundException>(() => trackingLogic.TrackPackage(trackingId));
         }
 
     }

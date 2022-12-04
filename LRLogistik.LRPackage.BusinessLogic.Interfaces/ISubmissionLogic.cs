@@ -9,6 +9,6 @@ namespace LRLogistik.LRPackage.BusinessLogic.Interfaces
 {
     public interface ISubmissionLogic
     {
-        public object SubmitParcel(Parcel parcel); 
+        public Parcel SubmitParcel(Parcel parcel); 
     }
 }

@@ -9,10 +9,10 @@ namespace LRLogistik.LRPackage.BusinessLogic.Interfaces
 {
     public interface IWarehouseLogic
     {
-        public object ExportWarehouse();
+        public Warehouse ExportWarehouse();
 
-        public object ImportWarehouse(Warehouse warehouse);
+        public string ImportWarehouse(Warehouse warehouse);
 
-        public object GetWarehouse(string code); 
+        public Hop GetWarehouse(string code); 
     }
 }

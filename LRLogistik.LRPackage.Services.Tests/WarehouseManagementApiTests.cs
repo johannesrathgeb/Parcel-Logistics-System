@@ -61,7 +61,7 @@ namespace LRLogistik.LRPackage.Services.Tests
 
             warehouseLogicMock
                 .Setup(m => m.ExportWarehouse())
-                .Returns(Builder<BusinessLogic.Entities.Error>.CreateNew().Build());
+                .Throws<BusinessLogic.Exceptions.BusinessLogicNotFoundException>();
 
             IWarehouseLogic warehouseLogic = warehouseLogicMock.Object;
 
@@ -119,7 +119,7 @@ namespace LRLogistik.LRPackage.Services.Tests
 
             warehouseLogicMock
                 .Setup(m => m.ImportWarehouse(It.IsAny<BusinessLogic.Entities.Warehouse>()))
-                .Returns(Builder<BusinessLogic.Entities.Error>.CreateNew().Build());
+                .Throws<BusinessLogic.Exceptions.BusinessLogicNotCreatedException>();
 
             IWarehouseLogic warehouseLogic = warehouseLogicMock.Object;
 
@@ -183,7 +183,7 @@ namespace LRLogistik.LRPackage.Services.Tests
 
             warehouseLogicMock
                 .Setup(m => m.GetWarehouse(It.IsAny<string>()))
-                .Returns(Builder<BusinessLogic.Entities.Error>.CreateNew().Build());
+                .Throws<BusinessLogic.Exceptions.BusinessLogicNotFoundException>();
 
             IWarehouseLogic warehouseLogic = warehouseLogicMock.Object;
 

@@ -64,7 +64,7 @@ namespace LRLogistik.LRPackage.Services.Tests
 
             submisssionLogicMock
                 .Setup(m => m.SubmitParcel(It.IsAny<BusinessLogic.Entities.Parcel>()))
-                .Returns(Builder<BusinessLogic.Entities.Error>.CreateNew().Build());
+                .Throws<BusinessLogic.Exceptions.BusinessLogicNotFoundException>();
 
             ISubmissionLogic submissionLogic = submisssionLogicMock.Object;
 

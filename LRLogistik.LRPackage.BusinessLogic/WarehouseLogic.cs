@@ -29,47 +29,38 @@ namespace LRLogistik.LRPackage.BusinessLogic
             _logger = logger;
         }
 
-        public object ImportWarehouse(Warehouse warehouse)
+        public string ImportWarehouse(Warehouse warehouse)
         {
-            //DataAccess.Entities.Warehouse h = _mapper.Map<DataAccess.Entities.Warehouse>(warehouse); 
-
-            //_warehouseRepository.Create(h);
-            _logger.LogInformation($"Importing Warehouse: {JsonConvert.SerializeObject(warehouse)}");
-            _warehouseRepository.Create(_mapper.Map<DataAccess.Entities.Warehouse>(warehouse));
-            _logger.LogInformation($"Mapped imported Warehouse to DAL: {JsonConvert.SerializeObject(warehouse)}");
-            return "Successfully loaded";
-
-            //return new Error() {ErrorMessage = "string"};
+            try
+            {
+                _logger.LogInformation($"Importing Warehouse: {JsonConvert.SerializeObject(warehouse)}");
+                _warehouseRepository.Create(_mapper.Map<DataAccess.Entities.Warehouse>(warehouse));
+                _logger.LogInformation($"Mapped imported Warehouse to DAL: {JsonConvert.SerializeObject(warehouse)}");
+                return "Successfully loaded";
+            }
+            catch(DataAccess.Entities.Exceptions.DataAccessNotCreatedException e)
+            {
+                _logger.LogError($"Warehouse was not imported!");
+                throw new BusinessLogic.Exceptions.BusinessLogicNotCreatedException("ImportWarehouse", "Warehouse not imported", e);
+            }
         }
 
-        public object ExportWarehouse()
+
+        public Hop GetWarehouse(string code)
         {
-            _logger.LogInformation($"Exporting Warehouse!");
-            return new Warehouse()
+            try
             {
-                Level = 0,
-                HopType = "string",
-                Code = "string",
-                Description = "string",
-                ProcessingDelayMins = 0,
-                LocationName = "string",
-                LocationCoordinates = new GeoCoordinate() {Lat = 0.0, Lon = 0.0 },
-                NextHops = new List<WarehouseNextHops>() { new WarehouseNextHops() {TraveltimeMins = 0, Hop = new Hop() {HopType = "string", Code = "string", Description = "string", ProcessingDelayMins = 0, LocationName = "string",LocationCoordinates = new GeoCoordinate() {Lat = 0.0, Lon = 0.0 } } } }
-            };
+                TrackingCodeValidator trackingCodeValidator = new TrackingCodeValidator();
 
-            //return new Error() {ErrorMessage = "string"};
+                var result = trackingCodeValidator.Validate(code);
 
-        }
+                if (!result.IsValid)
+                {
+                    throw new BusinessLogic.Exceptions.BusinessLogicValidationException("ValidateTrackingCode", "Tracking Code was invalid");
+                }
 
-        public object GetWarehouse(string code)
-        {
-            _logger.LogInformation($"Getting Warehouse with code: {JsonConvert.SerializeObject(code)}");
-            TrackingCodeValidator trackingCodeValidator = new TrackingCodeValidator();
+                _logger.LogInformation($"Getting Warehouse with code: {JsonConvert.SerializeObject(code)}");
 
-            var result = trackingCodeValidator.Validate(code);
-
-            if (result.IsValid)
-            {
                 return new Hop()
                 {
                     HopType = "string",
@@ -80,13 +71,26 @@ namespace LRLogistik.LRPackage.BusinessLogic
                     LocationCoordinates = new GeoCoordinate() { Lat = 0.0, Lon = 0.0 }
                 };
             }
-            else
+            catch(Exceptions.BusinessLogicValidationException e)
             {
-                _logger.LogDebug($"Code was invalid!");
-                return new Error() { ErrorMessage = "string" };
+                _logger.LogError($"Code was invalid!");
+                throw new BusinessLogic.Exceptions.BusinessLogicNotFoundException("GetWarehouse", "Warehouse not found", e);
             }
         }
-
-
+        public Warehouse ExportWarehouse()
+        {
+            _logger.LogInformation($"Exporting Warehouse!");
+            return new Warehouse()
+            {
+                Level = 0,
+                HopType = "string",
+                Code = "string",
+                Description = "string",
+                ProcessingDelayMins = 0,
+                LocationName = "string",
+                LocationCoordinates = new GeoCoordinate() { Lat = 0.0, Lon = 0.0 },
+                NextHops = new List<WarehouseNextHops>() { new WarehouseNextHops() { TraveltimeMins = 0, Hop = new Hop() { HopType = "string", Code = "string", Description = "string", ProcessingDelayMins = 0, LocationName = "string", LocationCoordinates = new GeoCoordinate() { Lat = 0.0, Lon = 0.0 } } } }
+            };
+        }
     }
 }

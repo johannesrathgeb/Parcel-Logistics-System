@@ -69,7 +69,7 @@ namespace LRLogistik.LRPackage.Services.Tests
 
             transferLogicMock
                 .Setup(m => m.TransferPackage(It.IsAny<string>(), It.IsAny<BusinessLogic.Entities.Parcel>()))
-                .Returns(Builder<BusinessLogic.Entities.Error>.CreateNew().Build());
+                .Throws<BusinessLogic.Exceptions.BusinessLogicNotFoundException>();
 
             ITransferLogic transferLogic = transferLogicMock.Object;
 

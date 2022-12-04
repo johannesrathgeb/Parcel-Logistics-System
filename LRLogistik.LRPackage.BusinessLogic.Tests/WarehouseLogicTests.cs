@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FizzWare.NBuilder;
 using LRLogistik.LRPackage.BusinessLogic.Entities;
+using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using LRLogistik.LRPackage.BusinessLogic.MappingProfiles;
 using LRLogistik.LRPackage.DataAccess.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -25,7 +26,8 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             var loggerMock = new Mock<ILogger<WarehouseLogic>>();
             ILogger<WarehouseLogic> logger = loggerMock.Object;
 
-            var config = new MapperConfiguration(cfg => {
+            var config = new MapperConfiguration(cfg =>
+            {
                 cfg.AddProfile<MappingProfile>();
             });
             var mapper = config.CreateMapper();
@@ -71,10 +73,11 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             });
             var mapper = config.CreateMapper();
             string code = "ABCD";
-            //Act
-            var response = new BusinessLogic.WarehouseLogic(mapper, warehouseRepository, logger).GetWarehouse(code);
-            //Test
-            Assert.IsInstanceOf<Error>(response);
+            
+            var warehouseLogic = new BusinessLogic.WarehouseLogic(mapper, warehouseRepository, logger);
+            
+            //ACT & ASSERT
+            Assert.Throws<BusinessLogic.Exceptions.BusinessLogicNotFoundException>(() => warehouseLogic.GetWarehouse(code));
         }
 
         [Test]

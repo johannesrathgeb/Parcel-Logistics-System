@@ -9,12 +9,12 @@ namespace LRLogistik.LRPackage.DataAccess.Interfaces
 {
     public interface IWarehouseRepository
     {
-        object Create(Warehouse w);
+        Warehouse Create(Warehouse w);
         Warehouse Update(Warehouse w);
         void Delete(string id);
 
 
         // Get by ID
-        object GetByHopId(string id);
+        Warehouse GetByHopId(string id);
     }
 }

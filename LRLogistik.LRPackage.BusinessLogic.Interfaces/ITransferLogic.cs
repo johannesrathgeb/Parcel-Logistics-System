@@ -9,6 +9,6 @@ namespace LRLogistik.LRPackage.BusinessLogic.Interfaces
 {
     public interface ITransferLogic
     {
-        public object TransferPackage(string trackingId, Parcel parcel); 
+        public Parcel TransferPackage(string trackingId, Parcel parcel); 
     }
 }
