@@ -3,6 +3,7 @@ using FizzWare.NBuilder;
 using LRLogistik.LRPackage.BusinessLogic.Entities;
 using LRLogistik.LRPackage.BusinessLogic.MappingProfiles;
 using LRLogistik.LRPackage.DataAccess.Interfaces;
+using LRLogistik.LRPackage.ServiceAgents.Interfaces;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -44,7 +45,10 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             var loggerMock = new Mock<ILogger<SubmissionLogic>>();
             ILogger<SubmissionLogic> logger =loggerMock.Object;
 
-            SubmissionLogic submissionLogic = new SubmissionLogic(mapper, parcelRepository, logger);
+            var encodingAgentMock = new Mock<IGeoEncodingAgent>();
+            IGeoEncodingAgent encodingAgent = encodingAgentMock.Object;
+
+            SubmissionLogic submissionLogic = new SubmissionLogic(mapper, parcelRepository, logger, encodingAgent);
 
             //ACT & ASSERT
             
@@ -85,7 +89,10 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             var loggerMock = new Mock<ILogger<SubmissionLogic>>();
             ILogger<SubmissionLogic> logger = loggerMock.Object;
 
-            SubmissionLogic submissionLogic = new SubmissionLogic(mapper, parcelRepository, logger);
+            var encodingAgentMock = new Mock<IGeoEncodingAgent>();
+            IGeoEncodingAgent encodingAgent = encodingAgentMock.Object;
+
+            SubmissionLogic submissionLogic = new SubmissionLogic(mapper, parcelRepository, logger, encodingAgent);
 
             //ACT & ASSERT
             Assert.Throws<BusinessLogic.Exceptions.BusinessLogicNotFoundException>(() => submissionLogic.SubmitParcel(BLParcel));

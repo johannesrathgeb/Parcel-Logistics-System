@@ -12,9 +12,10 @@ namespace LRLogistik.LRPackage.DataAccess.Interfaces
         Warehouse Create(Warehouse w);
         Warehouse Update(Warehouse w);
         void Delete(string id);
-
+        Warehouse ExportHierachy(); 
 
         // Get by ID
         Warehouse GetByHopId(string id);
+        Hop GetByHopCode(string code); 
     }
 }

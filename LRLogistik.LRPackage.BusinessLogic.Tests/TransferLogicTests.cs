@@ -3,6 +3,7 @@ using LRLogistik.LRPackage.BusinessLogic.Entities;
 using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using LRLogistik.LRPackage.BusinessLogic.MappingProfiles;
 using LRLogistik.LRPackage.DataAccess.Interfaces;
+using LRLogistik.LRPackage.ServiceAgents.Interfaces;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;
@@ -51,7 +52,10 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             var loggerMock = new Mock<ILogger<TransferLogic>>();
             ILogger<TransferLogic> logger = loggerMock.Object;
 
-            TransferLogic transferLogic = new TransferLogic(mapper, parcelRepository, logger);
+            var encodingAgentMock = new Mock<IGeoEncodingAgent>();
+            IGeoEncodingAgent encodingAgent = encodingAgentMock.Object;
+
+            TransferLogic transferLogic = new TransferLogic(mapper, parcelRepository, logger, encodingAgent);
 
             //ACT & ASSERT
 
@@ -94,7 +98,10 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             var loggerMock = new Mock<ILogger<TransferLogic>>();
             ILogger<TransferLogic> logger = loggerMock.Object;
 
-            TransferLogic transferLogic = new TransferLogic(mapper, parcelRepository, logger);
+            var encodingAgentMock = new Mock<IGeoEncodingAgent>();
+            IGeoEncodingAgent encodingAgent = encodingAgentMock.Object;
+
+            TransferLogic transferLogic = new TransferLogic(mapper, parcelRepository, logger, encodingAgent);
 
             //ACT & ASSERT
             Assert.Throws<BusinessLogic.Exceptions.BusinessLogicNotFoundException>(() => transferLogic.TransferPackage(trackingId, BLParcel));

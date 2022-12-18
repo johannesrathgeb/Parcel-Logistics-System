@@ -14,6 +14,8 @@ using System.Text;
 using System.Threading.Tasks;
 using LRLogistik.LRPackage.ServiceAgents;
 using LRLogistik.LRPackage.BusinessLogic.Exceptions;
+using LRLogistik.LRPackage.ServiceAgents.Interfaces;
+using NetTopologySuite.Geometries;
 
 namespace LRLogistik.LRPackage.BusinessLogic
 {
@@ -21,14 +23,17 @@ namespace LRLogistik.LRPackage.BusinessLogic
     {
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
+        private readonly IGeoEncodingAgent _encodingagent; 
+
         private static Random random = new Random();
         IParcelRepository _parcelRepository;
 
-        public SubmissionLogic(IMapper mapper, IParcelRepository repository, ILogger<SubmissionLogic> logger)
+        public SubmissionLogic(IMapper mapper, IParcelRepository repository, ILogger<SubmissionLogic> logger, IGeoEncodingAgent encodingAgent)
         {
             _mapper = mapper;
             _parcelRepository = repository;
             _logger = logger;
+            _encodingagent = encodingAgent; 
         }
 
         public Parcel SubmitParcel(Parcel parcel)
@@ -44,7 +49,17 @@ namespace LRLogistik.LRPackage.BusinessLogic
                 }
                 parcel.TrackingId = RandomString(9);
                 _logger.LogInformation($"New TrackingId created: {JsonConvert.SerializeObject(parcel.TrackingId)}");
-                DataAccess.Entities.Parcel p = (DataAccess.Entities.Parcel)_parcelRepository.Create(_mapper.Map<DataAccess.Entities.Parcel>(parcel));
+
+                //var senderCoordinates = _mapper.Map<Point>(_encodingagent.EncodeAddress(parcel.Sender));
+                //var recipientCoordinates = _mapper.Map<Point>(_encodingagent.EncodeAddress(parcel.Recipient));
+
+
+                _logger.LogInformation($"Sender and Recipient coordinates retrieved");
+
+                parcel.State = Parcel.StateEnum.PickupEnum; 
+                _logger.LogInformation($"Set Package to Pickup-State: {JsonConvert.SerializeObject(parcel)}");
+
+                DataAccess.Entities.Parcel p = (DataAccess.Entities.Parcel)_parcelRepository.Create(_mapper.Map<DataAccess.Entities.Parcel>(parcel)/*, senderCoordinates, recipientCoordinates*/);
                 _logger.LogInformation($"Parcel submitted to DAL");
                 return _mapper.Map<BusinessLogic.Entities.Parcel>(p);
             }
