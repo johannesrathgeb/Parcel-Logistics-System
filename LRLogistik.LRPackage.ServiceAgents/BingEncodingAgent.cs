@@ -17,9 +17,9 @@ namespace LRLogistik.LRPackage.ServiceAgents
     public class BingEncodingAgent : IGeoEncodingAgent
     {
         private readonly ILogger _logger;
-        public BingEncodingAgent(ILogger logger)
+        public BingEncodingAgent(ILogger<BingEncodingAgent> logger)
         {
-            _logger= logger;
+            _logger = logger;
         }
 
         public GeoCoordinate EncodeAddress(Recipient r)

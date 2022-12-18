@@ -61,15 +61,22 @@ namespace LRLogistik.LRPackage.BusinessLogic
 
                 _logger.LogInformation($"Getting Warehouse with code: {JsonConvert.SerializeObject(code)}");
 
-                return new Hop()
-                {
-                    HopType = "string",
-                    Code = "string",
-                    Description = "string",
-                    ProcessingDelayMins = 0,
-                    LocationName = "string",
-                    LocationCoordinates = new GeoCoordinate() { Lat = 0.0, Lon = 0.0 }
-                };
+                DataAccess.Entities.Hop h = _warehouseRepository.GetByHopCode(code);
+
+                //log
+
+                return _mapper.Map<BusinessLogic.Entities.Hop>(h);
+
+
+                //return new Hop()
+                //{
+                //    HopType = "string",
+                //    Code = "string",
+                //    Description = "string",
+                //    ProcessingDelayMins = 0,
+                //    LocationName = "string",
+                //    LocationCoordinates = new GeoCoordinate() { Lat = 0.0, Lon = 0.0 }
+                //};
             }
             catch(Exceptions.BusinessLogicValidationException e)
             {
@@ -80,17 +87,22 @@ namespace LRLogistik.LRPackage.BusinessLogic
         public Warehouse ExportWarehouse()
         {
             _logger.LogInformation($"Exporting Warehouse!");
-            return new Warehouse()
-            {
-                Level = 0,
-                HopType = "string",
-                Code = "string",
-                Description = "string",
-                ProcessingDelayMins = 0,
-                LocationName = "string",
-                LocationCoordinates = new GeoCoordinate() { Lat = 0.0, Lon = 0.0 },
-                NextHops = new List<WarehouseNextHops>() { new WarehouseNextHops() { TraveltimeMins = 0, Hop = new Hop() { HopType = "string", Code = "string", Description = "string", ProcessingDelayMins = 0, LocationName = "string", LocationCoordinates = new GeoCoordinate() { Lat = 0.0, Lon = 0.0 } } } }
-            };
+
+            DataAccess.Entities.Warehouse w = _warehouseRepository.ExportHierachy();
+
+            return _mapper.Map<BusinessLogic.Entities.Warehouse>(w);
+
+            //return new Warehouse()
+            //{
+            //    Level = 0,
+            //    HopType = "string",
+            //    Code = "string",
+            //    Description = "string",
+            //    ProcessingDelayMins = 0,
+            //    LocationName = "string",
+            //    LocationCoordinates = new GeoCoordinate() { Lat = 0.0, Lon = 0.0 },
+            //    NextHops = new List<WarehouseNextHops>() { new WarehouseNextHops() { TraveltimeMins = 0, Hop = new Hop() { HopType = "string", Code = "string", Description = "string", ProcessingDelayMins = 0, LocationName = "string", LocationCoordinates = new GeoCoordinate() { Lat = 0.0, Lon = 0.0 } } } }
+            //};
         }
     }
 }

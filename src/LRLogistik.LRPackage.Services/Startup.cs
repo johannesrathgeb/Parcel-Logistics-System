@@ -32,6 +32,8 @@ using System.Diagnostics.CodeAnalysis;
 using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using LRLogistik.LRPackage.BusinessLogic;
 using LRLogistik.LRPackage.DataAccess.Interfaces;
+using LRLogistik.LRPackage.ServiceAgents.Interfaces;
+using LRLogistik.LRPackage.ServiceAgents;
 
 namespace LRLogistik.LRPackage.Services
 {
@@ -68,6 +70,7 @@ namespace LRLogistik.LRPackage.Services
             services.AddTransient<ISubmissionLogic, SubmissionLogic>();
             services.AddTransient<ITrackingLogic, TrackingLogic>();
             services.AddTransient<ITransferLogic, TransferLogic>();
+            services.AddTransient<IGeoEncodingAgent, BingEncodingAgent>(); 
 
             //Interfaces DAL
             services.AddTransient<IParcelRepository, ParcelRepository>();

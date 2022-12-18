@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using LRLogistik.LRPackage.BusinessLogic.Converters;
+using NetTopologySuite.Geometries;
 using System.Diagnostics.CodeAnalysis;
+
 
 namespace LRLogistik.LRPackage.Services.MappingProfiles
 {
@@ -35,6 +37,7 @@ namespace LRLogistik.LRPackage.Services.MappingProfiles
             CreateMap<DTOs.Recipient, BusinessLogic.Entities.Recipient>().ReverseMap();
 
             CreateMap<DTOs.Transferwarehouse, BusinessLogic.Entities.Transferwarehouse>().ReverseMap();
+
             CreateMap<DTOs.Truck, BusinessLogic.Entities.Truck>()
                 .IncludeBase<DTOs.Hop, BusinessLogic.Entities.Hop>()
                 .ReverseMap();
@@ -44,7 +47,29 @@ namespace LRLogistik.LRPackage.Services.MappingProfiles
                 .ReverseMap();
 
             CreateMap<DTOs.WarehouseNextHops, BusinessLogic.Entities.WarehouseNextHops>().ReverseMap();
+
+            //Resolver
+            CreateMap<BusinessLogic.Entities.Truck, DataAccess.Entities.Truck>()
+                .IncludeBase<BusinessLogic.Entities.Hop, DataAccess.Entities.Hop>()
+                .ForMember(dest => dest.Region, opt => opt.MapFrom<GeoJsonResolver>());
+            //Resolver
+            CreateMap<DataAccess.Entities.Truck, BusinessLogic.Entities.Truck>()
+                .IncludeBase<DataAccess.Entities.Hop, BusinessLogic.Entities.Hop>()
+                .ForMember(dest => dest.RegionGeoJson, opt => opt.MapFrom<GeoJsonResolver>());
+
+
+            //Converter
+            CreateMap<BusinessLogic.Entities.GeoCoordinate, Point>()
+                .ConvertUsing(new GeoPointConverter());
+
+            CreateMap<Point, BusinessLogic.Entities.GeoCoordinate>()
+                .ConvertUsing(new GeoPointConverter());
+
+
+            CreateMap<BusinessLogic.Entities.Hop, DataAccess.Entities.Hop>().ReverseMap();
         }
+
+
 
 
     }

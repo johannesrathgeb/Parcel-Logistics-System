@@ -1,4 +1,5 @@
 ﻿using LRLogistik.LRPackage.DataAccess.Entities;
+using NetTopologySuite.Geometries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,8 @@ namespace LRLogistik.LRPackage.DataAccess.Interfaces
 {
     public interface IParcelRepository
     {
-        Parcel Create(Parcel p);
-        Parcel Update(Parcel p);
+        Parcel Create(Parcel p/*, Point senderPoint, Point recipientPoint*/);
+        void UpdateDeliveryState(string trackingid);
         void Delete(string TrackingId);
 
         // Get by ID

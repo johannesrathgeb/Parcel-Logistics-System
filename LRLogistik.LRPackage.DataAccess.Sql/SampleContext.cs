@@ -21,12 +21,6 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
     {
         public SampleContext(DbContextOptions<SampleContext> options) : base(options) 
         {
-            this.Database.EnsureCreated();
-        }
-
-        public SampleContext() 
-        {
-            this.Database.EnsureCreated();
         }
 
         public virtual DbSet<DataAccess.Entities.Parcel> Parcels { get; set; }
@@ -66,13 +60,29 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
             });
 
             modelBuilder.Entity<Hop>()
-                          .HasDiscriminator<string>("HopType")
+                          .HasDiscriminator()
                           .HasValue<Warehouse>("Level")
                           .HasValue<Transferwarehouse>("Region")
                           .HasValue<Transferwarehouse>("LogisticPartner")
                           .HasValue<Transferwarehouse>("LogisticPartnerUrl")
                           .HasValue<Truck>("Region")
                           .HasValue<Truck>("NumberPlate");
+
+            //modelBuilder.Entity<Hop>(e =>
+            //{
+            //    e.HasKey(c => c.HopId);
+            //    e.Property(c => c.HopId).ValueGeneratedOnAdd();
+            //    e.Property(c => c.LocationCoordinates).HasColumnType("geometry");
+
+            //    e.HasDiscriminator<string>("HopType")
+            //        .HasValue<Warehouse>("Level")
+            //        .HasValue<Transferwarehouse>("Region")
+            //        .HasValue<Transferwarehouse>("LogisticsPartner")
+            //        .HasValue<Transferwarehouse>("LogisticsPartnerUrl")
+            //        .HasValue<Truck>("Region")
+            //        .HasValue<Truck>("PlateNumber");
+
+            //});
 
 
             modelBuilder.Entity<Hop>(e =>

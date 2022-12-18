@@ -40,6 +40,9 @@ namespace LRLogistik.LRPackage.BusinessLogic
                     throw new BusinessLogicValidationException("ValidateTrackingId", "Tracking Id Validation was invalid");
                 }
                 _logger.LogInformation($"Reporting delivery of TrackingId: {JsonConvert.SerializeObject(trackingId)}");
+
+                _parcelRepository.UpdateDeliveryState(trackingId); 
+                
                 return "Successfully reported delivery";
             }
             catch(BusinessLogicValidationException e)

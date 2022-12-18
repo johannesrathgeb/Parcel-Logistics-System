@@ -1,5 +1,6 @@
 ﻿using LRLogistik.LRPackage.DataAccess.Entities;
 using LRLogistik.LRPackage.DataAccess.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
@@ -24,6 +25,8 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
 
         public Entities.Warehouse Create(Warehouse w)
         {
+            _dbContext.Database.EnsureDeleted();
+            _dbContext.Database.EnsureCreated();
             try
             {
                 _logger.LogInformation($"Creating Warehouse in DB");
@@ -56,6 +59,7 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
             }
         }
 
+        //maybe unnötig, weils nach code geht
         public Warehouse GetByHopId(string id)
         {
             _logger.LogInformation($"Getting Warehouse from DB: {JsonConvert.SerializeObject(id)}");
@@ -66,7 +70,22 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
             catch(InvalidOperationException e)
             {
                 _logger.LogError($"Getting Warehouse was invalid");
-                throw new Entities.Exceptions.DataAccessNotFoundException("Delete", "Warehouse with " + id + " not found", e);
+                throw new Entities.Exceptions.DataAccessNotFoundException("Delete", "Warehouse with ID " + id + " not found", e);
+            }
+        }
+
+        public Hop GetByHopCode(string code)
+        {
+            _dbContext.Database.EnsureCreated();
+            _logger.LogInformation($"Getting Warehouse from DB: {JsonConvert.SerializeObject(code)}");
+            try
+            {
+                return _dbContext.Hops.Single(w => w.Code == code);
+            }
+            catch (InvalidOperationException e)
+            {
+                _logger.LogError($"Getting Warehouse was invalid");
+                throw new Entities.Exceptions.DataAccessNotFoundException("Delete", "Warehouse with code " + code + " not found", e);
             }
         }
 
@@ -75,5 +94,25 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
             throw new NotImplementedException();
         }
 
+        public Warehouse ExportHierachy()
+        {
+            _dbContext.Database.EnsureCreated();
+            _logger.LogInformation($"Getting Warehouse Hierachy from DB");
+            try
+            {
+                var result = _dbContext.Hops.OfType<Warehouse>()
+                    .Include(w => w.NextHops)
+                    .ThenInclude(nh => nh.Hop)
+                    .AsEnumerable()
+                    .SingleOrDefault(w => w.Level == 0);
+
+                return result; 
+            }
+            catch (InvalidOperationException e)
+            {
+                _logger.LogError($"Getting Warehouse Hierachy was invalid");
+                throw new Entities.Exceptions.DataAccessNotFoundException("Delete", "Warehouse Hierachy not found", e);
+            }
+        }
     }
 }

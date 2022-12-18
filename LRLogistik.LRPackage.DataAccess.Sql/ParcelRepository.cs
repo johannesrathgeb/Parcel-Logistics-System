@@ -1,10 +1,9 @@
-﻿using LRLogistik.LRPackage.BusinessLogic.Entities;
-using LRLogistik.LRPackage.DataAccess.Entities;
+﻿using LRLogistik.LRPackage.DataAccess.Entities;
 using LRLogistik.LRPackage.DataAccess.Interfaces;
-using LRLogistik.LRPackage.Services.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
+using NetTopologySuite.Geometries;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -26,11 +25,24 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
         }
 
         [HttpPost]
-        public Entities.Parcel Create(Entities.Parcel parcel)
+        public Entities.Parcel Create(Entities.Parcel parcel/*, Point senderPoint, Point recipientPoint*/)
         {
+            _dbContext.Database.EnsureCreated();
             _logger.LogInformation($"Creating parcel in DB: {JsonConvert.SerializeObject(parcel)}");
             try
             {
+
+                //var senderCoordinates = _mapper.Map<Point>(_encodingagent.EncodeAddress(parcel.Sender)); 
+                //var recipientCoordinates = _mapper.Map<Point>(_encodingagent.EncodeAddress(parcel.Recipient));
+
+
+                //var senderTruck = _dbContext.Hops.OfType<Truck>()
+                //    .Where(t => t.Region.Contains(senderPoint));
+
+                //var receiverTruck = _dbContext.Hops.OfType<Truck>()
+                //   .Where(t => t.Region.Contains(recipientPoint));
+
+
                 _dbContext.Parcels.Add(parcel);
                 _dbContext.SaveChanges();
                 _logger.LogInformation($"Parcel successfully created: {JsonConvert.SerializeObject(parcel)}");
@@ -74,9 +86,13 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
             }
         }
 
-        public Entities.Parcel Update(Entities.Parcel p)
+        public void UpdateDeliveryState(string trackingid)
         {
-            throw new NotImplementedException();
+            (from p in _dbContext.Parcels
+             where p.TrackingId == trackingid
+             select p).ToList()
+             .ForEach(x => x.State = Parcel.StateEnum.DeliveredEnum);
+            _dbContext.SaveChanges();
         }
     }
 }

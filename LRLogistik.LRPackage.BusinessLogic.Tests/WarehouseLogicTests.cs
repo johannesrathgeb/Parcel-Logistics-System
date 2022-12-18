@@ -21,6 +21,12 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
         {
             //Arrange
             var warehouseRepositoryMock = new Mock<IWarehouseRepository>();
+
+            warehouseRepositoryMock
+                .Setup(m => m.ExportHierachy())
+                .Returns(Builder<DataAccess.Entities.Warehouse>.CreateNew().Build());
+
+
             IWarehouseRepository warehouseRepository = warehouseRepositoryMock.Object;
 
             var loggerMock = new Mock<ILogger<WarehouseLogic>>();
@@ -40,11 +46,22 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
         [Test]
         public void GetValidWarehouse()
         {
+            //transferLogicMock
+            //    .Setup(m => m.TransferPackage(It.IsAny<string>(), It.IsAny<BusinessLogic.Entities.Parcel>()))
+            //    .Returns(Builder<BusinessLogic.Entities.Parcel>.CreateNew().With(x => x.TrackingId = randomTrackingId).Build());
+
+
             //Arrange
             var warehouseRepositoryMock = new Mock<IWarehouseRepository>();
+
+            warehouseRepositoryMock
+                .Setup(m => m.GetByHopCode(It.IsAny<string>()))
+                .Returns(Builder<DataAccess.Entities.Hop>.CreateNew().Build()); 
+
             IWarehouseRepository warehouseRepository = warehouseRepositoryMock.Object;
 
             var loggerMock = new Mock<ILogger<WarehouseLogic>>();
+
             ILogger<WarehouseLogic> logger = loggerMock.Object;
 
             var config = new MapperConfiguration(cfg => {

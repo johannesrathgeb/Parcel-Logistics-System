@@ -5,8 +5,10 @@ using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using LRLogistik.LRPackage.BusinessLogic.Validators;
 using LRLogistik.LRPackage.DataAccess.Interfaces;
 using LRLogistik.LRPackage.DataAccess.Sql;
+using LRLogistik.LRPackage.ServiceAgents.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NetTopologySuite.Geometries;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -21,12 +23,14 @@ namespace LRLogistik.LRPackage.BusinessLogic
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
         IParcelRepository _parcelRepository;
+        private readonly IGeoEncodingAgent _encodingagent;
 
-        public TransferLogic(IMapper mapper, IParcelRepository repository, ILogger<TransferLogic> logger)
+        public TransferLogic(IMapper mapper, IParcelRepository repository, ILogger<TransferLogic> logger, IGeoEncodingAgent encodingAgent)
         {
             _mapper = mapper;
             _parcelRepository = repository; 
             _logger = logger;
+            _encodingagent = encodingAgent; 
         }
 
         public Parcel TransferPackage(string trackingId, Parcel parcel)
@@ -51,8 +55,17 @@ namespace LRLogistik.LRPackage.BusinessLogic
                 _logger.LogInformation($"Transferring Package: {JsonConvert.SerializeObject(parcel)}");
                 parcel.TrackingId = trackingId;
                 _logger.LogInformation($"Package updated with TrackingId: {JsonConvert.SerializeObject(parcel)}");
+
+                //var senderCoordinates = _mapper.Map<Point>(_encodingagent.EncodeAddress(parcel.Sender));
+                //var recipientCoordinates = _mapper.Map<Point>(_encodingagent.EncodeAddress(parcel.Recipient));
+
+                _logger.LogInformation($"Sender and Recipient coordinates retrieved");
+
+                parcel.State = Parcel.StateEnum.PickupEnum;
+                _logger.LogInformation($"Set Package to Pickup-State: {JsonConvert.SerializeObject(parcel)}");
+
                 _logger.LogInformation($"Mapping Package to DataAccessLayer: {JsonConvert.SerializeObject(parcel)}");
-                _parcelRepository.Create(_mapper.Map<DataAccess.Entities.Parcel>(parcel));
+                _parcelRepository.Create(_mapper.Map<DataAccess.Entities.Parcel>(parcel)/*, senderCoordinates, recipientCoordinates*/);
 
                 return parcel;
             }
