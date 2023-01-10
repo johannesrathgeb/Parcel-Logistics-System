@@ -56,8 +56,8 @@ namespace LRLogistik.LRPackage.BusinessLogic
                 parcel.TrackingId = trackingId;
                 _logger.LogInformation($"Package updated with TrackingId: {JsonConvert.SerializeObject(parcel)}");
 
-                //var senderCoordinates = _mapper.Map<Point>(_encodingagent.EncodeAddress(parcel.Sender));
-                //var recipientCoordinates = _mapper.Map<Point>(_encodingagent.EncodeAddress(parcel.Recipient));
+                var senderCoordinates = _mapper.Map<Point>(_encodingagent.EncodeAddress(parcel.Sender));
+                var recipientCoordinates = _mapper.Map<Point>(_encodingagent.EncodeAddress(parcel.Recipient));
 
                 _logger.LogInformation($"Sender and Recipient coordinates retrieved");
 
@@ -65,7 +65,7 @@ namespace LRLogistik.LRPackage.BusinessLogic
                 _logger.LogInformation($"Set Package to Pickup-State: {JsonConvert.SerializeObject(parcel)}");
 
                 _logger.LogInformation($"Mapping Package to DataAccessLayer: {JsonConvert.SerializeObject(parcel)}");
-                _parcelRepository.Create(_mapper.Map<DataAccess.Entities.Parcel>(parcel)/*, senderCoordinates, recipientCoordinates*/);
+                _parcelRepository.Create(_mapper.Map<DataAccess.Entities.Parcel>(parcel), senderCoordinates, recipientCoordinates);
 
                 return parcel;
             }

@@ -1,6 +1,7 @@
 ﻿using LRLogistik.LRPackage.DataAccess.Entities;
 using LRLogistik.LRPackage.DataAccess.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
 using NetTopologySuite.Geometries;
@@ -17,15 +18,77 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
     {
         SampleContext _dbContext;
         private readonly ILogger _logger;
+        IWarehouseRepository _warehouseRepository;
 
-        public ParcelRepository(SampleContext context, ILogger<ParcelRepository> logger)
+        public ParcelRepository(SampleContext context, ILogger<ParcelRepository> logger, IWarehouseRepository warehouseRepository)
         {
             _dbContext = context;
             _logger = logger;
+            _warehouseRepository = warehouseRepository;
+        }
+
+        public Warehouse GetParent(Hop hop)
+        {
+            var parent =
+                    _dbContext.Hops.OfType<Warehouse>()
+                        .Include(x => x.NextHops)
+                        .ThenInclude(x => x.Hop)
+                        .AsEnumerable()
+                        .SingleOrDefault(x => x.NextHops.Any(y => y.Hop.HopId == hop.HopId));
+
+            return parent;
+        }
+
+        public List<HopArrival> Routing(Hop hopA, Hop hopB)
+        {
+            // Get the parent of hop A and B
+            var aParent = GetParent(hopA);
+            var bParent = GetParent(hopB);
+
+            // Are the parent the SAME HOP?
+            if (aParent == bParent)
+            {
+                // -- YES.. we found the common hop and are done
+                var commonParent = aParent;
+                var HopArrival = new HopArrival()
+                {
+                    Code = commonParent.Code,
+                    Description = commonParent.Description,
+                    DateTime = DateTime.Now
+                };
+
+                return new List<HopArrival>() { HopArrival };
+            }
+            else
+            {
+                var route = Routing(aParent, bParent);
+
+                var aParentArrival = new HopArrival()
+                {
+                    HopArrivalId = aParent.HopId,
+                    Code = aParent.Code,
+                    Description = aParent.Description,
+                    DateTime = DateTime.Now
+
+                };
+
+                var bParentArrival = new HopArrival()
+                {
+                    HopArrivalId = bParent.HopId,
+                    Code = bParent.Code,
+                    Description = bParent.Description,
+                    DateTime = DateTime.Now
+                };
+
+                route.Insert(0, aParentArrival);
+                route.Add(bParentArrival);
+
+                return route;
+            }
         }
 
         [HttpPost]
-        public Entities.Parcel Create(Entities.Parcel parcel/*, Point senderPoint, Point recipientPoint*/)
+        public Entities.Parcel Create(Entities.Parcel parcel, Point senderPoint, Point recipientPoint)
         {
             _dbContext.Database.EnsureCreated();
             _logger.LogInformation($"Creating parcel in DB: {JsonConvert.SerializeObject(parcel)}");
@@ -36,12 +99,15 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
                 //var recipientCoordinates = _mapper.Map<Point>(_encodingagent.EncodeAddress(parcel.Recipient));
 
 
-                //var senderTruck = _dbContext.Hops.OfType<Truck>()
-                //    .Where(t => t.Region.Contains(senderPoint));
+                var senderTruck = _dbContext.Hops.OfType<Truck>()
+                    .AsEnumerable()
+                    .SingleOrDefault(w => w.Region.Contains(senderPoint));
 
-                //var receiverTruck = _dbContext.Hops.OfType<Truck>()
-                //   .Where(t => t.Region.Contains(recipientPoint));
+                var receiverTruck = _dbContext.Hops.OfType<Truck>()
+                    .AsEnumerable()
+                    .SingleOrDefault(w => w.Region.Contains(recipientPoint));
 
+                parcel.FutureHops = Routing(senderTruck, receiverTruck);
 
                 _dbContext.Parcels.Add(parcel);
                 _dbContext.SaveChanges();
@@ -77,7 +143,10 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
             _logger.LogInformation($"Getting Parcel from DB: {JsonConvert.SerializeObject(trackingid)}");
             try
             {
-                return _dbContext.Parcels.Single(p => p.TrackingId == trackingid);
+                return _dbContext.Parcels
+                    .Include(x => x.VisitedHops)
+                    .Include(x => x.FutureHops)
+                    .Single(p => p.TrackingId == trackingid);
             }
             catch(InvalidOperationException e)
             {
@@ -92,6 +161,59 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
              where p.TrackingId == trackingid
              select p).ToList()
              .ForEach(x => x.State = Parcel.StateEnum.DeliveredEnum);
+            _dbContext.SaveChanges();
+        }
+
+        public void ReportHop(string trackingId, string code)
+        {
+            Parcel parcel = GetByTrackingId(trackingId);
+            Hop hop = _warehouseRepository.GetByHopCode(code);
+            var hopArrival = new HopArrival()
+            {
+                HopArrivalId = hop.HopId,
+                Code = hop.Code,
+                Description = hop.Description,
+                DateTime = DateTime.Now
+            };
+
+            //foreach (HopArrival h in parcel.FutureHops) 
+            //{
+            //    if(h.Code== hop.Code)
+            //    {
+            //        tempHop = h;
+            //        break;
+            //    }
+            //}
+            parcel.FutureHops.RemoveAt(0);
+            parcel.VisitedHops.Add(hopArrival);
+
+            if (hop.HopType == "warehouse")
+            {
+                parcel.State = Parcel.StateEnum.InTransportEnum;
+            }
+            else if (hop.HopType == "truck")
+            {
+                parcel.State = Parcel.StateEnum.InTruckDeliveryEnum;
+            }
+            else
+            {
+                //TODO TRANSFER warehouse iwos
+            }
+            //(from p in _dbContext.Parcels
+            //    where p.TrackingId == parcel.TrackingId
+            //    select p).ToList()
+            //    .ForEach(x => x.State = parcel.State);
+            //(from p in _dbContext.Parcels
+            // where p.TrackingId == parcel.TrackingId
+            // select p).ToList()
+            //    .ForEach(x => x.VisitedHops = parcel.VisitedHops);
+            //(from p in _dbContext.Parcels
+            // where p.TrackingId == parcel.TrackingId
+            // select p).ToList()
+            //    .ForEach(x => x.FutureHops = parcel.FutureHops);
+
+            Delete(trackingId);
+            _dbContext.Parcels.Add(parcel);
             _dbContext.SaveChanges();
         }
     }

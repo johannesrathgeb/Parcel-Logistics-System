@@ -10,11 +10,14 @@ namespace LRLogistik.LRPackage.DataAccess.Interfaces
 {
     public interface IParcelRepository
     {
-        Parcel Create(Parcel p/*, Point senderPoint, Point recipientPoint*/);
+        Warehouse GetParent(Hop hop);
+        List<HopArrival> Routing(Hop hopA, Hop hopB);
+        Parcel Create(Parcel p, Point senderPoint, Point recipientPoint);
         void UpdateDeliveryState(string trackingid);
         void Delete(string TrackingId);
 
         // Get by ID
         Parcel GetByTrackingId(string trackingid);
+        void ReportHop(string trackingId, string code);
     }
 }
