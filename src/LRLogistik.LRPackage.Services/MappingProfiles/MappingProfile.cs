@@ -57,6 +57,16 @@ namespace LRLogistik.LRPackage.Services.MappingProfiles
                 .IncludeBase<DataAccess.Entities.Hop, BusinessLogic.Entities.Hop>()
                 .ForMember(dest => dest.RegionGeoJson, opt => opt.MapFrom<GeoJsonResolver>());
 
+            //ResolverTWH
+            CreateMap<BusinessLogic.Entities.Transferwarehouse, DataAccess.Entities.Transferwarehouse>()
+                .IncludeBase<BusinessLogic.Entities.Hop, DataAccess.Entities.Hop>()
+                .ForMember(dest => dest.Region, opt => opt.MapFrom<GeoJsonTWarehouseResolver>());
+            //ResolverTWH
+            CreateMap<DataAccess.Entities.Transferwarehouse, BusinessLogic.Entities.Transferwarehouse>()
+                .IncludeBase<DataAccess.Entities.Hop, BusinessLogic.Entities.Hop>()
+                .ForMember(dest => dest.RegionGeoJson, opt => opt.MapFrom<GeoJsonTWarehouseResolver>());
+
+
 
             //Converter
             CreateMap<BusinessLogic.Entities.GeoCoordinate, Point>()
