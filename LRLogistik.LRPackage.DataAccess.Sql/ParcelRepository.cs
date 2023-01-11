@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LRLogistik.LRPackage.DataAccess.Entities.Exceptions;
 
 namespace LRLogistik.LRPackage.DataAccess.Sql
 {
@@ -30,61 +31,82 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
 
         public Warehouse GetParent(Hop hop)
         {
-            var parent =
+            try
+            {
+                var parent =
                     _dbContext.Hops.OfType<Warehouse>()
                         .Include(x => x.NextHops)
                         .ThenInclude(x => x.Hop)
                         .AsEnumerable()
                         .SingleOrDefault(x => x.NextHops.Any(y => y.Hop.HopId == hop.HopId));
-
-            return parent;
+                _logger.LogInformation($"Parent Hop found!");
+                return parent;
+            }
+            catch (InvalidOperationException e)
+            {
+                _logger.LogError($"Getting Parent was unsuccesful");
+                throw new Entities.Exceptions.DataAccessNotFoundException("GetParent", "Parent of Hop " + hop + " not found", e);
+            }
         }
 
         public List<HopArrival> Routing(Hop hopA, Hop hopB)
         {
-            // Get the parent of hop A and B
-            var aParent = GetParent(hopA);
-            var bParent = GetParent(hopB);
-
-            // Are the parent the SAME HOP?
-            if (aParent == bParent)
+            try
             {
-                // -- YES.. we found the common hop and are done
-                var commonParent = aParent;
-                var HopArrival = new HopArrival()
-                {
-                    Code = commonParent.Code,
-                    Description = commonParent.Description,
-                    DateTime = DateTime.Now
-                };
+                // Get the parent of hop A and B
+                var aParent = GetParent(hopA);
+                var bParent = GetParent(hopB);
 
-                return new List<HopArrival>() { HopArrival };
+                // Are the parent the SAME HOP?
+                if (aParent == bParent)
+                {
+                    // -- YES.. we found the common hop and are done
+                    var commonParent = aParent;
+                    var HopArrival = new HopArrival()
+                    {
+                        Code = commonParent.Code,
+                        Description = commonParent.Description,
+                        DateTime = DateTime.Now
+                    };
+
+                    return new List<HopArrival>() { HopArrival };
+                }
+                else
+                {
+                    var route = Routing(aParent, bParent);
+
+                    var aParentArrival = new HopArrival()
+                    {
+                        //HopArrivalId = aParent.HopId,
+                        Code = aParent.Code,
+                        Description = aParent.Description,
+                        DateTime = DateTime.Now
+
+                    };
+
+                    var bParentArrival = new HopArrival()
+                    {
+                        //HopArrivalId = bParent.HopId,
+                        Code = bParent.Code,
+                        Description = bParent.Description,
+                        DateTime = DateTime.Now
+                    };
+
+                    route.Insert(0, aParentArrival);
+                    route.Add(bParentArrival);
+                    _logger.LogInformation($"Route found!");
+                    return route;
+                }
             }
-            else
+            catch (InvalidOperationException e)
             {
-                var route = Routing(aParent, bParent);
-
-                var aParentArrival = new HopArrival()
-                {
-                    //HopArrivalId = aParent.HopId,
-                    Code = aParent.Code,
-                    Description = aParent.Description,
-                    DateTime = DateTime.Now
-
-                };
-
-                var bParentArrival = new HopArrival()
-                {
-                    //HopArrivalId = bParent.HopId,
-                    Code = bParent.Code,
-                    Description = bParent.Description,
-                    DateTime = DateTime.Now
-                };
-
-                route.Insert(0, aParentArrival);
-                route.Add(bParentArrival);
-
-                return route;
+                _logger.LogError($"Routing was unsuccesful");
+                throw new Entities.Exceptions.DataAccessNotFoundException("Routing", "Routing between " + hopA + " and " + hopB + " not found", e);
+            }
+            catch (DataAccessNotFoundException e)
+            {
+                _logger.LogError($"Routing was unsuccesful");
+                throw new Entities.Exceptions.DataAccessNotFoundException("Routing", "Routing between " + hopA + " and " + hopB + " not found", e);
             }
         }
 
@@ -159,76 +181,87 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
 
         public void UpdateDeliveryState(string trackingid)
         {
-            (from p in _dbContext.Parcels
-             where p.TrackingId == trackingid
-             select p).ToList()
-             .ForEach(x => x.State = Parcel.StateEnum.DeliveredEnum);
-            _dbContext.SaveChanges();
+            try
+            {
+                (from p in _dbContext.Parcels
+                 where p.TrackingId == trackingid
+                 select p).ToList()
+                             .ForEach(x => x.State = Parcel.StateEnum.DeliveredEnum);
+                _dbContext.SaveChanges();
+            }
+            catch (InvalidOperationException e)
+            {
+                _logger.LogError($"Updating Delivery State was unsuccesful!");
+                throw new Entities.Exceptions.DataAccessNotFoundException("UpdateDeliveryState", "Parcel with Id " + trackingid + " not found", e);
+            }
         }
 
         public async void ReportHop(string trackingId, string code)
         {
-            _dbContext.Database.EnsureCreated();
-
-
-            HttpClient client = new HttpClient();
-
-            Parcel parcel = GetByTrackingId(trackingId);
-
-            Hop hop = _warehouseRepository.GetByHopCode(code);
-            var hopArrival = new HopArrival()
+            try
             {
-                //HopArrivalId = hop.HopId,
-                Code = hop.Code,
-                Description = hop.Description,
-                DateTime = DateTime.Now
-            };
-
-            parcel.FutureHops.RemoveAll(x => x.Code == code); 
-
-            parcel.VisitedHops.Add(hopArrival);
-
-            if (hop.HopType == "warehouse")
-            {
-                parcel.State = Parcel.StateEnum.InTransportEnum;
-            }
-            else if (hop.HopType == "truck")
-            {
-                parcel.State = Parcel.StateEnum.InTruckDeliveryEnum;
-            } else if(hop.HopType == "transferwarehouse")
-            {
-                parcel.State = Parcel.StateEnum.TransferredEnum; 
-            }
-            else
-            {
-                //TODO TRANSFER warehouse iwos
-            }
-
-            bool saveFailed;
-            do
-            {
-                saveFailed = false;
-
-                try
+                _dbContext.Database.EnsureCreated();
+                HttpClient client = new HttpClient();
+                Parcel parcel = GetByTrackingId(trackingId);
+                Hop hop = _warehouseRepository.GetByHopCode(code);
+                _logger.LogInformation($"Parcel and Hop found: {JsonConvert.SerializeObject(parcel)}, {JsonConvert.SerializeObject(hop)}");
+                var hopArrival = new HopArrival()
                 {
-                    _dbContext.Parcels.Update(parcel);
-                    _dbContext.SaveChanges();
+                    //HopArrivalId = hop.HopId,
+                    Code = hop.Code,
+                    Description = hop.Description,
+                    DateTime = DateTime.Now
+                };
+
+                parcel.FutureHops.RemoveAll(x => x.Code == code);
+                parcel.VisitedHops.Add(hopArrival);
+
+                _logger.LogInformation($"Parcel FutureHops removed and Visited Hops added!");
+
+                if (hop.HopType == "warehouse")
+                {
+                    parcel.State = Parcel.StateEnum.InTransportEnum;
+                    _logger.LogInformation($"Parcel State set to InTransport!");
                 }
-                catch (DbUpdateConcurrencyException ex)
+                else if (hop.HopType == "truck")
                 {
-                    saveFailed = true;
-
-                    // Update the values of the entity that failed to save from the store
-                    ex.Entries.Single().Reload();
+                    parcel.State = Parcel.StateEnum.InTruckDeliveryEnum;
+                    _logger.LogInformation($"Parcel State set to InTruckDelivery!");
+                }
+                else if (hop.HopType == "transferwarehouse")
+                {
+                    parcel.State = Parcel.StateEnum.TransferredEnum;
+                    _logger.LogInformation($"Parcel State set to Transferred!");
+                }
+                else
+                {
+                    //TODO TRANSFER warehouse iwos
                 }
 
-            } while (saveFailed);
-
-
-            //_dbContext.Parcels.Update(parcel);
-            //_dbContext.SaveChanges();
-
-            return; 
+                bool saveFailed;
+                do
+                {
+                    saveFailed = false;
+                    try
+                    {
+                        _dbContext.Parcels.Update(parcel);
+                        _dbContext.SaveChanges();
+                        _logger.LogInformation($"Saved to DB!");
+                    }
+                    catch (DbUpdateConcurrencyException ex)
+                    {
+                        saveFailed = true;
+                        _logger.LogInformation($"Unable to save to DB! Retrying!");
+                        // Update the values of the entity that failed to save from the store
+                        ex.Entries.Single().Reload();
+                    }
+                } while (saveFailed);
+            }
+            catch (InvalidOperationException e)
+            {
+                _logger.LogError($"Reporting Hop was unsuccesful!");
+                throw new Entities.Exceptions.DataAccessNotFoundException("ReportHop", "Parcel with Id " + trackingId + " and Hop with Code " + code + " not found", e);
+            }
         }
 
     }

@@ -52,6 +52,11 @@ namespace LRLogistik.LRPackage.BusinessLogic
                 _logger.LogError($"TrackingId was invalid!");
                 throw new BusinessLogic.Exceptions.BusinessLogicNotFoundException("ReportDelivery", "Delivery was not reported", e);
             }
+            catch (DataAccess.Entities.Exceptions.DataAccessNotFoundException e)
+            {
+                _logger.LogError($"Unable to change data in database!");
+                throw new BusinessLogicNotFoundException("ReportDelivery", "Delivery was not reported", e);
+            }
         }
 
         public string ReportHop(string trackingId, string code)
@@ -85,6 +90,11 @@ namespace LRLogistik.LRPackage.BusinessLogic
             catch(BusinessLogicValidationException e) 
             {
                 _logger.LogError($"TrackingId or Code was invalid!");
+                throw new BusinessLogicNotFoundException("ReportHop", "Hop was not reported", e);
+            }
+            catch(DataAccess.Entities.Exceptions.DataAccessNotFoundException e)
+            {
+                _logger.LogError($"Unable to change data in database!");
                 throw new BusinessLogicNotFoundException("ReportHop", "Hop was not reported", e);
             }
         }
