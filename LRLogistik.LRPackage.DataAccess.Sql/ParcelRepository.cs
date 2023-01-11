@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
 using NetTopologySuite.Geometries;
 using Newtonsoft.Json;
+using System.Net.Http; 
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,7 +66,7 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
 
                 var aParentArrival = new HopArrival()
                 {
-                    HopArrivalId = aParent.HopId,
+                    //HopArrivalId = aParent.HopId,
                     Code = aParent.Code,
                     Description = aParent.Description,
                     DateTime = DateTime.Now
@@ -74,7 +75,7 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
 
                 var bParentArrival = new HopArrival()
                 {
-                    HopArrivalId = bParent.HopId,
+                    //HopArrivalId = bParent.HopId,
                     Code = bParent.Code,
                     Description = bParent.Description,
                     DateTime = DateTime.Now
@@ -147,8 +148,9 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
                     .Include(x => x.VisitedHops)
                     .Include(x => x.FutureHops)
                     .Single(p => p.TrackingId == trackingid);
+                    
             }
-            catch(InvalidOperationException e)
+            catch (InvalidOperationException e)
             {
                 _logger.LogError($"Getting Parcel was invalid");
                 throw new Entities.Exceptions.DataAccessNotFoundException("GetByTrackingId", "Parcel with Id " + trackingid + " not found", e);
@@ -164,27 +166,26 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
             _dbContext.SaveChanges();
         }
 
-        public void ReportHop(string trackingId, string code)
+        public async void ReportHop(string trackingId, string code)
         {
+            _dbContext.Database.EnsureCreated();
+
+
+            HttpClient client = new HttpClient();
+
             Parcel parcel = GetByTrackingId(trackingId);
+
             Hop hop = _warehouseRepository.GetByHopCode(code);
             var hopArrival = new HopArrival()
             {
-                HopArrivalId = hop.HopId,
+                //HopArrivalId = hop.HopId,
                 Code = hop.Code,
                 Description = hop.Description,
                 DateTime = DateTime.Now
             };
 
-            //foreach (HopArrival h in parcel.FutureHops) 
-            //{
-            //    if(h.Code== hop.Code)
-            //    {
-            //        tempHop = h;
-            //        break;
-            //    }
-            //}
-            parcel.FutureHops.RemoveAt(0);
+            parcel.FutureHops.RemoveAll(x => x.Code == code); 
+
             parcel.VisitedHops.Add(hopArrival);
 
             if (hop.HopType == "warehouse")
@@ -194,27 +195,41 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
             else if (hop.HopType == "truck")
             {
                 parcel.State = Parcel.StateEnum.InTruckDeliveryEnum;
+            } else if(hop.HopType == "transferwarehouse")
+            {
+                parcel.State = Parcel.StateEnum.TransferredEnum; 
             }
             else
             {
                 //TODO TRANSFER warehouse iwos
             }
-            //(from p in _dbContext.Parcels
-            //    where p.TrackingId == parcel.TrackingId
-            //    select p).ToList()
-            //    .ForEach(x => x.State = parcel.State);
-            //(from p in _dbContext.Parcels
-            // where p.TrackingId == parcel.TrackingId
-            // select p).ToList()
-            //    .ForEach(x => x.VisitedHops = parcel.VisitedHops);
-            //(from p in _dbContext.Parcels
-            // where p.TrackingId == parcel.TrackingId
-            // select p).ToList()
-            //    .ForEach(x => x.FutureHops = parcel.FutureHops);
 
-            Delete(trackingId);
-            _dbContext.Parcels.Add(parcel);
-            _dbContext.SaveChanges();
+            bool saveFailed;
+            do
+            {
+                saveFailed = false;
+
+                try
+                {
+                    _dbContext.Parcels.Update(parcel);
+                    _dbContext.SaveChanges();
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    saveFailed = true;
+
+                    // Update the values of the entity that failed to save from the store
+                    ex.Entries.Single().Reload();
+                }
+
+            } while (saveFailed);
+
+
+            //_dbContext.Parcels.Update(parcel);
+            //_dbContext.SaveChanges();
+
+            return; 
         }
+
     }
 }
