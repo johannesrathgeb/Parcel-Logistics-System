@@ -81,8 +81,9 @@ namespace LRLogistik.LRPackage.DataAccess.Tests
         [TearDown]
         public void Cleanup()
         {
-            _mockedDbContext.Database.EnsureDeleted();
-            _mockedDbContext.Dispose();
+            //TODO DB
+            //_mockedDbContext.Database.EnsureDeleted();
+            //_mockedDbContext.Dispose();
         }
 
         [Test]

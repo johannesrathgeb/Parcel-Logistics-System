@@ -3,6 +3,7 @@ using LRLogistik.LRPackage.DataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,9 +24,17 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
             _logger = logger;
         }
 
+
         public Entities.Warehouse Create(Warehouse w)
         {
-            _dbContext.Database.EnsureDeleted();
+            _dbContext.Database.EnsureCreated();
+
+            _dbContext.Database.ExecuteSqlRaw("drop table WarehouseNextHops");
+            _dbContext.Database.ExecuteSqlRaw("drop table HopArrival");
+            _dbContext.Database.ExecuteSqlRaw("drop table Parcels");
+            _dbContext.Database.ExecuteSqlRaw("drop table Recipient");
+            _dbContext.Database.ExecuteSqlRaw("drop table Hops");
+
             _dbContext.Database.EnsureCreated();
             try
             {
