@@ -49,19 +49,16 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
             }
         }
 
-        public List<HopArrival> Routing(Hop hopA, Hop hopB)
+        public List<HopArrival> Routing(Hop hop1, Hop hop2)
         {
             try
             {
-                // Get the parent of hop A and B
-                var aParent = GetParent(hopA);
-                var bParent = GetParent(hopB);
+                var parent1 = GetParent(hop1);
+                var parent2 = GetParent(hop2);
 
-                // Are the parent the SAME HOP?
-                if (aParent == bParent)
+                if (parent1 == parent2)
                 {
-                    // -- YES.. we found the common hop and are done
-                    var commonParent = aParent;
+                    var commonParent = parent1;
                     var HopArrival = new HopArrival()
                     {
                         Code = commonParent.Code,
@@ -73,27 +70,25 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
                 }
                 else
                 {
-                    var route = Routing(aParent, bParent);
+                    var route = Routing(parent1, parent2);
 
-                    var aParentArrival = new HopArrival()
+                    var parent1Arrival = new HopArrival()
                     {
-                        //HopArrivalId = aParent.HopId,
-                        Code = aParent.Code,
-                        Description = aParent.Description,
+                        Code = parent1.Code,
+                        Description = parent1.Description,
                         DateTime = DateTime.Now
 
                     };
 
-                    var bParentArrival = new HopArrival()
+                    var parent2Arrival = new HopArrival()
                     {
-                        //HopArrivalId = bParent.HopId,
-                        Code = bParent.Code,
-                        Description = bParent.Description,
+                        Code = parent2.Code,
+                        Description = parent2.Description,
                         DateTime = DateTime.Now
                     };
 
-                    route.Insert(0, aParentArrival);
-                    route.Add(bParentArrival);
+                    route.Insert(0, parent1Arrival);
+                    route.Add(parent2Arrival);
                     _logger.LogInformation($"Route found!");
                     return route;
                 }
@@ -101,12 +96,12 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
             catch (InvalidOperationException e)
             {
                 _logger.LogError($"Routing was unsuccesful");
-                throw new Entities.Exceptions.DataAccessNotFoundException("Routing", "Routing between " + hopA + " and " + hopB + " not found", e);
+                throw new Entities.Exceptions.DataAccessNotFoundException("Routing", "Routing between " + hop1 + " and " + hop2 + " not found", e);
             }
             catch (DataAccessNotFoundException e)
             {
                 _logger.LogError($"Routing was unsuccesful");
-                throw new Entities.Exceptions.DataAccessNotFoundException("Routing", "Routing between " + hopA + " and " + hopB + " not found", e);
+                throw new Entities.Exceptions.DataAccessNotFoundException("Routing", "Routing between " + hop1 + " and " + hop2 + " not found", e);
             }
         }
 

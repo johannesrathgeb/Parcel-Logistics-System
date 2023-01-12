@@ -99,5 +99,26 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             Assert.Throws<BusinessLogic.Exceptions.BusinessLogicNotFoundException>(() => submissionLogic.SubmitParcel(BLParcel));
 
         }
+
+        [Test]
+        public void RoutingSuccess()
+        {
+            List<DataAccess.Entities.HopArrival> hopArrivals = new List<DataAccess.Entities.HopArrival>();
+
+            DataAccess.Entities.Hop hop1 = new DataAccess.Entities.Hop(); 
+            DataAccess.Entities.Hop hop2 = new DataAccess.Entities.Hop(); 
+
+
+            var parcelRepositoryMock = new Mock<IParcelRepository>();
+
+            parcelRepositoryMock
+                .Setup(m => m.Routing(It.IsAny<DataAccess.Entities.Hop>(), It.IsAny<DataAccess.Entities.Hop>()))
+                .Returns(hopArrivals);
+
+            IParcelRepository parcelRepository = parcelRepositoryMock.Object;
+
+            Assert.IsInstanceOf<List<DataAccess.Entities.HopArrival>>(parcelRepository.Routing(hop1, hop2));                         
+        }
+
     }
 }
