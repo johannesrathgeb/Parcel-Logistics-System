@@ -26,7 +26,7 @@ namespace LRLogistik.LRPackage.ServiceAgents
         {
             try
             {
-                string address = (r.Country + r.PostalCode + r.City + r.Street);
+                string address = ($"{r.Country}/{r.PostalCode}{r.City}/{r.Street}");
                 string url = "http://dev.virtualearth.net/REST/v1/Locations?query=" + address + "&key=ApXpNBTanGJMbV8xoem8FWdvckZ6anMTEcjBFgE-PVsJR0ETiUNT3_Jv2mqrRhwB";
                 _logger.LogInformation("Trying to get Map data");
                 using (var client = new WebClient())
@@ -41,8 +41,8 @@ namespace LRLogistik.LRPackage.ServiceAgents
                         _logger.LogInformation("Returning Coordinates");
                         return new GeoCoordinate()
                         {
-                            Lat = location.Point.Coordinates[0],
-                            Lon = location.Point.Coordinates[1]
+                            Lat = location.Point.Coordinates[1],
+                            Lon = location.Point.Coordinates[0]
                         };
                     }
                 }

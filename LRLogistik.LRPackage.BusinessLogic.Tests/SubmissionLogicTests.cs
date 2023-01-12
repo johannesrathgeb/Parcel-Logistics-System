@@ -6,6 +6,7 @@ using LRLogistik.LRPackage.DataAccess.Interfaces;
 using LRLogistik.LRPackage.ServiceAgents.Interfaces;
 using Microsoft.Extensions.Logging;
 using Moq;
+using NetTopologySuite.Geometries;
 
 namespace LRLogistik.LRPackage.BusinessLogic.Tests
 {
@@ -37,7 +38,7 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             var parcelRepositoryMock = new Mock<IParcelRepository>(); 
 
             parcelRepositoryMock
-                .Setup(m => m.Create(It.IsAny<DataAccess.Entities.Parcel>()))
+                .Setup(m => m.Create(It.IsAny<DataAccess.Entities.Parcel>(), It.IsAny<Point>(), It.IsAny<Point>()))
                 .Returns(DALParcel);
 
             IParcelRepository parcelRepository = parcelRepositoryMock.Object;
@@ -81,7 +82,7 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             var parcelRepositoryMock = new Mock<IParcelRepository>();
 
             parcelRepositoryMock
-                .Setup(m => m.Create(It.IsAny<DataAccess.Entities.Parcel>()))
+                .Setup(m => m.Create(It.IsAny<DataAccess.Entities.Parcel>(), It.IsAny<Point>(), It.IsAny<Point>()))
                 .Returns(DALParcel);
 
             IParcelRepository parcelRepository = parcelRepositoryMock.Object;

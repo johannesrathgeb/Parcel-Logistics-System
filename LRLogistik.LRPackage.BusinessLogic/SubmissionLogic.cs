@@ -50,8 +50,8 @@ namespace LRLogistik.LRPackage.BusinessLogic
                 parcel.TrackingId = RandomString(9);
                 _logger.LogInformation($"New TrackingId created: {JsonConvert.SerializeObject(parcel.TrackingId)}");
 
-                //var senderCoordinates = _mapper.Map<Point>(_encodingagent.EncodeAddress(parcel.Sender));
-                //var recipientCoordinates = _mapper.Map<Point>(_encodingagent.EncodeAddress(parcel.Recipient));
+                var senderCoordinates = _mapper.Map<Point>(_encodingagent.EncodeAddress(parcel.Sender));
+                var recipientCoordinates = _mapper.Map<Point>(_encodingagent.EncodeAddress(parcel.Recipient));
 
 
                 _logger.LogInformation($"Sender and Recipient coordinates retrieved");
@@ -59,7 +59,7 @@ namespace LRLogistik.LRPackage.BusinessLogic
                 parcel.State = Parcel.StateEnum.PickupEnum; 
                 _logger.LogInformation($"Set Package to Pickup-State: {JsonConvert.SerializeObject(parcel)}");
 
-                DataAccess.Entities.Parcel p = (DataAccess.Entities.Parcel)_parcelRepository.Create(_mapper.Map<DataAccess.Entities.Parcel>(parcel)/*, senderCoordinates, recipientCoordinates*/);
+                DataAccess.Entities.Parcel p = (DataAccess.Entities.Parcel)_parcelRepository.Create(_mapper.Map<DataAccess.Entities.Parcel>(parcel), senderCoordinates, recipientCoordinates);
                 _logger.LogInformation($"Parcel submitted to DAL");
                 return _mapper.Map<BusinessLogic.Entities.Parcel>(p);
             }

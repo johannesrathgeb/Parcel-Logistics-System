@@ -10,7 +10,7 @@ namespace LRLogistik.LRPackage.DataAccess.Entities
     [ExcludeFromCodeCoverage]
     public class HopArrival
     {
-        public int HopArrivalId { get; set; }
+        public string HopArrivalId { get; set; }
 
         public string Code { get; set; }
 

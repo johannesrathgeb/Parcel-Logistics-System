@@ -20,13 +20,15 @@ namespace LRLogistik.LRPackage.BusinessLogic
     {
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
-        IParcelRepository _parcelRepository;  
+        IParcelRepository _parcelRepository;
+        IWarehouseRepository _warehouseRepository;
 
-        public TrackingLogic(IMapper mapper, IParcelRepository repository, ILogger<TrackingLogic> logger)
+        public TrackingLogic(IMapper mapper, IParcelRepository repository, ILogger<TrackingLogic> logger, IWarehouseRepository warehouseRepository)
         {
             _mapper = mapper;
             _parcelRepository = repository;
             _logger = logger;
+            _warehouseRepository = warehouseRepository;
         }
 
         public string ReportDelivery(string trackingId)
@@ -50,6 +52,11 @@ namespace LRLogistik.LRPackage.BusinessLogic
                 _logger.LogError($"TrackingId was invalid!");
                 throw new BusinessLogic.Exceptions.BusinessLogicNotFoundException("ReportDelivery", "Delivery was not reported", e);
             }
+            catch (DataAccess.Entities.Exceptions.DataAccessNotFoundException e)
+            {
+                _logger.LogError($"Unable to change data in database!");
+                throw new BusinessLogicNotFoundException("ReportDelivery", "Delivery was not reported", e);
+            }
         }
 
         public string ReportHop(string trackingId, string code)
@@ -61,6 +68,8 @@ namespace LRLogistik.LRPackage.BusinessLogic
 
                 var result_t = trackingIdValidator.Validate(trackingId);
                 var result_c = trackingCodeValidator.Validate(code);
+            
+
 
                 if(!result_t.IsValid) 
                 {
@@ -70,12 +79,22 @@ namespace LRLogistik.LRPackage.BusinessLogic
                 {
                     throw new BusinessLogicValidationException("ValidateTrackingCode", "Tracking Code was invalid");
                 }
+
+                //Aufruf an die österreichische Bevölkerung:
+                //GEHEN SIE WÄHLEN!
+                _parcelRepository.ReportHop(trackingId, code);
+
                 _logger.LogInformation($"Reporting Hop of TrackingId: {JsonConvert.SerializeObject(trackingId)} and code: {JsonConvert.SerializeObject(code)}");
                 return "Successfully reported hop";
             }
             catch(BusinessLogicValidationException e) 
             {
                 _logger.LogError($"TrackingId or Code was invalid!");
+                throw new BusinessLogicNotFoundException("ReportHop", "Hop was not reported", e);
+            }
+            catch(DataAccess.Entities.Exceptions.DataAccessNotFoundException e)
+            {
+                _logger.LogError($"Unable to change data in database!");
                 throw new BusinessLogicNotFoundException("ReportHop", "Hop was not reported", e);
             }
         }

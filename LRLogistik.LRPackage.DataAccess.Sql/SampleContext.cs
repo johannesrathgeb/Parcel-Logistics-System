@@ -91,6 +91,10 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
                 e.Property(h => h.LocationCoordinates).HasColumnType("geometry");
             });
 
+            modelBuilder.Entity<HopArrival>(e =>
+            {
+                e.Property(x => x.HopArrivalId).ValueGeneratedOnAdd();
+            });
 
             modelBuilder.Entity<Transferwarehouse>()
                 .Property(t => t.Region).HasColumnType("geometry");
