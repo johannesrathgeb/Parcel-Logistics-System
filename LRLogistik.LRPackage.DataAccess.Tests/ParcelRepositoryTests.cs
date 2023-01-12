@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NetTopologySuite.Geometries;
+using System.Data.Entity;
 
 namespace LRLogistik.LRPackage.DataAccess.Tests
 {
@@ -82,8 +83,8 @@ namespace LRLogistik.LRPackage.DataAccess.Tests
         public void Cleanup()
         {
             //TODO DB
-            //_mockedDbContext.Database.EnsureDeleted();
-            //_mockedDbContext.Dispose();
+            _mockedDbContext.Database.EnsureDeleted();
+            _mockedDbContext.Dispose();
         }
 
         [Test]

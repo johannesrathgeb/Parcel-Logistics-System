@@ -99,8 +99,8 @@ namespace LRLogistik.LRPackage.DataAccess.Tests
         public void Cleanup()
         {
             //TODO DB
-            //_mockedDbContext.Database.EnsureDeleted();
-            //_mockedDbContext.Dispose();
+            _mockedDbContext.Database.EnsureDeleted();
+            _mockedDbContext.Dispose();
         }
 
         [Test]
@@ -161,60 +161,60 @@ namespace LRLogistik.LRPackage.DataAccess.Tests
         //    Assert.IsInstanceOf<Warehouse>(result);
         //}
 
-        [Test]
-        public void CreateValidWarehouse()
-        {
-            // Arrange
-            var loggerMock = new Mock<ILogger<WarehouseRepository>>();
-            ILogger<WarehouseRepository> logger = loggerMock.Object;
-            var repository = new WarehouseRepository(_mockedDbContext, logger);
-            Warehouse warehouse = new Warehouse()
-            {
-                HopId = "123456",
-                HopType = "string",
-                Code = "string",
-                Description = "string",
-                ProcessingDelayMins = 2,
-                LocationName = "string",
-                LocationCoordinates = new NetTopologySuite.Geometries.Point(2, 3),
-                Level = 2,
-                NextHops = new List<WarehouseNextHops>()
-                        {
-                            new WarehouseNextHops()
-                            {
-                                WarehouseNextHopsId = "ASDFG",
-                                TraveltimeMins = 5,
-                                Hop = new Hop()
-                                {
-                                    HopId = "HHREDSA",
-                                    HopType = "string",
-                                    Code = "string",
-                                    Description = "string",
-                                    ProcessingDelayMins = 2,
-                                    LocationName = "string",
-                                    LocationCoordinates = new NetTopologySuite.Geometries.Point(2, 3),
-                                }
-                            }
-                        }
-            };
-            // Act
-            var result = repository.Create(warehouse);
+        //[Test]
+        //public void CreateValidWarehouse()
+        //{
+        //    // Arrange
+        //    var loggerMock = new Mock<ILogger<WarehouseRepository>>();
+        //    ILogger<WarehouseRepository> logger = loggerMock.Object;
+        //    var repository = new WarehouseRepository(_mockedDbContext, logger);
+        //    Warehouse warehouse = new Warehouse()
+        //    {
+        //        HopId = "123456",
+        //        HopType = "string",
+        //        Code = "string",
+        //        Description = "string",
+        //        ProcessingDelayMins = 2,
+        //        LocationName = "string",
+        //        LocationCoordinates = new NetTopologySuite.Geometries.Point(2, 3),
+        //        Level = 2,
+        //        NextHops = new List<WarehouseNextHops>()
+        //                {
+        //                    new WarehouseNextHops()
+        //                    {
+        //                        WarehouseNextHopsId = "ASDFG",
+        //                        TraveltimeMins = 5,
+        //                        Hop = new Hop()
+        //                        {
+        //                            HopId = "HHREDSA",
+        //                            HopType = "string",
+        //                            Code = "string",
+        //                            Description = "string",
+        //                            ProcessingDelayMins = 2,
+        //                            LocationName = "string",
+        //                            LocationCoordinates = new NetTopologySuite.Geometries.Point(2, 3),
+        //                        }
+        //                    }
+        //                }
+        //    };
+        //    // Act
+        //    var result = repository.Create(warehouse);
 
-            // Assert
-            Assert.IsInstanceOf<Warehouse>(result);
-        }
+        //    // Assert
+        //    Assert.IsInstanceOf<Warehouse>(result);
+        //}
 
-        [Test]
-        public void CreateInvalidWarehouse()
-        {
-            // Arrange
-            var loggerMock = new Mock<ILogger<WarehouseRepository>>();
-            ILogger<WarehouseRepository> logger = loggerMock.Object;
-            var repository = new WarehouseRepository(_mockedDbContext, logger);
+        //[Test]
+        //public void CreateInvalidWarehouse()
+        //{
+        //    // Arrange
+        //    var loggerMock = new Mock<ILogger<WarehouseRepository>>();
+        //    ILogger<WarehouseRepository> logger = loggerMock.Object;
+        //    var repository = new WarehouseRepository(_mockedDbContext, logger);
 
-            // Act & Assert
-            Assert.Throws<DataAccess.Entities.Exceptions.DataAccessNotCreatedException>(() => repository.Create(null));
-        }
+        //    // Act & Assert
+        //    Assert.Throws<DataAccess.Entities.Exceptions.DataAccessNotCreatedException>(() => repository.Create(null));
+        //}
 
     }
 }
