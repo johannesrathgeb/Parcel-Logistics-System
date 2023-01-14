@@ -5,6 +5,7 @@ using LRLogistik.LRPackage.BusinessLogic.Interfaces;
 using LRLogistik.LRPackage.BusinessLogic.Validators;
 using LRLogistik.LRPackage.DataAccess.Interfaces;
 using LRLogistik.LRPackage.DataAccess.Sql;
+using LRLogistik.LRPackage.ServiceAgents.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -22,13 +23,15 @@ namespace LRLogistik.LRPackage.BusinessLogic
         private readonly ILogger _logger;
         IParcelRepository _parcelRepository;
         IWarehouseRepository _warehouseRepository;
+        IWebhookManager _webhookManager;
 
-        public TrackingLogic(IMapper mapper, IParcelRepository repository, ILogger<TrackingLogic> logger, IWarehouseRepository warehouseRepository)
+        public TrackingLogic(IMapper mapper, IParcelRepository repository, ILogger<TrackingLogic> logger, IWarehouseRepository warehouseRepository, IWebhookManager webhookManager)
         {
             _mapper = mapper;
             _parcelRepository = repository;
             _logger = logger;
             _warehouseRepository = warehouseRepository;
+            _webhookManager = webhookManager;
         }
 
         public string ReportDelivery(string trackingId)
@@ -45,6 +48,8 @@ namespace LRLogistik.LRPackage.BusinessLogic
 
                 _parcelRepository.UpdateDeliveryState(trackingId); 
                 
+                //TODO DELETE WEBHOOKS
+
                 return "Successfully reported delivery";
             }
             catch(BusinessLogicValidationException e)
@@ -69,8 +74,6 @@ namespace LRLogistik.LRPackage.BusinessLogic
                 var result_t = trackingIdValidator.Validate(trackingId);
                 var result_c = trackingCodeValidator.Validate(code);
             
-
-
                 if(!result_t.IsValid) 
                 {
                     throw new BusinessLogicValidationException("ValidateTrackingId", "Tracking ID was invalid");
@@ -83,6 +86,8 @@ namespace LRLogistik.LRPackage.BusinessLogic
                 //Aufruf an die österreichische Bevölkerung:
                 //GEHEN SIE WÄHLEN!
                 _parcelRepository.ReportHop(trackingId, code);
+
+                _webhookManager.NotifySubscribers(trackingId);
 
                 _logger.LogInformation($"Reporting Hop of TrackingId: {JsonConvert.SerializeObject(trackingId)} and code: {JsonConvert.SerializeObject(code)}");
                 return "Successfully reported hop";
@@ -115,6 +120,7 @@ namespace LRLogistik.LRPackage.BusinessLogic
                 _logger.LogInformation($"Tracking Package with TrackingId: {JsonConvert.SerializeObject(trackingId)}");
                 var parcel = _mapper.Map<BusinessLogic.Entities.Parcel>(_parcelRepository.GetByTrackingId(trackingId));
                 _logger.LogInformation($"Found Parcel to track: {JsonConvert.SerializeObject(parcel)}");
+
                 return parcel;
             }
             catch(BusinessLogicValidationException e)

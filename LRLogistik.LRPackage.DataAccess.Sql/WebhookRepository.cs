@@ -1,5 +1,6 @@
 ﻿using LRLogistik.LRPackage.DataAccess.Entities;
 using LRLogistik.LRPackage.DataAccess.Interfaces;
+using LRLogistik.LRPackage.ServiceAgents.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
     public class WebhookRepository : IWebhookRepository
     {
         SampleContext _dbContext;
+      
 
         public WebhookRepository(SampleContext dbContext)
         {

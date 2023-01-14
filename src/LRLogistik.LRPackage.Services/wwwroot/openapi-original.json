@@ -650,7 +650,8 @@
             "type" : "number"
           },
           "lon" : {
-            "description" : "Longitude of the coordinate.",
+            "description": "
+              itude of the coordinate.",
             "format" : "double",
             "type" : "number"
           }

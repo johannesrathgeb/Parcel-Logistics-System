@@ -48,7 +48,6 @@ namespace LRLogistik.LRPackage.Services.DTOs
         [DataMember(Name = "futureHops", EmitDefaultValue = false)]
         public List<HopArrival> FutureHops { get; set; }
 
-        [RegularExpression("^[A-Z0-9]{9}$")]
         [DataMember(Name = "trackingId", EmitDefaultValue = false)]
         public string TrackingId { get; set; }
 

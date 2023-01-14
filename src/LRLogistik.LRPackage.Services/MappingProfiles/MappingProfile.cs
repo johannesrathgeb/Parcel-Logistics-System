@@ -38,6 +38,14 @@ namespace LRLogistik.LRPackage.Services.MappingProfiles
 
             CreateMap<DTOs.Transferwarehouse, BusinessLogic.Entities.Transferwarehouse>().ReverseMap();
 
+            CreateMap<DTOs.WebhookMessage, BusinessLogic.Entities.WebhookMessage>().ReverseMap();
+            CreateMap<DataAccess.Entities.WebhookMessage, BusinessLogic.Entities.WebhookMessage>().ReverseMap();
+
+            CreateMap<DataAccess.Entities.WebhookResponse, BusinessLogic.Entities.WebhookResponse>().ReverseMap();
+            CreateMap<DTOs.WebhookResponse, BusinessLogic.Entities.WebhookResponse>().ReverseMap();
+
+            CreateMap<BusinessLogic.Entities.Parcel, Services.DTOs.WebhookMessage>().ReverseMap();
+
             CreateMap<DTOs.Truck, BusinessLogic.Entities.Truck>()
                 .IncludeBase<DTOs.Hop, BusinessLogic.Entities.Hop>()
                 .ReverseMap();

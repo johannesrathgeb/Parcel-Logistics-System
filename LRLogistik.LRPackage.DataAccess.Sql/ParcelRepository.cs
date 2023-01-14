@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LRLogistik.LRPackage.DataAccess.Entities.Exceptions;
+using LRLogistik.LRPackage.ServiceAgents.Interfaces;
 
 namespace LRLogistik.LRPackage.DataAccess.Sql
 {
@@ -130,6 +131,7 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
                 _dbContext.Parcels.Add(parcel);
                 _dbContext.SaveChanges();
                 _logger.LogInformation($"Parcel successfully created: {JsonConvert.SerializeObject(parcel)}");
+
                 return new Entities.Parcel { TrackingId = parcel.TrackingId };
             }
             catch(ArgumentNullException e)

@@ -45,7 +45,7 @@ namespace LRLogistik.LRPackage.ServiceAgents
 
             var parcel = _parcelRepository.GetByTrackingId(trackingId);
 
-            WebhookMessage? webhookMessage;
+            WebhookMessage webhookMessage;
 
             try
             {

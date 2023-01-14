@@ -8,5 +8,6 @@ namespace LRLogistik.LRPackage.ServiceAgents.Interfaces
 {
     public interface IWebhookManager
     {
+        Task NotifySubscribers(string trackingid); 
     }
 }

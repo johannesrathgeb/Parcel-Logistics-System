@@ -70,11 +70,15 @@ namespace LRLogistik.LRPackage.Services
             services.AddTransient<ISubmissionLogic, SubmissionLogic>();
             services.AddTransient<ITrackingLogic, TrackingLogic>();
             services.AddTransient<ITransferLogic, TransferLogic>();
-            services.AddTransient<IGeoEncodingAgent, BingEncodingAgent>(); 
+            services.AddTransient<IGeoEncodingAgent, BingEncodingAgent>();
+            services.AddTransient<IParcelWebhookLogic, ParcelWebhookLogic> ();
+            services.AddTransient<IWebhookRepository, WebhookRepository> ();
 
             //Interfaces DAL
             services.AddTransient<IParcelRepository, ParcelRepository>();
             services.AddTransient <IWarehouseRepository, WarehouseRepository>();
+            services.AddTransient <IWebhookManager, WebhookManager>();
+
 
             // AutoMapper
             var config = new MapperConfiguration(cfg => {
