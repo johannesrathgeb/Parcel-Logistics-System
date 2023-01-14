@@ -51,24 +51,15 @@ namespace LRLogistik.LRPackage.Services.Controllers
             try
             {
                 webhooksBL = _parcelWebhookLogic.ListParcelWebhooks(trackingId);
+                var webhooks = _mapper.Map<List<WebhookResponse>>(webhooksBL);
+                _logger.LogInformation($"Got List of Webhooks for Parcel with TrackingID: {trackingId}");
+                return StatusCode(200, webhooks);
             }
-            catch (BusinessLogicException e)
+            catch (BusinessLogicNotFoundException e)
             {
-                var mostInnerException = e.GetBaseException();
-                if (mostInnerException is DataAccess.Entities.Exceptions.DataAccessNotFoundException)
-                {
-                    return StatusCode(404, new Error { ErrorMessage = mostInnerException.Message });
-                }
-                return StatusCode(400, new Error { ErrorMessage = mostInnerException.Message });
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, new Error { ErrorMessage = e.Message });
-            }
-
-            var webhooks = _mapper.Map<List<WebhookResponse>>(webhooksBL);
-
-            return StatusCode(200, webhooks);
+                _logger.LogError($"Webhooks for Parcel with TrackingID {trackingId} not found.");
+                return BadRequest(new Error { ErrorMessage = e.Message });
+            }           
         }
 
         /// <summary>
@@ -92,26 +83,20 @@ namespace LRLogistik.LRPackage.Services.Controllers
             try
             {
                 webhookResponseBL = _parcelWebhookLogic.SubscribeParcelWebhook(trackingId, url);
+                var webhookResponse = _mapper.Map<WebhookResponse>(webhookResponseBL);
+                _logger.LogInformation($"Subscribed to Parcel with TrackingID: {trackingId}");
+                return StatusCode(200, webhookResponse);
             }
-            catch (BusinessLogicException e)
+            catch (BusinessLogicNotFoundException e)
             {
-                throw; 
-                //var mostInnerException = e.GetBaseException();
-                //if (mostInnerException is DataAccess.Entities.Exceptions.DataAccessNotFoundException)
-                //{
-                //    return StatusCode(404, new Error { ErrorMessage = mostInnerException.Message });
-                //}
-                //return StatusCode(400, new Error { ErrorMessage = mostInnerException.Message });
+                _logger.LogError($"No Parcel with TrackingID {trackingId} found.");
+                return BadRequest(new Error { ErrorMessage = e.Message });
             }
-            catch (Exception e)
+            catch (BusinessLogicNotCreatedException e)
             {
-                throw; 
-                //return StatusCode(500, new Error { ErrorMessage = e.Message });
+                _logger.LogError($"Webhooks for Parcel with TrackingID {trackingId} couldn't be created.");
+                return BadRequest(new Error { ErrorMessage = e.Message });
             }
-
-            var webhookResponse = _mapper.Map<WebhookResponse>(webhookResponseBL);
-
-            return StatusCode(200, webhookResponse);
         }
 
         /// <summary>
@@ -128,35 +113,17 @@ namespace LRLogistik.LRPackage.Services.Controllers
         [SwaggerResponse(statusCode: 400, type: typeof(Error), description: "The operation failed due to an error.")]
         public virtual IActionResult UnsubscribeParcelWebhook([FromRoute(Name = "id")][Required] int id)
         {
-
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200);
-            //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(400, default(Error));
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404);
-
             try
             {
                 _parcelWebhookLogic.UnsubscribeParcelWebhook(id);
+                _logger.LogInformation($"Unsubscribed from Parcel with Webhook with ID: {id}");
+                return StatusCode(200);
             }
-            catch (BusinessLogicException e)
+            catch (BusinessLogicNotFoundException e)
             {
-                throw; 
-                //var mostInnerException = e.GetBaseException();
-                //if (mostInnerException is DataAccess.Entities.Exceptions.DataAccessNotFoundException)
-                //{
-                //    return StatusCode(404, new Error { ErrorMessage = mostInnerException.Message });
-                //}
-                //return StatusCode(400, new Error { ErrorMessage = mostInnerException.Message });
+                _logger.LogError($"Couldn't unsubscribe from Parcel with Webhook with ID: {id}.");
+                return BadRequest(new Error { ErrorMessage = e.Message });
             }
-            catch (Exception e)
-            {
-                throw; 
-                //return StatusCode(500, new Error { ErrorMessage = e.Message });
-            }
-
-            return StatusCode(200);
         }
     }
 }
