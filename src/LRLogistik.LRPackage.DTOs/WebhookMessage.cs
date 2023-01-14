@@ -10,9 +10,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Text.Json.Serialization;
+using System.Diagnostics.CodeAnalysis;
 
 namespace LRLogistik.LRPackage.Services.DTOs
 {
+    [ExcludeFromCodeCoverage]
     [DataContract]
     public partial class WebhookMessage
     {
