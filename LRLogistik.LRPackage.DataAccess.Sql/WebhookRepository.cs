@@ -1,11 +1,8 @@
 ﻿using LRLogistik.LRPackage.DataAccess.Entities;
 using LRLogistik.LRPackage.DataAccess.Interfaces;
-<<<<<<< HEAD
 using LRLogistik.LRPackage.ServiceAgents.Interfaces;
-=======
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
->>>>>>> 4a87eb6eecc1091f91eb6507e76a06672706787a
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +14,7 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
     public class WebhookRepository : IWebhookRepository
     {
         SampleContext _dbContext;
-<<<<<<< HEAD
-      
-=======
         ILogger _logger;
->>>>>>> 4a87eb6eecc1091f91eb6507e76a06672706787a
 
         public WebhookRepository(SampleContext dbContext, ILogger logger)
         {
