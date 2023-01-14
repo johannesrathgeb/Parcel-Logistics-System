@@ -51,7 +51,7 @@ namespace LRLogistik.LRPackage.ServiceAgents
             {
                 webhookMessage = _mapper.Map<WebhookMessage>(_mapper.Map<BusinessLogic.Entities.Parcel>(parcel));
             }
-            catch(Exception ex)
+            catch(Exception e)
             {
                 throw;
             }
