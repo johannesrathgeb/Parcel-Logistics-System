@@ -31,13 +31,13 @@ namespace LRLogistik.LRPackage.ServiceAgents
             _mapper = mapper;
         }
 
-        public WebhookManager(HttpClient httpClient, IParcelRepository parcelRepository, IWebhookRepository webhookRepository, IMapper mapper)
-        {
-            _httpClient = httpClient;
-            _parcelRepository = parcelRepository;
-            _webhookRepository = webhookRepository;
-            _mapper = mapper;
-        }
+        //public WebhookManager(HttpClient httpClient, IParcelRepository parcelRepository, IWebhookRepository webhookRepository, IMapper mapper)
+        //{
+        //    _httpClient = httpClient;
+        //    _parcelRepository = parcelRepository;
+        //    _webhookRepository = webhookRepository;
+        //    _mapper = mapper;
+        //}
 
         public async Task NotifySubscribers(string trackingId)
         {
