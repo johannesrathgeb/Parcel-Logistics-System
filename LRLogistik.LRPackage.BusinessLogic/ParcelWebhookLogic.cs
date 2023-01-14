@@ -30,12 +30,13 @@ namespace LRLogistik.LRPackage.BusinessLogic
             try
             {
                 var webhooksDA = _repo.GetWebhooksForParcel(trackingId);
+                _logger.LogInformation($"Recieved List of all Webhooks for Parcel with TrackingID: {trackingId}");
                 return _mapper.Map<List<WebhookResponse>>(webhooksDA);
             }
-            catch (DataAccess.Entities.Exceptions.DataAccessException ex)
+            catch (DataAccess.Entities.Exceptions.DataAccessNotFoundException e)
             {
-                throw; 
-                //throw new BusinessLogicException($"Error listing Webhooks for Parcel with TrackingID [{trackingId}]", ex);
+                _logger.LogError($"No Webhooks found for Parcel with ID {trackingId}");
+                throw new BusinessLogic.Exceptions.BusinessLogicNotFoundException("ListParcelWebhooks",$"No Webhooks found for Parcel with TrackingID: {trackingId}", e);
             }
         }
 
@@ -43,14 +44,20 @@ namespace LRLogistik.LRPackage.BusinessLogic
         {
             try
             {
-                var p = _parcelRepo.GetByTrackingId(trackingid); 
+                _parcelRepo.GetByTrackingId(trackingid); 
                 var webhookResponse = new WebhookResponse() { TrackingId = trackingid, CreatedAt = DateTime.Now, Url = url };
+                _logger.LogInformation($"{url} trying to subscribe to Parcel with TrackingID: {trackingid}");
                 return _mapper.Map<WebhookResponse>(_repo.CreateWebhook(_mapper.Map<DataAccess.Entities.WebhookResponse>(webhookResponse)));
             }
-            catch (DataAccess.Entities.Exceptions.DataAccessException ex)
+            catch (DataAccess.Entities.Exceptions.DataAccessNotCreatedException e)
             {
-                throw; 
-                //throw new BusinessLogicException($"Error subscribing to a Webhook", ex);
+                _logger.LogError($"Webhook not created for Parcel with Id: {trackingid}");
+                throw new BusinessLogic.Exceptions.BusinessLogicNotCreatedException("SubscribeParcelWebhook", $"Webhook not created for Parcel with Id: {trackingid}", e);
+            }
+            catch(DataAccess.Entities.Exceptions.DataAccessNotFoundException e)
+            {
+                _logger.LogError($"Couldn't find Parcel with Id: {trackingid}");
+                throw new BusinessLogic.Exceptions.BusinessLogicNotFoundException("SubscribeParcelWebhook", $"Couldn't find Parcel with Id: {trackingid}", e);
             }
         }
 
@@ -59,11 +66,12 @@ namespace LRLogistik.LRPackage.BusinessLogic
             try
             {
                 _repo.DeleteWebhook(id);
+                _logger.LogInformation($"Webhook with id: {id} deleted");
             }
-            catch (DataAccess.Entities.Exceptions.DataAccessException ex)
+            catch (DataAccess.Entities.Exceptions.DataAccessNotFoundException e)
             {
-                throw; 
-                //throw new BusinessLogicException($"Error deleting a Webhook", ex);
+                _logger.LogError($"Couldn't delete Webhook with Id: {id}");
+                throw new BusinessLogic.Exceptions.BusinessLogicNotFoundException("UnsubscribeParcelWebhook", $"Couldn't delete Webhook with Id: {id}", e);
             }
         }
     }

@@ -201,7 +201,7 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
                 HttpClient client = new HttpClient();
                 Parcel parcel = GetByTrackingId(trackingId);
                 Hop hop = _warehouseRepository.GetByHopCode(code);
-                _logger.LogInformation($"Parcel and Hop found: {JsonConvert.SerializeObject(parcel)}, {JsonConvert.SerializeObject(hop)}");
+                _logger.LogInformation($"Parcel with id {parcel.ParcelId} and Hop with id {hop.HopId} found.");
                 var hopArrival = new HopArrival()
                 {
                     //HopArrivalId = hop.HopId,
