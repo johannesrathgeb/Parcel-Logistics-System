@@ -33,7 +33,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LRLogistik.LRPackage.Servic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LRLogistik.LRPackage.ServiceAgents.Tests", "LRLogistik.LRPackage.ServiceAgents.Tests\LRLogistik.LRPackage.ServiceAgents.Tests.csproj", "{F98D4BDE-B174-42B4-BE3D-C749CCE117D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LRLogistik.LRPackage.IntegrationTests", "LRLogistik.LRPackage.IntegrationTests\LRLogistik.LRPackage.IntegrationTests.csproj", "{4DE493BB-F401-4E9E-A856-4AC49E15DC1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LRLogistik.LRPackage.IntegrationTests", "LRLogistik.LRPackage.IntegrationTests\LRLogistik.LRPackage.IntegrationTests.csproj", "{4DE493BB-F401-4E9E-A856-4AC49E15DC1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -101,6 +101,10 @@ Global
 		{F98D4BDE-B174-42B4-BE3D-C749CCE117D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F98D4BDE-B174-42B4-BE3D-C749CCE117D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F98D4BDE-B174-42B4-BE3D-C749CCE117D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DE493BB-F401-4E9E-A856-4AC49E15DC1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DE493BB-F401-4E9E-A856-4AC49E15DC1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DE493BB-F401-4E9E-A856-4AC49E15DC1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DE493BB-F401-4E9E-A856-4AC49E15DC1A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
