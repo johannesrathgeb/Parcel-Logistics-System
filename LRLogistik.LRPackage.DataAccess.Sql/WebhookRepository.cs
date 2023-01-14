@@ -14,9 +14,9 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
     public class WebhookRepository : IWebhookRepository
     {
         SampleContext _dbContext;
-        ILogger _logger;
+        private readonly ILogger _logger;
 
-        public WebhookRepository(SampleContext dbContext, ILogger logger)
+        public WebhookRepository(SampleContext dbContext, ILogger<WebhookRepository> logger)
         {
             _dbContext = dbContext;
             _logger = logger;
