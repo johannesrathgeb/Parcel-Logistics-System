@@ -34,6 +34,7 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
             _dbContext.Database.ExecuteSqlRaw("drop table Parcels");
             _dbContext.Database.ExecuteSqlRaw("drop table Recipient");
             _dbContext.Database.ExecuteSqlRaw("drop table Hops");
+            _dbContext.Database.ExecuteSqlRaw("drop table WebhookResponse");
 
             _dbContext.Database.EnsureCreated();
             try
