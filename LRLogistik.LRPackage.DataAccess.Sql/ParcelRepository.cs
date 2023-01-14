@@ -127,6 +127,19 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
                     .SingleOrDefault(w => w.Region.Contains(recipientPoint));
 
                 parcel.FutureHops = Routing(senderTruck, receiverTruck);
+                
+                parcel.FutureHops.Insert(0, new HopArrival()
+                {
+                    Code = senderTruck.Code,
+                    Description = senderTruck.Description,
+                    DateTime = DateTime.Now
+                });
+                parcel.FutureHops.Add(new HopArrival()
+                {
+                    Code = receiverTruck.Code,
+                    Description = receiverTruck.Description,
+                    DateTime = DateTime.Now
+                });
 
                 _dbContext.Parcels.Add(parcel);
                 _dbContext.SaveChanges();
