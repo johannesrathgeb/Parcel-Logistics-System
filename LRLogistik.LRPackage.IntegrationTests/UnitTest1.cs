@@ -10,7 +10,7 @@ namespace LRLogistik.LRPackage.IntegrationTests
         public class UnitTest1
         {
             private readonly HttpClient _httpClient = new();
-            private readonly string _url = "https://parceltracker-dev.azurewebsites.net";
+            private readonly string _url = "https://lrlogistik.azurewebsites.net";
 
             public async Task<HttpResponseMessage> WarehouseManagementApi_POST_warehouse()
             {
@@ -28,20 +28,22 @@ namespace LRLogistik.LRPackage.IntegrationTests
                   ""recipient"": {
                     ""name"": ""Johannes"",
                     ""street"": ""Hochstädtplatz 6"",
-                    ""postalCode"": ""1200"",
+                    ""postalCode"": ""A-1200"",
                     ""city"": ""Wien"",
                     ""country"": ""Austria""
                   },
                   ""sender"": {
                     ""name"": ""Florian"",
                     ""street"": ""Kinskygasse 15"",
-                    ""postalCode"": ""1230"",
+                    ""postalCode"": ""A-1230"",
                     ""city"": ""Wien"",
                     ""country"": ""Austria""
                   }
                 }", System.Text.Encoding.UTF8, "application/json"));
                 System.Console.WriteLine($"Content: {await response.Content.ReadAsStringAsync()}");
                 System.Console.WriteLine($"StatusCode: {response.StatusCode}");
+
+                //TODO
                 Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
                 return response;
             }
@@ -106,6 +108,8 @@ namespace LRLogistik.LRPackage.IntegrationTests
                 Assert.NotNull(response);
                 var trackedParcel = JsonConvert.DeserializeObject<TrackingInformation>(await response.Content.ReadAsStringAsync());
                 Assert.NotNull(trackedParcel);
+
+                //TODO
                 Assert.AreEqual(3, trackedParcel.FutureHops.Count);
                 Assert.AreEqual(firstHopCode, trackedParcel.FutureHops[0].Code);
 
@@ -123,6 +127,8 @@ namespace LRLogistik.LRPackage.IntegrationTests
                 Assert.NotNull(response);
                 trackedParcel = JsonConvert.DeserializeObject<TrackingInformation>(await response.Content.ReadAsStringAsync());
                 Assert.NotNull(trackedParcel);
+
+                //TODO
                 Assert.AreEqual(2, trackedParcel.FutureHops.Count);
                 Assert.AreEqual(1, trackedParcel.VisitedHops.Count);
                 Assert.AreEqual(firstHopCode, trackedParcel.VisitedHops[0].Code);
@@ -134,6 +140,8 @@ namespace LRLogistik.LRPackage.IntegrationTests
                 Assert.NotNull(response);
                 trackedParcel = JsonConvert.DeserializeObject<TrackingInformation>(await response.Content.ReadAsStringAsync());
                 Assert.NotNull(trackedParcel);
+
+                //TODO
                 Assert.AreEqual(1, trackedParcel.FutureHops.Count);
                 Assert.AreEqual(2, trackedParcel.VisitedHops.Count);
                 Assert.AreEqual(TrackingInformation.StateEnum.InTransportEnum, trackedParcel.State);
@@ -144,6 +152,8 @@ namespace LRLogistik.LRPackage.IntegrationTests
                 Assert.NotNull(response);
                 trackedParcel = JsonConvert.DeserializeObject<TrackingInformation>(await response.Content.ReadAsStringAsync());
                 Assert.NotNull(trackedParcel);
+
+                //TODO
                 Assert.AreEqual(0, trackedParcel.FutureHops.Count);
                 Assert.AreEqual(3, trackedParcel.VisitedHops.Count);
                 Assert.AreEqual(TrackingInformation.StateEnum.InTruckDeliveryEnum, trackedParcel.State);
@@ -154,6 +164,8 @@ namespace LRLogistik.LRPackage.IntegrationTests
                 Assert.NotNull(response);
                 trackedParcel = JsonConvert.DeserializeObject<TrackingInformation>(await response.Content.ReadAsStringAsync());
                 Assert.NotNull(trackedParcel);
+
+                //TODO
                 Assert.AreEqual(0, trackedParcel.FutureHops.Count);
                 Assert.AreEqual(3, trackedParcel.VisitedHops.Count);
                 Assert.AreEqual(TrackingInformation.StateEnum.DeliveredEnum, trackedParcel.State);
