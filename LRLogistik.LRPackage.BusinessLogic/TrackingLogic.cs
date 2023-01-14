@@ -23,14 +23,16 @@ namespace LRLogistik.LRPackage.BusinessLogic
         private readonly ILogger _logger;
         IParcelRepository _parcelRepository;
         IWarehouseRepository _warehouseRepository;
+        IWebhookRepository _webhookRepository;
         IWebhookManager _webhookManager;
 
-        public TrackingLogic(IMapper mapper, IParcelRepository repository, ILogger<TrackingLogic> logger, IWarehouseRepository warehouseRepository, IWebhookManager webhookManager)
+        public TrackingLogic(IMapper mapper, IParcelRepository repository, ILogger<TrackingLogic> logger, IWarehouseRepository warehouseRepository,IWebhookRepository webhookRepository, IWebhookManager webhookManager)
         {
             _mapper = mapper;
             _parcelRepository = repository;
             _logger = logger;
             _warehouseRepository = warehouseRepository;
+            _webhookRepository = webhookRepository; 
             _webhookManager = webhookManager;
         }
 
@@ -48,7 +50,11 @@ namespace LRLogistik.LRPackage.BusinessLogic
 
                 _parcelRepository.UpdateDeliveryState(trackingId); 
                 
-                //TODO DELETE WEBHOOKS
+                var allWebhooks = _webhookRepository.GetWebhooksForParcel(trackingId);
+                foreach (var webhook in allWebhooks)
+                {
+                    _webhookRepository.DeleteWebhook(webhook.Id);
+                }
 
                 return "Successfully reported delivery";
             }
