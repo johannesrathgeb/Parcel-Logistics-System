@@ -42,7 +42,15 @@ namespace LRLogistik.LRPackage.BusinessLogic.MappingProfiles
 
             CreateMap<Geometry, string>()
                 .ConvertUsing(new GeoJsonConverter());
-            
+
+
+            CreateMap<Services.DTOs.WebhookMessage, BusinessLogic.Entities.WebhookMessage>().ReverseMap();
+            CreateMap<DataAccess.Entities.WebhookMessage, BusinessLogic.Entities.WebhookMessage>().ReverseMap();
+
+            CreateMap<DataAccess.Entities.WebhookResponse, BusinessLogic.Entities.WebhookResponse>().ReverseMap();
+            CreateMap<Services.DTOs.WebhookResponse, BusinessLogic.Entities.WebhookResponse>().ReverseMap();
+
+            CreateMap<BusinessLogic.Entities.Parcel, Services.DTOs.WebhookMessage>().ReverseMap();
 
             CreateMap<BusinessLogic.Entities.Parcel, DataAccess.Entities.Parcel>().ReverseMap();
             CreateMap<BusinessLogic.Entities.HopArrival, DataAccess.Entities.HopArrival>().ReverseMap();

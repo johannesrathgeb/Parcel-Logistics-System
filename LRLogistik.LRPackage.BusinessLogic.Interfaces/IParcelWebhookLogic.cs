@@ -13,7 +13,7 @@ namespace LRLogistik.LRPackage.BusinessLogic.Interfaces
 
         public WebhookResponse SubscribeParcelWebhook(string trackinId, string url);
 
-        public void UnsubscribeParcelWebhook(int id);
+        public string UnsubscribeParcelWebhook(int id);
 
     }
 }

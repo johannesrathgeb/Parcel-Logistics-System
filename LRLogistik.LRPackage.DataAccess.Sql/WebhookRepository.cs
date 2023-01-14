@@ -62,7 +62,7 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
         {
             try
             {
-                var result = _dbContext.WebhookResponse.SingleOrDefault(wh => wh.Id == id);
+                var result = _dbContext.WebhookResponse.Single(wh => wh.Id == id);
                 _logger.LogInformation($"Found Webhook: {JsonConvert.SerializeObject(result)}");
                 return result;
             }
@@ -76,7 +76,7 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
         {
             try
             {
-                var result = _dbContext.WebhookResponse.Where(wh => wh.trackingId == trackingId).ToList();
+                var result = _dbContext.WebhookResponse.Where(wh => wh.TrackingId == trackingId).ToList();
                 _logger.LogInformation($"Found Webhooks for Parcel with TrackingID: {trackingId}");
                 return result;
             }

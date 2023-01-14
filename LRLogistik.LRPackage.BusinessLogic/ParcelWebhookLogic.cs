@@ -61,12 +61,14 @@ namespace LRLogistik.LRPackage.BusinessLogic
             }
         }
 
-        public void UnsubscribeParcelWebhook(int id)
+        //TESTEN ??
+        public string UnsubscribeParcelWebhook(int id)
         {
             try
             {
                 _repo.DeleteWebhook(id);
                 _logger.LogInformation($"Webhook with id: {id} deleted");
+                return "success"; 
             }
             catch (DataAccess.Entities.Exceptions.DataAccessNotFoundException e)
             {

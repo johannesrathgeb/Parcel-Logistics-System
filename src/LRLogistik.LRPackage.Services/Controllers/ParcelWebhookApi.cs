@@ -115,9 +115,9 @@ namespace LRLogistik.LRPackage.Services.Controllers
         {
             try
             {
-                _parcelWebhookLogic.UnsubscribeParcelWebhook(id);
+                var res = _parcelWebhookLogic.UnsubscribeParcelWebhook(id);
                 _logger.LogInformation($"Unsubscribed from Parcel with Webhook with ID: {id}");
-                return StatusCode(200);
+                return StatusCode(200, res);
             }
             catch (BusinessLogicNotFoundException e)
             {

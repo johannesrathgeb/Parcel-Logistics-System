@@ -32,6 +32,11 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             IParcelRepository parcelRepository = parcelRepositoryMock.Object;
 
             var webhookRepositoryMock = new Mock<IWebhookRepository>();
+
+            webhookRepositoryMock
+                .Setup(m => m.GetWebhooksForParcel(It.IsAny<string>()))
+                .Returns(new List<DataAccess.Entities.WebhookResponse>() { new DataAccess.Entities.WebhookResponse() { Id = 1, TrackingId = "1234", Url = "https://moin" } });
+
             IWebhookRepository webhookRepository = webhookRepositoryMock.Object;
 
             IWebhookManager webhookManager = new WebhookManager(parcelRepository, webhookRepository, mapper); 
@@ -46,7 +51,7 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             IWarehouseRepository warehouseRepository = warehouseRepositoryMock.Object;
 
             //Act
-            var response = new BusinessLogic.TrackingLogic(mapper, parcelRepository, logger, warehouseRepository, webhookManager).ReportDelivery(trackingId);
+            var response = new BusinessLogic.TrackingLogic(mapper, parcelRepository, logger, warehouseRepository, webhookRepository, webhookManager).ReportDelivery(trackingId);
             //Assert
             Assert.AreEqual("Successfully reported delivery", response);
         }
@@ -77,7 +82,7 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             var warehouseRepositoryMock = new Mock<IWarehouseRepository>();
             IWarehouseRepository warehouseRepository = warehouseRepositoryMock.Object;
 
-            var trackingLogic = new BusinessLogic.TrackingLogic(mapper, parcelRepository, logger, warehouseRepository, webhookManager);
+            var trackingLogic = new BusinessLogic.TrackingLogic(mapper, parcelRepository, logger, warehouseRepository, webhookRepository, webhookManager);
 
             //ACT & ASSERT
             Assert.Throws<BusinessLogic.Exceptions.BusinessLogicNotFoundException>(() => trackingLogic.ReportDelivery(trackingId));
@@ -110,7 +115,7 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             IWarehouseRepository warehouseRepository = warehouseRepositoryMock.Object;
 
             //Act
-            var response = new BusinessLogic.TrackingLogic(mapper, parcelRepository, logger, warehouseRepository, webhookManager).ReportHop(trackingId, code);
+            var response = new BusinessLogic.TrackingLogic(mapper, parcelRepository, logger, warehouseRepository, webhookRepository, webhookManager).ReportHop(trackingId, code);
             //Test
             Assert.AreEqual("Successfully reported hop", response);
         }
@@ -141,7 +146,7 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             var warehouseRepositoryMock = new Mock<IWarehouseRepository>();
             IWarehouseRepository warehouseRepository = warehouseRepositoryMock.Object;
 
-            var trackingLogic = new BusinessLogic.TrackingLogic(mapper, parcelRepository, logger, warehouseRepository, webhookManager);
+            var trackingLogic = new BusinessLogic.TrackingLogic(mapper, parcelRepository, logger, warehouseRepository, webhookRepository, webhookManager);
 
             //ACT & ASSERT
             Assert.Throws<BusinessLogic.Exceptions.BusinessLogicNotFoundException>(() => trackingLogic.ReportHop(trackingId, code));
@@ -212,7 +217,7 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             var warehouseRepositoryMock = new Mock<IWarehouseRepository>();
             IWarehouseRepository warehouseRepository = warehouseRepositoryMock.Object;
 
-            TrackingLogic trackingLogic= new TrackingLogic(mapper, parcelRepository, logger, warehouseRepository, webhookManager);
+            TrackingLogic trackingLogic= new TrackingLogic(mapper, parcelRepository, logger, warehouseRepository, webhookRepository, webhookManager);
 
             //ACT & ASSERT
 
@@ -253,7 +258,7 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             var warehouseRepositoryMock = new Mock<IWarehouseRepository>();
             IWarehouseRepository warehouseRepository = warehouseRepositoryMock.Object;
 
-            TrackingLogic trackingLogic = new TrackingLogic(mapper, parcelRepository, logger, warehouseRepository, webhookManager);
+            TrackingLogic trackingLogic = new TrackingLogic(mapper, parcelRepository, logger, warehouseRepository, webhookRepository, webhookManager);
 
             //ACT & ASSERT
             Assert.Throws<BusinessLogic.Exceptions.BusinessLogicNotFoundException>(() => trackingLogic.TrackPackage(trackingId));
