@@ -27,6 +27,8 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
         
         public virtual DbSet<DataAccess.Entities.Hop> Hops { get; set; }
 
+        public virtual DbSet<WebhookResponse> WebhookResponse { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -108,6 +110,12 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
                 e.Property(w => w.WarehouseNextHopsId).ValueGeneratedOnAdd();
                 e.Property(w => w.TraveltimeMins).IsRequired();
                 e.HasOne<Hop>(w => w.Hop);
+            });
+
+            modelBuilder.Entity<WebhookResponse>(e =>
+            {
+                e.HasKey(webhook => webhook.Id);
+                e.Property(webhook => webhook.Id).ValueGeneratedOnAdd();
             });
         }
     }
