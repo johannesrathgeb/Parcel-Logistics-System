@@ -191,24 +191,24 @@ namespace LRLogistik.LRPackage.DataAccess.Tests
         //    Assert.AreEqual("123", result.TrackingId);
         //}
 
-        [Test]
-        public void UpdateWebhook_Invalid()
-        {
-            // Arrange
-            var loggerMock = new Mock<ILogger<WebhookRepository>>();
-            ILogger<WebhookRepository> logger = loggerMock.Object;
+        //[Test]
+        //public void UpdateWebhook_Invalid()
+        //{
+        //    // Arrange
+        //    var loggerMock = new Mock<ILogger<WebhookRepository>>();
+        //    ILogger<WebhookRepository> logger = loggerMock.Object;
 
-            var repository = new WebhookRepository(_mockedDbContext, logger);
+        //    var repository = new WebhookRepository(_mockedDbContext, logger);
 
-            WebhookResponse webhookResponse1 = new WebhookResponse()
-            {
-                Id = 7,
-                TrackingId = "123",
-                Url = "http://1"
-            };
+        //    WebhookResponse webhookResponse1 = new WebhookResponse()
+        //    {
+        //        Id = 7,
+        //        TrackingId = "123",
+        //        Url = "http://1"
+        //    };
 
-            //ACT & ASSERT
-            Assert.Throws<Entities.Exceptions.DataAccessNotFoundException>(() => repository.UpdateWebhook(webhookResponse1));
-        }
+        //    //ACT & ASSERT
+        //    Assert.Throws<Entities.Exceptions.DataAccessNotFoundException>(() => repository.UpdateWebhook(webhookResponse1));
+        //}
     }
 }

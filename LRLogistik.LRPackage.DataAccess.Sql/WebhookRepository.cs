@@ -87,21 +87,5 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
             }
         }
 
-        public WebhookResponse UpdateWebhook(WebhookResponse webhookResponse)
-        {
-            try
-            {
-                var result = GetWebhook(webhookResponse.Id);
-                _dbContext.Update(webhookResponse);
-                _dbContext.SaveChanges();
-                _logger.LogInformation($"Webhook successfully updated: {JsonConvert.SerializeObject(webhookResponse)}");
-                return result;
-            }
-            catch(InvalidOperationException e)
-            {
-                _logger.LogError($"Updating Webhook was unsuccesful!");
-                throw new Entities.Exceptions.DataAccessNotFoundException("UpdateWebhook", "Webhook with Id " + webhookResponse.Id + " not updated", e);
-            }
-        }
     } 
 }

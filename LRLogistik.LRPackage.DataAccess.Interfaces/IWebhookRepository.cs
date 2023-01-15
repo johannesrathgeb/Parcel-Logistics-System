@@ -9,13 +9,11 @@ namespace LRLogistik.LRPackage.DataAccess.Interfaces
 {
     public interface IWebhookRepository
     {
+        public WebhookResponse CreateWebhook(WebhookResponse webhookResponse);
+
         public WebhookResponse GetWebhook(int id);
 
         public void DeleteWebhook(int id);
-
-        public WebhookResponse CreateWebhook(WebhookResponse webhookResponse);
-
-        public WebhookResponse UpdateWebhook(WebhookResponse webhookResponse);
 
         public List<WebhookResponse> GetWebhooksForParcel(string trackingId);
     }
