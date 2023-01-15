@@ -48,7 +48,17 @@ namespace LRLogistik.LRPackage.DataAccess.Tests
                         Country = "Austria"
                     },
                     TrackingId = "M5OEG8LWD",
-                    State = Parcel.StateEnum.PickupEnum
+                    State = Parcel.StateEnum.PickupEnum,
+                    FutureHops = new List<HopArrival>()
+                    {
+                        new HopArrival()
+                        {
+                            Code = "WENB01",
+                            Description = "Wien Warehouse",
+                            DateTime = DateTime.Now,
+                            HopOrder = 0,
+                        }
+                    }
                 },
                 new Parcel()
                 {
@@ -70,7 +80,17 @@ namespace LRLogistik.LRPackage.DataAccess.Tests
                         Country = "Austria"
                     },
                     TrackingId = "MFVFBW984",
-                    State = Parcel.StateEnum.PickupEnum
+                    State = Parcel.StateEnum.PickupEnum,
+                    FutureHops = new List<HopArrival>()
+                    {
+                        new HopArrival()
+                        {
+                            Code = "WENB01",
+                            Description = "Wien Warehouse",
+                            DateTime = DateTime.Now,
+                            HopOrder = 0,
+                        }
+                    }
                 },
             };
 
