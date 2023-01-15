@@ -47,3 +47,9 @@ steps:
     PathtoPublish: 'src/LRLogistik.LRPackage.Services/bin/$(buildConfiguration)/'
     ArtifactName: 'drop'
     publishLocation: 'Container'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: 'src/LRLogistik.LRPackage.IntegrationTests/bin/$(buildConfiguration)/'
+    ArtifactName: 'integrationtest'
+    publishLocation: 'Container'
