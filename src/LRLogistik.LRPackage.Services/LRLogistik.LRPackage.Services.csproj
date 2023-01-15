@@ -33,4 +33,9 @@
     <ProjectReference Include="..\..\LRLogistik.LRPackage.DataAccess.Sql\LRLogistik.LRPackage.DataAccess.Sql.csproj" />
     <ProjectReference Include="..\LRLogistik.LRPackage.DTOs\LRLogistik.LRPackage.Services.DTOs.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot/**/*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

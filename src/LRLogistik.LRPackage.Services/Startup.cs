@@ -34,6 +34,7 @@ using LRLogistik.LRPackage.BusinessLogic;
 using LRLogistik.LRPackage.DataAccess.Interfaces;
 using LRLogistik.LRPackage.ServiceAgents.Interfaces;
 using LRLogistik.LRPackage.ServiceAgents;
+using Microsoft.Extensions.FileProviders;
 
 namespace LRLogistik.LRPackage.Services
 {
@@ -160,7 +161,13 @@ namespace LRLogistik.LRPackage.Services
 
             //app.UseHttpsRedirection();
             app.UseDefaultFiles();
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
+                RequestPath = ""
+            });
+
             app.UseSwagger(c =>
                 {
                     c.RouteTemplate = "openapi/{documentName}/openapi.json";

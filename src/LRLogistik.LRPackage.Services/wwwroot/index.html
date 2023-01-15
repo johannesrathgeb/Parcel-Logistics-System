@@ -1,1 +1,248 @@
-<meta http-equiv="refresh" content="0;URL='./openapi/'" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>REST Client</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .container {
+        height: 100vh;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        margin-left: 25%;
+        margin-right: 25%;
+        margin-top: 2%;
+        margin-bottom: 2%;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+
+    input[type="submit"] {
+        margin-top: 20px;
+        margin-left: 33%;
+        margin-right: 33%;
+    }
+</style>
+
+<body>
+    <div class="container">
+        <h1>Parel Track Trace</h1>
+        <br />
+        <h2>Track Parcel</h2>
+        <form id="track">
+            <label for="track.id">Tracking ID: </label>
+            <input type="text" id="trackingId" name="track.id"><br>
+
+            <input type="submit" value="Track Parcel" />
+        </form>
+
+        <h2>Submit Parcel</h2>
+        <form id="submitParcel">
+            <label for="submit.weight">Weight: </label>
+            <input type="text" id="weight" name="submit.weight"><br />
+            <h3>Sender:</h3>
+            <label for="submit.sender.name">Name: </label>
+            <input type="text" id="senderName" name="submit.sender.name"><br />
+            <label for="submit.sender.postal">Postal Code: </label>
+            <input type="text" id="senderPostalCode" name="submit.sender.postal"><br />
+            <label for="submit.sender.street">Street: </label>
+            <input type="text" id="senderStreet" name="submit.sender.street"><br />
+            <label for="submit.sender.city">City: </label>
+            <input type="text" id="senderCity" name="submit.sender.city"><br />
+            <label for="submit.sender.country">Country: </label>
+            <input type="text" id="senderCountry" name="submit.sender.country"><br />
+            <h3>Recipient</h3>
+            <label for="submit.recipient.name">Name: </label>
+            <input type="text" id="recipientName" name="submit.recipient.name"><br />
+            <label for="submit.recipient.postal">Postal Code: </label>
+            <input type="text" id="recipientPostalCode" name="submit.recipient.postal"><br />
+            <label for="submit.recipient.street">Street: </label>
+            <input type="text" id="recipientStreet" name="submit.recipient.street"><br />
+            <label for="submit.recipient.city">City: </label>
+            <input type="text" id="recipientCity" name="submit.recipient.city"><br />
+            <label for="submit.recipient.country">Country: </label>
+            <input type="text" id="recipientCountry" name="submit.recipient.country"><br />
+
+            <input type="submit" value="Submit Parcel" />
+        </form>
+
+        <h2>Report Parcel Hop</h2>
+        <form id="reportHop">
+            <label for="reportHop.id">Tracking ID: </label>
+            <input type="text" id="trackingIdHop" name="reportHop.id"><br>
+            <label for="reportHop.code">Hop Code: </label>
+            <input type="text" id="hopCode" name="reportHop.code"><br>
+
+            <input type="submit" value="Report Hop" />
+        </form>
+
+        <h2>Report Parcel Delivery</h2>
+        <form id="reportDelivery">
+            <label for="reportDelivery.id">Tracking ID: </label>
+            <input type="text" id="trackingIdHopDelivery" name="reportDelivery.id"><br>
+
+            <input type="submit" value="Report Delivery" />
+        </form>
+        <div id="result">RESPONSE</div>
+    </div>
+    <script>
+      // response field
+      var responseField = document.getElementById('result');
+
+      // form elements
+      var submitElement = document.getElementById('submitParcel');
+      var trackElement = document.getElementById('track');
+      var reportHopElement = document.getElementById('reportHop');
+      var reportDeliveryElement = document.getElementById('reportDelivery');
+
+      // event listeners
+      submitElement.addEventListener("submit", submitParcel);
+      trackElement.addEventListener("submit", trackParcel);
+      reportHopElement.addEventListener("submit", reportHop);
+      reportDeliveryElement.addEventListener("submit", reportDelivery);
+
+      function trackParcel(e) {
+        e.preventDefault();
+
+        // get data from form
+        var trackingId = document.getElementById('trackingId').value;
+
+        fetch("/parcel/"+trackingId, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          }
+        })
+        .then((response) => response.json())
+        .then((result) => {
+          responseField.innerHTML = JSON.stringify(result, null, 6)
+            .replace(/\n( *)/g, function (match, p1) {
+              return '<br>' + '&nbsp;'.repeat(p1.length);
+            });
+        })
+        .catch(err => console.log(err));
+      }
+
+      function submitParcel(e) {
+        e.preventDefault();
+
+        // get data from form
+        var weightParcel = document.getElementById('weight').value;
+
+        var senderName = document.getElementById('senderName').value;
+        var senderPostalCode = document.getElementById('senderPostalCode').value;
+        var senderStreet = document.getElementById('senderStreet').value;
+        var senderCity = document.getElementById('senderCity').value;
+        var senderCountry = document.getElementById('senderCountry').value;
+
+        var recipientName = document.getElementById('recipientName').value;
+        var recipientPostalCode = document.getElementById('recipientPostalCode').value;
+        var recipientStreet = document.getElementById('recipientStreet').value;
+        var recipientCity = document.getElementById('recipientCity').value;
+        var recipientCountry = document.getElementById('recipientCountry').value;
+
+        fetch("/parcel", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(
+            {
+              weight: weightParcel,
+              recipient: {
+                name: recipientName,
+                street: recipientStreet,
+                postalCode: recipientPostalCode,
+                city: recipientCity,
+                country: recipientCountry
+              },
+              sender: {
+                name: senderName,
+                street: senderStreet,
+                postalCode: senderPostalCode,
+                city: senderCity,
+                country: senderCountry
+              }
+            }
+          )
+        })
+        .then((response) => response.json())
+        .then((result) => {
+          responseField.innerHTML = JSON.stringify(result, null, 6)
+            .replace(/\n( *)/g, function (match, p1) {
+              return '<br>' + '&nbsp;'.repeat(p1.length);
+            });
+        })
+        .catch(err => console.log(err));
+      }
+
+      function reportHop(e) {
+        e.preventDefault();
+
+        // get data from form
+        var trackingIdHop = document.getElementById('trackingIdHop').value;
+        var hopCode = document.getElementById('hopCode').value;
+
+        fetch("/parcel/"+trackingIdHop+"/reportHop/"+hopCode, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          }
+        })
+        .then((result) => {
+          if(result.status == 200)
+          {
+            responseField.innerHTML = "Reported parcel hop successfully";
+          }
+          else
+          {
+            responseField.innerHTML = "Something went wrong"
+          }
+        })
+        .catch(err => console.log(err));
+      }
+
+      function reportDelivery(e) {
+        e.preventDefault();
+
+        // get data from form
+        var trackingIdHop = document.getElementById('trackingIdHopDelivery').value;
+
+        fetch("/parcel/"+trackingIdHop+"/reportDelivery", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          }
+        })
+        .then((result) => {
+          if(result.status == 200)
+          {
+            responseField.innerHTML = "Reported parcel delivery successfully";
+          }
+          else
+          {
+            responseField.innerHTML = "Something went wrong"
+          }
+        })
+        .catch(err => console.log(err));
+      }
+    </script>
+</body>
+</html>
