@@ -110,6 +110,7 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
         }
 
         [HttpPost]
+        [ExcludeFromCodeCoverage]
         public Entities.Parcel Create(Entities.Parcel parcel, Point senderPoint, Point recipientPoint)
         {
             _dbContext.Database.EnsureCreated();
