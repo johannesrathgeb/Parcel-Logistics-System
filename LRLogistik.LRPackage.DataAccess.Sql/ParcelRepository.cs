@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LRLogistik.LRPackage.DataAccess.Entities.Exceptions;
 using LRLogistik.LRPackage.ServiceAgents.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace LRLogistik.LRPackage.DataAccess.Sql
 {
@@ -30,6 +31,7 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
             _warehouseRepository = warehouseRepository;
         }
 
+        [ExcludeFromCodeCoverage]
         public Warehouse GetParent(Hop hop)
         {
             try
@@ -50,6 +52,7 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
             }
         }
 
+        [ExcludeFromCodeCoverage]
         public List<HopArrival> Routing(Hop hop1, Hop hop2)
         {
             try

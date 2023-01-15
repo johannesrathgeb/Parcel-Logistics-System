@@ -29,6 +29,37 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
 
         }
 
+        [Test]
+        public void WarehouseValidatorValidData()
+        {
+            Warehouse warehouse = new Warehouse()
+            {
+                Code = "WENB01",
+                Description = "Moinsen",
+                Level = 1
+            };
+
+            WarehouseValidator warehouseValidator = new WarehouseValidator();
+            var result = warehouseValidator.Validate(warehouse);
+
+            Assert.IsTrue(result.IsValid);
+        }
+
+        [Test]
+        public void WarehouseValidatorInvalidData()
+        {
+            Warehouse warehouse = new Warehouse()
+            {
+                Code = "WENB01",
+                Description = "ß1aasASJK Sassa#++as-22^^°",
+                Level = 1
+            };
+
+            WarehouseValidator warehouseValidator = new WarehouseValidator();
+            var result = warehouseValidator.Validate(warehouse);
+
+            Assert.IsTrue(!result.IsValid);
+        }
 
     }
 }
