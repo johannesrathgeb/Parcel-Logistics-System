@@ -61,5 +61,39 @@ namespace LRLogistik.LRPackage.BusinessLogic.Tests
             Assert.IsTrue(!result.IsValid);
         }
 
+        [Test]
+        public void HopArrivalValidatorValidData()
+        {
+            HopArrival hopArrival = new HopArrival()
+            {
+                Code = "WENB01",
+                Description = "safdjasdlöfjasdlöfa",
+                DateTime = DateTime.Now
+            };
+
+            HopArrivalValidator hopArrivalValidator = new HopArrivalValidator(); 
+
+            var res = hopArrivalValidator.Validate(hopArrival);
+
+            Assert.IsTrue(res.IsValid);
+        }
+
+        [Test]
+        public void  HopArrivalValidatorInvalidData()
+        {
+            HopArrival hopArrival = new HopArrival()
+            {
+                Code = "asdföjkljölsadfklösadfjölk2413^^°",
+                Description = "sdfa4321234++ää3^^°",
+                DateTime = DateTime.Now
+            };
+
+            HopArrivalValidator hopArrivalValidator = new HopArrivalValidator();
+
+            var res = hopArrivalValidator.Validate(hopArrival);
+
+            Assert.IsTrue(!res.IsValid);
+        }
+
     }
 }
