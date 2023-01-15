@@ -8,7 +8,7 @@ namespace LRLogistik.LRPackage.IntegrationTests
     public class IntegrationTest
     {
         private readonly HttpClient _httpClient = new();
-        private readonly string _url = "https://lrlogistik.azurewebsites.net";
+        private readonly string _url = "https://lrlogistiktest.azurewebsites.net";
 
         public async Task<HttpResponseMessage> CreateWarehouses_POST()
         {
