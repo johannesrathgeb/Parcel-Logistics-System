@@ -18,5 +18,7 @@ namespace LRLogistik.LRPackage.DataAccess.Entities
 
         public DateTime DateTime { get; set; }
 
+        public int HopOrder { get; set; }
+
     }
 }

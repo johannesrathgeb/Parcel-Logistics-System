@@ -141,6 +141,12 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
                     DateTime = DateTime.Now
                 });
 
+                int i = 0;
+                foreach(HopArrival hop in parcel.FutureHops)
+                {
+                    hop.HopOrder = i++;
+                }
+
                 _dbContext.Parcels.Add(parcel);
                 _dbContext.SaveChanges();
                 _logger.LogInformation($"Parcel successfully created: {JsonConvert.SerializeObject(parcel)}");
@@ -176,11 +182,14 @@ namespace LRLogistik.LRPackage.DataAccess.Sql
             _logger.LogInformation($"Getting Parcel from DB: {JsonConvert.SerializeObject(trackingid)}");
             try
             {
-                return _dbContext.Parcels
+                var parcel = _dbContext.Parcels
                     .Include(x => x.VisitedHops)
                     .Include(x => x.FutureHops)
                     .Single(p => p.TrackingId == trackingid);
-                    
+
+                parcel.FutureHops = parcel.FutureHops.OrderBy(x => x.HopOrder).ToList();
+
+                return parcel;     
             }
             catch (InvalidOperationException e)
             {

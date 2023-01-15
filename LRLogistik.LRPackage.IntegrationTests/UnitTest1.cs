@@ -95,7 +95,7 @@
 //            [Category("Integration")]
 //            public async Task ParcelJourney()
 //            {
-//                var firstHopCode = "WTTA09";
+//                var firstHopCode = "WTTA085";
 //                var webhookUrl = "http://test.test.fake/webhooks";
 
 //                await WarehouseManagementApi_POST_warehouse();
@@ -132,7 +132,7 @@
 //                Assert.AreEqual(2, trackedParcel.FutureHops.Count);
 //                Assert.AreEqual(1, trackedParcel.VisitedHops.Count);
 //                Assert.AreEqual(firstHopCode, trackedParcel.VisitedHops[0].Code);
-//                Assert.AreEqual(TrackingInformation.StateEnum.InTransportEnum, trackedParcel.State);
+//                Assert.AreEqual(TrackingInformation.StateEnum.InTruckDeliveryEnum, trackedParcel.State);
 
 //                await StaffApi_POST_reportHop(newParcelInfo.TrackingId, trackedParcel.FutureHops[0].Code);
 
@@ -144,7 +144,7 @@
 //                //TODO
 //                Assert.AreEqual(1, trackedParcel.FutureHops.Count);
 //                Assert.AreEqual(2, trackedParcel.VisitedHops.Count);
-//                Assert.AreEqual(TrackingInformation.StateEnum.InTransportEnum, trackedParcel.State);
+//                Assert.AreEqual(TrackingInformation.StateEnum.InTruckDeliveryEnum, trackedParcel.State);
 
 //                await StaffApi_POST_reportHop(newParcelInfo.TrackingId, trackedParcel.FutureHops[0].Code);
 

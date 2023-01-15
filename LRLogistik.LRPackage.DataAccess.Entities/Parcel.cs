@@ -40,5 +40,7 @@ namespace LRLogistik.LRPackage.DataAccess.Entities
 
         //NewParcelInfo
         public string TrackingId { get; set; }
+
+        
     }
 }
