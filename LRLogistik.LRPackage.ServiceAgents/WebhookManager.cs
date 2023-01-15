@@ -21,8 +21,6 @@ namespace LRLogistik.LRPackage.ServiceAgents
         private readonly IWebhookRepository _webhookRepository;
         private readonly IMapper _mapper;
 
-
-        [ActivatorUtilitiesConstructor]
         public WebhookManager(IParcelRepository parcelRepository, IWebhookRepository webhookRepository, IMapper mapper)
         {
             _httpClient = new HttpClient();
@@ -30,14 +28,6 @@ namespace LRLogistik.LRPackage.ServiceAgents
             _webhookRepository = webhookRepository;
             _mapper = mapper;
         }
-
-        //public WebhookManager(HttpClient httpClient, IParcelRepository parcelRepository, IWebhookRepository webhookRepository, IMapper mapper)
-        //{
-        //    _httpClient = httpClient;
-        //    _parcelRepository = parcelRepository;
-        //    _webhookRepository = webhookRepository;
-        //    _mapper = mapper;
-        //}
 
         public async Task NotifySubscribers(string trackingId)
         {
